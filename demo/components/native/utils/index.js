@@ -1,0 +1,3 @@
+class COKE_UI {
+  
+}
