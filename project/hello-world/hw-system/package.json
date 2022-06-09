@@ -1,0 +1,21 @@
+{
+  "name": "hw-system",
+  "version": "1.0.0",
+  "description": "hello world game's system",
+  "private": true,
+  "scripts": {
+    "dev": "node ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "PomoloCoke",
+    "email": "pomelocoke@163.com",
+    "url": "https://www.pomelode.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.7.3",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.9.2"
+  }
+}
