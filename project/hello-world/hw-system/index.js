@@ -1,12 +1,27 @@
-const fs = require('fs')
+const path = require('path');
+const { app, BrowserWindow } = require('electron');
 
-const content = 'some content'
+const createWindow = () => {
+  const win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'src/app.js')
+    }
+  })
+  // win.webContents.openDevTools()
+  win.loadFile('./dist/index.html')
+}
 
-// fs.writeFile('test.txt', content, err=> {
-//   console.log('helloWorld', err)
-// })
+app.whenReady().then(() => {
+  createWindow()
 
-// fs.readFile('./test.json', 'utf8', (err, data) => {
-//   console.log('helloWorld', JSON.parse(data))
-// })
-console.log()
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  })
+})
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit()
+})
+
