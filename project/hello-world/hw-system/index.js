@@ -9,7 +9,7 @@ const createWindow = () => {
       preload: path.join(__dirname, 'src/app.js')
     }
   })
-  // win.webContents.openDevTools()
+
   win.loadFile('./dist/index.html')
 }
 
