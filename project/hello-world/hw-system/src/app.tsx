@@ -1,10 +1,15 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom' 
 
-import { Hello } from "./components/Hello";
+import App from "@/views/index/index";
 
 const root = createRoot(document.getElementById("root"));
 
 root.render(
-    <Hello compiler="TypeScript" framework="React" />,
-);
+  <React.StrictMode>
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
+  </React.StrictMode>
+); 

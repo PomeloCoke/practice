@@ -13,17 +13,25 @@ module.exports = {
   devtool: "source-map",
 
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".json"]
+    extensions: [".ts", ".tsx", ".js", ".json", ".css", ".less"],
+    alias: {
+      "@": path.resolve(__dirname, "src")
+    }
   },
 
   module: {
     rules: [
       {
-        test: /\.tsx?$/, loader: "awesome-typescript-loader"
+        test: /\.(ts|tsx)$/, loader: "ts-loader"
       },
       {
-        enforce: "pre", test: /\.js$/, loader: "source-map-loader"
-      }
+        test: /\.js$/, enforce: "pre", loader: "source-map-loader"
+      },
+      { test: /\.less$/, use: [
+        { loader: 'style-loader' },
+        { loader: 'css-loader' },
+        { loader: 'less-loader' }
+      ] }
     ]
   },
   devServer: {
