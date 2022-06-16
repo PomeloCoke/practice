@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom' 
 
 import App from "@/views/index/index";
+import Layout from './layout';
 
 const root = createRoot(document.getElementById("root"));
 
@@ -10,6 +11,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <App/>
+      <Layout LOGIN={true}></Layout>
     </BrowserRouter>
   </React.StrictMode>
-); 
+);  
