@@ -26,7 +26,14 @@ module.exports = {
         exclude: [/node_modules/, /lib/],
         use: [
           { loader: "ts-loader" },
-          { loader: "babel-loader" }
+          { loader: "babel-loader",
+            options: {
+              presets: [
+                "@babel/preset-env",
+                "@babel/preset-react"
+              ]
+            }
+          }
         ]
       },
       {
