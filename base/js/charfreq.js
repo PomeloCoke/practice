@@ -1,5 +1,4 @@
-const { set } = require("core-js/core/dict");
-const { entry } = require("../../project/hello-world/hw-system/webpack.config");
+
 
 class DefaultMap extends Map {
   constructor(defaultValue) {
@@ -57,7 +56,7 @@ class Histogram {
 
     // 接着把每个条目转换为一行文本
     let lines = entries.map(([l,n]) => 
-      `${i}:${"#".repeat(Math.round(n))} ${n.toFixed(2)}%`
+      `${l}:${"#".repeat(Math.round(n))} ${n.toFixed(2)}%`
     );
 
     return lines.join("\n");
@@ -66,6 +65,7 @@ class Histogram {
 
 // 
 async function histogramFromStdin() {
+  // console.log('请输入：')
   process.stdin.setEncoding('utf-8');   // 读取Unicode字符串，而非字节
   let histogram = new Histogram();
   for await(let chunk of process.stdin) {
