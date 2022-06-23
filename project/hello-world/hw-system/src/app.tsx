@@ -12,7 +12,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <App/>
-      <Layout LOGIN={true}></Layout>
+      <Layout LOGIN={false}></Layout>
     </BrowserRouter>
   </React.StrictMode>
 );  
