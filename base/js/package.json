@@ -5,7 +5,7 @@
   "main": "charfreq.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test:bat": "bash test.bat"
+    "test:bat": "test.sh"
   },
   "keywords": [],
   "author": "",
