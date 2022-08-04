@@ -1,4 +1,4 @@
-export interface STATUS__LAYOUT {
+export interface STATUS_LAYOUT {
   LOGIN?: Boolean,
   LOADING?: Boolean,
 

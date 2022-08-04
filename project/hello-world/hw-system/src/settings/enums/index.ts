@@ -12,10 +12,6 @@ Object.keys(enumImportList).map(key=> {
   })
 })
 
-function exportEnumItem(item: any) {
-
-}
-
 export default enumExportList
 
 
