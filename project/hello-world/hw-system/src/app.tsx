@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter } from 'react-router-dom' 
-
-import App from "@/views/index/index";
+import { BrowserRouter as Router } from 'react-router-dom';
 import Layout from './layout';
 import ENUM from '@/settings/enums'
 import 'antd/dist/antd.less'; 
@@ -12,9 +10,8 @@ console.log('getEnumList', ENUM)
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App/>
-      <Layout LOGIN={false}></Layout>
-    </BrowserRouter>
+    <Router>
+      <Layout LOGIN></Layout>
+    </Router>
   </React.StrictMode>
 );  

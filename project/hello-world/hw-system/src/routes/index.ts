@@ -4,11 +4,21 @@ import * as React from 'react';
 const App = React.lazy(() => import("@/views/index"))
 const Login = React.lazy(() => import('@/views/single/login'))
 
-const route: ROUTER[] = [
+export const routes: ROUTER[] = [
   {
-    path: '1',
-    component: App
-  }
+    path: '/',
+    // redirect: '/login',
+    component: App,
+    meta: {},
+    children: [
+      {
+        path: '/login',
+        component: Login,
+        meta: {},
+      }
+    ]
+  },
+  
 ]
 
 const mainRouteConfig = {

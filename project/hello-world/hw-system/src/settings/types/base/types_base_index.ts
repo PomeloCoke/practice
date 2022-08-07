@@ -1,8 +1,10 @@
-export interface componentFn<T> {
-  (props: T) : void
-}
-
 export type ROUTER = {
   path: string,
-  component: componentFn<any>
+  redirect?: string,
+  component?: any
+  meta?: {
+    title?: string,
+    authority?: boolean,
+  },
+  children?: ROUTER[]
 }
