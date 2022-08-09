@@ -3,7 +3,7 @@ import CLIENT from './client'
 import API from './api'
 
 // TODO 枚举变量类型定义
-let enumImportList: any = { DATE, CLIENT }
+let enumImportList: any = { DATE, CLIENT, API }
 let enumExportList:any = {}
 
 Object.keys(enumImportList).map(key=> {

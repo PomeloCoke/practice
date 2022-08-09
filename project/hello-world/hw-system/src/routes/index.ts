@@ -1,24 +1,33 @@
 import { ROUTER } from '@/settings/types/base/types_base_index';
 import * as React from 'react';
 
-const App = React.lazy(() => import("@/views/index"))
-const Login = React.lazy(() => import('@/views/single/login'))
-
 export const routes: ROUTER[] = [
   {
     path: '/',
-    // redirect: '/login',
-    component: App,
+    redirect: '/login',
     meta: {},
-    children: [
-      {
-        path: '/login',
-        component: Login,
-        meta: {},
-      }
-    ]
   },
-  
+  {
+    path: '/login',
+    component: React.lazy(() => import('@/views/single/login')),
+    meta: {
+      title: '登录'
+    },
+  },
+  {
+    path: '/dashboard',
+    component: React.lazy(() => import("@/views/index")),
+    meta: {
+      title: '仪表盘'
+    },
+  },
+  {
+    path: '/test',
+    component: React.lazy(() => import('@/views/single/test')),
+    meta: {
+      title: '仪表盘'
+    },
+  },
 ]
 
 const mainRouteConfig = {

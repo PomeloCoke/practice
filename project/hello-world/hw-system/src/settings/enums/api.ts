@@ -1,4 +1,5 @@
-enum RES_STATUS {
+export enum RES_STATUS {
+  Success = 0,
 
 }
 
