@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom';
 import Layout from './layout';
 import ENUM from '@/settings/enums'
+import '@/utils'
 import 'antd/dist/antd.less'; 
 
 const root = createRoot(document.getElementById("root"));

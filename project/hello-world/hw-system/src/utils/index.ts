@@ -3,16 +3,28 @@
  * api回参format
  * api入参format
  */
-declare interface Array<T> {
-  remove(T: any): void
-}
 
-// Array.prototype.remove = function (val) {
-//   const index = this.indexOf(val)
-//   if (index > -1) {
-//     this.splice(index, 1)
-//   }
-// }
+/*Array Extend Start**********************************************/
+/**
+ * 删除元素
+ * @return 返回删除元素后的原数组
+ */
+Array.prototype.remove = function<T>(this: T[], val: T): T[] {
+  return this.filter(el => el !== val)
+}
+/*Array Extend End************************************************/
+
+/*Data Extend Start***********************************************/
+/**
+ * 判断值是否为object
+ * @param {any}val
+ * @returns {boolean}
+ */
+ export function isObject(val: any): boolean {
+  const type = val = typeof val
+  return val != null && (type === 'object' || type === 'function')
+}
+/*Data Extend End*************************************************/
 
 /**
  * 判断是否是基本数据类型
@@ -30,15 +42,6 @@ function isPrimitiveValue(value: any): boolean {
   )
 }
 
-/**
- * 判断值是否为object
- * @param {any}value
- * @returns {boolean}
- */
-export function isObject(value: any): boolean {
-  const type = value = typeof value
-  return value != null && (type === 'object' || type === 'function')
-}
 /**
  * 对象数据深拷贝
  */
@@ -79,6 +82,4 @@ export function deepClone(value: any) {
   return result
 }
 
-export default {
-  isObject,
-}
+export default {}
