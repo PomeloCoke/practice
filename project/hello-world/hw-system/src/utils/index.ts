@@ -15,6 +15,8 @@ Array.prototype.remove = function<T>(this: T[], val: T): T[] {
 /*Array Extend End************************************************/
 
 /*Data Extend Start***********************************************/
+const localStorge = window.localStorage
+const sessionStorge = window.sessionStorage
 /**
  * 判断值是否为object
  * @param {any}val

@@ -1,15 +1,18 @@
 import * as React from 'react'; 
-import { STATUS_LAYOUT } from '@/settings/types';
 import { routes } from '@/routes';
+import { observer } from 'mobx-react-lite';
 import RouterView from '@/routes/view_util';
+import useStore from '@/stores';
 
-const Layout = (props: STATUS_LAYOUT) => {
+const Layout = () => {
+  const store = useStore()
+  const storeLogin = store.data.user.login
   return (
     <div className='layout__app__container'>
       
       {/* 默认布局
       --------------------------------------------------- */}
-      {props?.LOGIN && (
+      {storeLogin && (
         <div className='layout__default__container'>
           <div className='layout__slot__left'>
 
@@ -21,13 +24,15 @@ const Layout = (props: STATUS_LAYOUT) => {
       )}
       {/* 单页布局
       --------------------------------------------------- */}
-      {!props?.LOGIN && (
+      {!storeLogin && (
         <div className='layout__single__container'>
           <RouterView routes={routes}/>
         </div>
       )}
+      <button onClick={()=>store.setLogin(!storeLogin)}>点击切换登录状态</button>
+      {storeLogin ? '已登录' : '未登录'}
     </div>
   )
 }
 
-export default Layout
+export default observer(Layout)

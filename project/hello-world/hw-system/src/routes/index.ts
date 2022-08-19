@@ -1,5 +1,5 @@
-import { ROUTER } from '@/settings/types/base/types_base_index';
 import * as React from 'react';
+import { useLocation } from 'react-router-dom';
 
 export const routes: ROUTER[] = [
   {
@@ -25,10 +25,15 @@ export const routes: ROUTER[] = [
     path: '/test',
     component: React.lazy(() => import('@/views/single/test')),
     meta: {
-      title: '仪表盘'
+      title: '测试页面'
     },
   },
 ]
+
+export const beforeEach = () => {
+  const location = useLocation()
+  console.log('getCurPath', location)
+}
 
 const mainRouteConfig = {
   

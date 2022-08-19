@@ -1,7 +1,8 @@
 
 import * as React from 'react';
 import { Navigate, Routes, Route } from 'react-router-dom'
-import { ROUTER } from "@/settings/types/base/types_base_index";
+
+import { beforeEach } from '.';
 import LayoutLoading from "@/layout/loading";
 
 type props = {
@@ -15,7 +16,7 @@ function createRoute(route: ROUTER) {
       <Route key={route.path}
              path={route.path}
       >
-        { !route.redirect &&
+        {!route.redirect &&
           <Route index
                  key={route.path}
                  element={<route.component/>}

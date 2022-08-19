@@ -23,7 +23,7 @@ enumFiles.keys()
   //  enumExportList[enumName] = eval(`${enumName}`)
 });
 
-export default enumExportList
+export default {enumExportList}
 
 
 

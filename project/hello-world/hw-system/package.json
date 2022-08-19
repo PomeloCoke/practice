@@ -42,6 +42,7 @@
     "@types/react-dom": "^18.0.5",
     "antd": "^4.21.2",
     "mobx": "^6.6.0",
+    "mobx-react-lite": "^3.4.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0"
