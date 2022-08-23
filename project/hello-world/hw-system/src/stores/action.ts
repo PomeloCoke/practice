@@ -1,5 +1,5 @@
 const common = {
-
+  
 }
 
 const action: STORE_ACTION = {

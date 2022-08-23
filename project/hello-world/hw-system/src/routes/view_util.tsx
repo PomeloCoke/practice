@@ -2,11 +2,35 @@
 import * as React from 'react';
 import { Navigate, Routes, Route } from 'react-router-dom'
 
+import { useEffect } from 'react';
+import { useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import { beforeEach } from '.';
 import LayoutLoading from "@/layout/loading";
 
 type props = {
   routes: ROUTER[]
+}
+
+function routeGurad(routes: ROUTER[]) {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    beforeEach(location, navigate, routes)
+  })
+
+  return (
+    <Routes>
+      {
+        routes.map(route => {
+          return (
+            createRoute(route)
+          )
+        })
+      }
+    </Routes>
+  )
+  
 }
 function createRoute(route: ROUTER) {
   
@@ -61,15 +85,8 @@ export default function RouterView(props: props) {
   const { routes } = props
   return (
     <React.Suspense fallback={<LayoutLoading />}>
-      <Routes>
-        {
-          routes.map(route => {
-            return (
-              createRoute(route)
-            )
-          })
-        }
-      </Routes>
+      {routeGurad(routes)}
+      
     </React.Suspense>
   )
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useLocation } from 'react-router-dom';
+import { NavigateFunction } from 'react-router-dom';
 
 export const routes: ROUTER[] = [
   {
@@ -18,7 +18,8 @@ export const routes: ROUTER[] = [
     path: '/dashboard',
     component: React.lazy(() => import("@/views/index")),
     meta: {
-      title: '仪表盘'
+      title: '仪表盘',
+      authority: true
     },
   },
   {
@@ -30,13 +31,34 @@ export const routes: ROUTER[] = [
   },
 ]
 
-export const beforeEach = () => {
-  const location = useLocation()
-  console.log('getCurPath', location)
+export const beforeEach = (
+  location: any,
+  navigate: NavigateFunction,
+  routes: ROUTER[]
+) => {
+  const { pathname } = location
+  const routeInfo = routeSearch(pathname, routes)
+
+  // TODO 404页面
+  if (!routeInfo) return false
+
+  if (routeInfo.meta.authority) {
+    // TODO 接口校验token是否有效
+    const token = localStorage.getItem('test_token')
+    if (!token) {
+      console.log('token无效，登录')
+      navigate('/login', { replace: true })
+      return false
+    }
+  }
+
+  return true
 }
 
-const mainRouteConfig = {
-  
+export function routeSearch (path: string, routes: ROUTER[]): ROUTER | null {
+  for (let item of routes) {
+    if (item.path === path) return item
+    if (item.children) return routeSearch(path, item.children)
+  }
+  return null
 }
-
-export default mainRouteConfig
