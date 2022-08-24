@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
+import useStore from '@/stores';
 import 'antd/dist/antd.less'; 
 import '@/utils'
 import ENUM from '@/settings/enums'
@@ -10,6 +11,10 @@ import ENUM from '@/settings/enums'
 import Layout from '@/layout';
 
 const App = observer(() => {
+  // 进入app初始化store
+  const store = useStore()
+  store.getSystemInfo()
+  
   return (
     <React.StrictMode>
       <Router>

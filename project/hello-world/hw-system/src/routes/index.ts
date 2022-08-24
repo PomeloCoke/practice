@@ -31,10 +31,20 @@ export const routes: ROUTER[] = [
   },
 ]
 
+/**
+ * 路由前置钩子函数
+ * @description 在路由跳转前进行检验：1=>路由是否存在 2=>路由是否要登录&&token是否有效
+ * @param location 活跃路由信息
+ * @param navigate 路由方法
+ * @param routes 路由列表
+ * @param storeData 状态管理store
+ * @returns 
+ */
 export const beforeEach = (
   location: any,
   navigate: NavigateFunction,
-  routes: ROUTER[]
+  routes: ROUTER[],
+  storeData: STORE_STATE
 ) => {
   const { pathname } = location
   const routeInfo = routeSearch(pathname, routes)
@@ -44,9 +54,9 @@ export const beforeEach = (
 
   if (routeInfo.meta.authority) {
     // TODO 接口校验token是否有效
-    const token = localStorage.getItem('test_token')
+    const token = storeData.user.token
     if (!token) {
-      console.log('token无效，登录')
+      console.log('token无效，登录', storeData.user)
       navigate('/login', { replace: true })
       return false
     }
@@ -55,6 +65,13 @@ export const beforeEach = (
   return true
 }
 
+/**
+ * 路由查找
+ * @description 在路由列表中查找路由是否存在
+ * @param path 需要查找的路由名
+ * @param routes 路由列表
+ * @returns if 存在=>返回该路由的信息 else=>返回null
+ */
 export function routeSearch (path: string, routes: ROUTER[]): ROUTER | null {
   for (let item of routes) {
     if (item.path === path) return item

@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import utils from '@/utils'
 function Test() {
   let oldArr = [1,2,3,4,5,6]
   // console.log('getRemoveArr',oldArr.remove(1))

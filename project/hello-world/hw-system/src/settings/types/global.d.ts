@@ -33,7 +33,9 @@ declare global {
     }
   }
   type STORE_ACTION = {
-    setLogin(status: boolean): void
+    setSystemInfo(): void,
+    getSystemInfo(): void,
+    setLogin(status: boolean): void,
   }
   interface STORE extends STORE_ACTION {
     data: STORE_STATE

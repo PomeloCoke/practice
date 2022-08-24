@@ -1,22 +1,29 @@
 
 import * as React from 'react';
-import { Navigate, Routes, Route } from 'react-router-dom'
-
 import { useEffect } from 'react';
-import { useLocation, useNavigate, useRoutes } from 'react-router-dom';
+import { Navigate, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
+
 import { beforeEach } from '.';
+import useStore from '@/stores';
 import LayoutLoading from "@/layout/loading";
 
 type props = {
   routes: ROUTER[]
 }
 
+/**
+ * 导航守卫
+ * @param routes 
+ * @returns if 路由未被拦截=>返回路由列表元素
+ */
 function routeGurad(routes: ROUTER[]) {
-  const location = useLocation()
   const navigate = useNavigate()
+  const location = useLocation()
+  const store = useStore()
+  const storeData = store.data
 
   useEffect(() => {
-    beforeEach(location, navigate, routes)
+    beforeEach(location, navigate, routes, storeData)
   })
 
   return (
@@ -29,11 +36,15 @@ function routeGurad(routes: ROUTER[]) {
         })
       }
     </Routes>
-  )
-  
+  )  
 }
+
+/**
+ * 创建路由元素
+ * @param route 路由项
+ * @returns 生成的路由元素
+ */
 function createRoute(route: ROUTER) {
-  
   if (route.children && route.children.length > 0) {
     // 有子路由
     return (
@@ -62,6 +73,7 @@ function createRoute(route: ROUTER) {
     </Route>
     )
   }
+
   if (route.redirect) {
     // 路由重定向
     return (
@@ -72,6 +84,7 @@ function createRoute(route: ROUTER) {
       </Route>
     )
   }
+
   return (
     <Route key={route.path}
            path={route.path}
@@ -83,10 +96,10 @@ function createRoute(route: ROUTER) {
 
 export default function RouterView(props: props) {
   const { routes } = props
+
   return (
     <React.Suspense fallback={<LayoutLoading />}>
       {routeGurad(routes)}
-      
     </React.Suspense>
   )
 }

@@ -9,7 +9,6 @@ const Layout = () => {
   const storeLogin = store.data.user.login
   return (
     <div className='layout__app__container'>
-      
       {/* 默认布局
       --------------------------------------------------- */}
       {storeLogin && (
@@ -29,8 +28,6 @@ const Layout = () => {
           <RouterView routes={routes}/>
         </div>
       )}
-      <button onClick={()=>store.setLogin(!storeLogin)}>点击切换登录状态</button>
-      {storeLogin ? '已登录' : '未登录'}
     </div>
   )
 }
