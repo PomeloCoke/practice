@@ -62,6 +62,7 @@ export const beforeEach = (
     }
   }
 
+  document.title = routeInfo.meta.title
   return true
 }
 
