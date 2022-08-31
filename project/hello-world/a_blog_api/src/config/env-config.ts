@@ -4,12 +4,6 @@ const development = {
   envAlia: 'dev',
 }
 
-const devtest = {
-  envName: '开发测试环境',
-  env: 'devtest',
-  envAlia: 'devtest',
-}
-
 const test = {
   envName: '测试环境',
   env: 'test',
@@ -32,11 +26,10 @@ const env = process.env.NODE_ENV
 let envConfig = {}
 switch(env) {
   case 'development': envConfig = development; break
-  case 'devtest': envConfig = devtest; break
   case 'test': envConfig = test; break
   case 'sandbox': envConfig = sandbox; break
   case 'production': envConfig = production; break
   default: envConfig = development; break
 }
 
-module.exports =  envConfig
+export default envConfig
