@@ -1,0 +1,27 @@
+body,html {
+  margin: 0;
+}
+
+#layout__app__container {
+  min-width: 1200px;
+  min-height: 100vh;
+  overflow-x: auto;
+}
+
+html {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: @theme-module-background;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: @on-module-sub1;
+    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2);
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
