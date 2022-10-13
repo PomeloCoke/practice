@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { observer, useLocalStore } from 'mobx-react-lite';
 import useStore from '@/stores';
 
+import styles from './index.module.less'
 
 function Login() {
   /*State Start*************************************************/
@@ -14,8 +15,8 @@ function Login() {
   const storeLogin = store.data.user.login
 
   return (
-    <div className='page__single__login'>
-      
+    <div className={styles.page__single__login}>
+      <div className={styles.text}>login</div>
     </div>
   )
 }

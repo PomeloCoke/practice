@@ -33,7 +33,6 @@ module.exports = {
       },
       { 
         test: /\.less$/,
-        exclude: /\.module\.less$/, 
         use: [
           { loader: 'style-loader' },
           { loader: 'css-loader' },
@@ -57,8 +56,10 @@ module.exports = {
   },
   devServer: {
     static: {
+      
       directory: path.join(__dirname, "dist"),
     },
+    publicPath: '/public/',
     historyApiFallback: true,
     compress: true,
     port: 3000,

@@ -12,7 +12,7 @@ const Layout = () => {
       {/* 默认布局
       --------------------------------------------------- */}
       {storeLogin && (
-        <div className='layout__default__container'>
+        <div className='layout__default__container theme__light theme__vitality'>
           <div className='layout__slot__left'>
 
           </div>
@@ -24,7 +24,7 @@ const Layout = () => {
       {/* 单页布局
       --------------------------------------------------- */}
       {!storeLogin && (
-        <div className='layout__single__container'>
+        <div className='layout__single__container theme__light theme__vitality'>
           <RouterView routes={routes}/>
         </div>
       )}
