@@ -16,7 +16,7 @@ function Login() {
 
   return (
     <div className={styles.page__single__login}>
-      <div className={styles.text}>login</div>
+      <input className={styles.text} placeholder="啦啦啦"/>
     </div>
   )
 }

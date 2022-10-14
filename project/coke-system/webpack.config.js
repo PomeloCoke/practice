@@ -1,7 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-console.log('getdirname',__dirname)
+
 module.exports = {
   target: 'web',
   entry: './src/app.tsx',
@@ -31,6 +31,21 @@ module.exports = {
       {
         test: /\.js$/, enforce: "pre", loader: "source-map-loader"
       },
+      {
+        test: /\.css$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          {
+            loader: 'style-resources-loader',
+            options: {
+              patterns: [
+                path.resolve(__dirname, 'public/style/theme.css')
+              ]
+            }
+          }
+        ]
+      },
       { 
         test: /\.less$/,
         use: [
@@ -56,10 +71,8 @@ module.exports = {
   },
   devServer: {
     static: {
-      
       directory: path.join(__dirname, "dist"),
     },
-    publicPath: '/public/',
     historyApiFallback: true,
     compress: true,
     port: 3000,
