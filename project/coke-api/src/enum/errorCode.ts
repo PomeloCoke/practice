@@ -1,0 +1,5 @@
+export enum ErrorCode {
+  SERVER = 100000,
+  MIDDLEWARE = 100001,
+  DATABASE = 100002
+}

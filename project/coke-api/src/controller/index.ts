@@ -3,7 +3,9 @@ const getHome = async (ctx: ctx, next: next) => {
 }
 
 const getTest = async (ctx: ctx, next: next) => {
-  ctx.body = "test~~~~~~"
+  ctx.success({
+    data: "test~~~~~~"
+  })
 }
 
 export default {

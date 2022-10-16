@@ -9,17 +9,12 @@ declare global {
   type next = Koa.Next
 
   // 路由相关
-  type routeMustParams = {
-    name: string,
-    type: string
-  }
   type route = {
     path: string,
     controller: any,
     option: {
       method: string,
-      verifyToken: boolean,
-      mustParams: routeMustParams[]
+      verifyToken: boolean
     }
   }
 }

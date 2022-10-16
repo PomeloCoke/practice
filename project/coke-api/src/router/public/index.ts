@@ -1,4 +1,3 @@
-import Router from "koa-router";
 import home from '../../controller'
 import routerGenerator from "../../middleware/router";
 
@@ -9,10 +8,6 @@ const routes: route[] = [
     option: {
       method: 'get',
       verifyToken: false,
-      mustParams: [
-        { name: '', type: 'string' },
-        { name: '', type: 'string' }
-      ]
     }
   },
   {
@@ -21,9 +16,6 @@ const routes: route[] = [
     option: {
       method: 'post',
       verifyToken: true,
-      mustParams: [
-        { name: '', type: 'string' }
-      ]
     }
   }
 ]
