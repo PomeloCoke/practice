@@ -23,9 +23,21 @@ declare global {
     name: string,
     alias?: string
   }
+  type sqlWhere = {
+    name: string,
+    opt: '=' | '<>' | '>' | '<' | '>=' | '<=' | 'BETWEEN' | 'LIKE' | 'IN',
+    val: number | string 
+  }
+  type sqlOrderBy = {
+    name: string,
+    order?: 'asc' | 'desc'
+  }
+  
   type querySql = {
-    select: '*' | (string|sqlSelect)[],
-    from: string
+    [select: string]: '*' | (string | sqlSelect)[],
+    from: string,
+    where?: (string | sqlWhere)[],
+    order_by?: (string | sqlOrderBy)[]
   }
 }
 
