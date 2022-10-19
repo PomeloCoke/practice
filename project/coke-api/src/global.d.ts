@@ -17,6 +17,16 @@ declare global {
       verifyToken: boolean
     }
   }
+
+  // 数据库相关
+  type sqlSelect = {
+    name: string,
+    alias?: string
+  }
+  type querySql = {
+    select: '*' | (string|sqlSelect)[],
+    from: string
+  }
 }
 
 export { }

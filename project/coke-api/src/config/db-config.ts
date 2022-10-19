@@ -1,4 +1,12 @@
-const TestSql = {
+type sqlConfig = {
+  host: string,
+  port: string,
+  user: string,
+  password: string,
+  database: string
+}
+
+const testSql: sqlConfig = {
   host: '119.45.60.225',
   port: '3306',
   user: 'coke',
@@ -8,5 +16,5 @@ const TestSql = {
 
 const env = process.env.NODE_ENV
 
-let dbConfig = TestSql
+let dbConfig = testSql
 export default dbConfig
