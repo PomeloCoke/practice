@@ -1,5 +1,6 @@
 import mysql from 'mysql'
-import config from '@/config/db-config'
+import config from '../config/db-config'
+import { typeData } from '../utils'
 
 // 创建数据池
 const pool = mysql.createPool({
@@ -10,18 +11,41 @@ const pool = mysql.createPool({
 })
 
 function createSqlStr(sql:querySql):string {
-  let str = ''
+  type keyType = keyof typeof sql
+  let str:string[] = []
+
   Object.keys(sql).map((key) => {
     const sqlKey = key.toUpperCase()
-    let sqlItem = ''
-    if (sql[key]) {
+    const sqlVal = sql[key as keyType]
+    let sqlItem = `${sqlKey}`
+    
+    if (typeData(sqlVal, 'Array')) {
       
+    } else {
+      sqlItem+= ` ${sqlVal}`
     }
+    str.push(sqlItem)
   })
-  return ''
+  return str.join(' ') + ';'
 }
 
 // 数据库会话操作
-function querySql(sql:querySql) {
+export function querySql(sql:querySql) {
+  const sqlStr = createSqlStr(sql)
+  console.log('getSqlStr', sqlStr)
 
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) reject(err)
+      else {
+        connection.query(sqlStr, (error, res) => {
+          if(error) reject(error)
+          else resolve(res)
+          connection.release()
+        })
+      }
+      
+    })
+  })
 }
+

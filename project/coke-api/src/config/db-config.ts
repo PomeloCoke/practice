@@ -11,7 +11,7 @@ const testSql: sqlConfig = {
   port: '3306',
   user: 'coke',
   password: 'lytz+01@19!lovey',
-  database: 'testsql'
+  database: 'test'
 }
 
 const env = process.env.NODE_ENV

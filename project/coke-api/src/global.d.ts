@@ -1,8 +1,10 @@
 
+import utils from './utils'
 declare global {
   interface Array<T> {
     remove(val: T): Array<T>
   }
+
 
   // 框架相关
   type ctx = Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext, any>
@@ -34,11 +36,13 @@ declare global {
   }
   
   type querySql = {
-    [select: string]: '*' | (string | sqlSelect)[],
+    select: '*' | (string | sqlSelect)[],
     from: string,
     where?: (string | sqlWhere)[],
     order_by?: (string | sqlOrderBy)[]
   }
+
+  const typeData:(data: any, type: string)=>any
 }
 
 export { }
