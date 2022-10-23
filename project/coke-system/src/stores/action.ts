@@ -27,8 +27,16 @@ const common = {
   },
 }
 
+const layout = {
+  toggleMenuBar(status: boolean): void {
+    this.data.layout.menubar.status = status
+    this.setSystemInfo()
+  }
+}
+
 const action: STORE_ACTION = {
-  ...common
+  ...common,
+  ...layout
 }
 
 export default action

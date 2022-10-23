@@ -1,8 +1,10 @@
 import * as React from 'react'; 
 import { routes } from '@/routes';
 import { observer } from 'mobx-react-lite';
-import RouterView from '@/routes/view_util';
 import useStore from '@/stores';
+
+import RouterView from '@/routes/view_util';
+import DefaultLayout from './layout_default'
 
 const Layout = () => {
   const store = useStore()
@@ -11,16 +13,7 @@ const Layout = () => {
     <>
       {/* 默认布局
       --------------------------------------------------- */}
-      {storeLogin && (
-        <div className='layout__default__container'>
-          <div className='layout__slot__left'>
-
-          </div>
-          <div className='layout__slot__mid'>
-          <RouterView routes={routes}/>
-          </div>
-        </div>
-      )}
+      {storeLogin && <DefaultLayout />}
       {/* 单页布局
       --------------------------------------------------- */}
       {!storeLogin && (

@@ -1,34 +1,98 @@
 import * as React from 'react';
 import { NavigateFunction } from 'react-router-dom';
 
-export const routes: ROUTER[] = [
+export const defaultRoutes: ROUTER[] = [
   {
     path: '/',
     redirect: '/login',
-    meta: {},
+    meta: {
+      is_verify: false,
+      is_login: false,
+    },
+    menu: {
+      is_show:false,
+    }
   },
   {
     path: '/login',
     component: React.lazy(() => import('@/views/single/login')),
     meta: {
-      title: '登录'
+      title: '登录',
+      is_verify: false,
+      is_login: false,
     },
+    menu: {
+      is_show: false,
+    }
   },
   {
     path: '/dashboard',
     component: React.lazy(() => import("@/views/index")),
     meta: {
       title: '仪表盘',
-      authority: true
+      is_verify: false,
+      is_login: true,
     },
+    menu: {
+      is_show: true,
+      name_c: '仪表盘',
+      name_e: 'dashboard',
+      icon: 'icon-dashboard-fill'
+    }
   },
+]
+
+export const blogRoutes: ROUTER[] = [
   {
     path: '/test',
-    component: React.lazy(() => import('@/views/single/test')),
+    redirect: 'dashborad',
     meta: {
-      title: '测试页面'
+      title: '测试页面',
+      is_verify: true,
+      is_login: true,
     },
+    menu: {
+      is_show: true,
+      name_c: '测试测试',
+      name_e: 'test',
+      icon: 'icon-question-circle'
+    },
+    children: [
+      {
+        path: 'dashborad',
+        component: React.lazy(() => import("@/views/single/test")),
+        meta: {
+          title: '测试仪表盘',
+          is_verify: true,
+          is_login: true,
+        },
+        menu: {
+          is_show: true,
+          name_c: '测试仪表盘',
+          name_e: 'testboard',
+        }
+      },
+      {
+        path: 'login',
+        component: React.lazy(() => import("@/views/single/login")),
+        meta: {
+          title: '测试登录',
+          is_verify: true,
+          is_login: true,
+        },
+        menu: {
+          is_show: true,
+          name_c: '测试登录',
+          name_e: 'testlogin',
+        }
+      }
+    ]
   },
+]
+
+export const routes: ROUTER[] = [
+  ...defaultRoutes,
+  ...blogRoutes
 ]
 
 /**
@@ -52,7 +116,7 @@ export const beforeEach = (
   // TODO 404页面
   if (!routeInfo) return false
 
-  if (routeInfo.meta.authority) {
+  if (routeInfo.meta.is_login) {
     // TODO 接口校验token是否有效
     const token = storeData.user.token
     if (!token) {

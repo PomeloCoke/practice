@@ -7,6 +7,7 @@ import useStore from '@/stores';
 import 'antd/dist/antd.less'; 
 import '/public/style/theme.css'
 import '@/utils'
+import '@/utils/style'
 import ENUM from '@/settings/enums'
 
 import Layout from '@/layout';
@@ -14,8 +15,11 @@ import Layout from '@/layout';
 const App = observer(() => {
   // 进入app初始化store
   const store = useStore()
+  const { theme, theme_mod } = store.data.layout
+
   store.getSystemInfo()
-  
+  document.getElementsByTagName('html')[0].className = `theme__${theme_mod} theme__${theme}`
+
   return (
     <React.StrictMode>
       <Router>
@@ -25,7 +29,7 @@ const App = observer(() => {
   )
 })
 
-document.getElementsByTagName('html')[0].className = 'theme__light theme__vitality'
+
 const root = createRoot(document.getElementById("layout__app__container"));
 root.render(
   <App/>
