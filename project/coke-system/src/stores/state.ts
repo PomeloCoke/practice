@@ -9,11 +9,16 @@ const state:STORE_STATE = {
     },
     menubar: {
       status: false,
-      active: [1,0]
+      active: [0,0,0,0,0]
     },
     pagebar: {
       status: true,
-      active: 0
+      active: 0,
+      cur_page: {
+        name_c: '仪表盘',
+        name_e: 'dashboard',
+        route: '/dashboard',
+      }
     }
   },
   user: {

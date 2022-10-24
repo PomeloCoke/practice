@@ -37,6 +37,7 @@ export const defaultRoutes: ROUTER[] = [
       is_show: true,
       name_c: '仪表盘',
       name_e: 'dashboard',
+      route: '/dashboard',
       icon: 'icon-dashboard-fill'
     }
   },
@@ -70,6 +71,7 @@ export const blogRoutes: ROUTER[] = [
           is_show: true,
           name_c: '测试仪表盘',
           name_e: 'testboard',
+          route: '/test/dashboard'
         }
       },
       {
@@ -84,6 +86,7 @@ export const blogRoutes: ROUTER[] = [
           is_show: true,
           name_c: '测试登录',
           name_e: 'testlogin',
+          route: '/test/login'
         }
       }
     ]

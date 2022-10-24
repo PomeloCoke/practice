@@ -1,3 +1,5 @@
+import { MenuListData } from "@/layout/type"
+import { curPageData } from "@/stores/type"
 export { }
 declare global {
   interface Array<T> {
@@ -20,6 +22,7 @@ declare global {
       is_show: boolean,
       name_c?: string,
       name_e?: string,
+      route?: string,
       icon?: string,
 
     },
@@ -42,6 +45,12 @@ declare global {
       pagebar: {
         status: boolean,
         active: number,
+        cur_page: {
+          name_c: string,
+          name_e?: string,
+          route: string,
+          params?: any
+        }
       }
     },
     user: {
@@ -62,6 +71,8 @@ declare global {
     getSystemInfo(): void,
     setLogin(status: boolean): void,
     toggleMenuBar(status: boolean): void,
+    changeMenuBar(menuIdx: number[], item: MenuListData): void,
+    changePage(page: curPageData): void
   }
   interface STORE extends STORE_ACTION {
     data: STORE_STATE

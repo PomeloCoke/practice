@@ -1,3 +1,4 @@
+import { curMenuData, curPageData } from "./type"
 const common = {
   /**
    * 存储系统信息
@@ -31,6 +32,25 @@ const layout = {
   toggleMenuBar(status: boolean): void {
     this.data.layout.menubar.status = status
     this.setSystemInfo()
+  },
+  changeMenuBar(menuIdx: number[], item:curMenuData): void {
+    this.data.layout.menubar.active = [0,0,0,0,0]
+    menuIdx.map((item, idx)=> {
+      this.data.layout.menubar.active[idx] = item
+    })
+
+    if(item.children.length == 0) {
+      const {name_c, name_e, route} = item
+      const curPage = {
+        name_c, name_e, route
+      }
+      this.changePage(curPage)
+    }
+
+    this.setSystemInfo()
+  },
+  changePage(page:curPageData):void {
+    this.data.layout.pagebar.cur_page = page
   }
 }
 
