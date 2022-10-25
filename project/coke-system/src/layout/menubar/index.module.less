@@ -85,16 +85,16 @@
       z-index: 2;
       background-color: @for-tertiary;
     }
-    &.active .menuListItem {
+    &.open .menuListItem {
       background-color: @for-tertiary;
       transform: translateY(0);
       transition: all 0.3s ease;
     }
-    &:not(.active) {
+    &:not(.open) {
       height: 48px;
       overflow: hidden;
     }
-    &:not(.active)>.menuListItem {
+    &:not(.open)>.menuListItem {
       transform: translateY(-100%);
       overflow: hidden;
     }

@@ -8,171 +8,204 @@
   justify-content: space-between;
   align-items: center;
   user-select: none;
-  // logo
-  .logoBox {
-    width: 61px;
-    height: 56px;
-    padding: 10px 15px 10px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    &.active {
-      width: 195px;
-      padding-left: 15px;
-      .logoText {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-    .logoImg {
-      position: relative;
-      z-index: 2;
-      width: 36px;
-      height: 36px;
-      background-color: @for-secondary;
-      flex-shrink: 0;
-      &:not(.prod)::after {
-        position: absolute;
-        top: calc(-9px);
-        right: calc(-13px);
-        height: 18px;
-        width: 34px;
-        padding: 2px 5px;
-        background-color: @theme-module-background;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 2px;
-        font-size: 12px;
-        transform: scale(0.8);
-      }
-      &.dev::after {
-        content: '开发'
-      }
-      &.test::after {
-        content: '测试'
-      }
-      &.sandbox::after {
-        content: '沙箱'
-      }
-    }
+}
+// logo
+.logoBox {
+  width: 61px;
+  height: 56px;
+  padding: 10px 15px 10px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  &.active {
+    width: 195px;
+    padding-left: 15px;
     .logoText {
-      font-size: 24px;
-      font-weight: bold;
-      font-family: 'Courier New', Courier, monospace;
-      color: @on-tertiary;
-      transform: translateX(-36px);
-      opacity: 0;
-      transition: all 0.3s ease;
+      transform: translateX(0);
+      opacity: 1;
     }
   }
-  // 面包屑
-  .breadcrumbBox {
-    .icon {
-      font-size: 24px;
-      color: @on-tertiary;
-      cursor: pointer;
-    }
-  }
-  // 产品导航
-  .navListBox {
-    height: 56px;
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    .navItemBox {
-      padding: 0 15px;
-      height: 56px;
+  .logoImg {
+    position: relative;
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    background-color: @for-secondary;
+    flex-shrink: 0;
+    &:not(.prod)::after {
+      position: absolute;
+      top: calc(-9px);
+      right: calc(-13px);
+      height: 18px;
+      width: 34px;
+      padding: 2px 5px;
+      background-color: @theme-module-background;
       display: flex;
       justify-content: center;
       align-items: center;
-      .navItem {
-        position: relative;
-        height: 56px;
-        padding: 0 10px;
-        color: @on-tertiary;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: all 0.2s ease;
-        &:active, &:visited, &:hover {
-          color: @on-tertiary;
-        }
-        &::after {
-          position: absolute;
-          content: ' ';
-          bottom: 0;
-          left: 50%;
-          width: 0;
-          height: 4px;
-          background-color: @theme-sub1;
-          transition: all 0.2s ease;
-        }
-        &:not(.active) {
-          cursor: pointer;
-        }
-        .icon {
-          margin-right: 5px;
-          font-size: 16px;
-          opacity: 0.7;
-          transition: all 0.2s ease;
-        }
-        .text {
-          height: 56px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          opacity: 0.7;
-          transition: all 0.2s ease;
-        }
-        &:not(.active):hover,&.active {
-          .icon, .text {
-            opacity: 1;
-          }
-          &::after {
-            left: 0;
-            width: 100%;
-          }
-        }
-      }
-      
+      border-radius: 2px;
+      font-size: 12px;
+      transform: scale(0.8);
+    }
+    &.dev::after {
+      content: "开发";
+    }
+    &.test::after {
+      content: "测试";
+    }
+    &.sandbox::after {
+      content: "沙箱";
     }
   }
-  // 用户头像
-  .userAvaBox {
+  .logoText {
+    font-size: 24px;
+    font-weight: bold;
+    font-family: "Courier New", Courier, monospace;
+    color: @on-tertiary;
+    transform: translateX(-36px);
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+}
+// 面包屑
+.breadcrumbBox {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  .icon {
+    margin-left: 5px;
+    font-size: 24px;
+    color: @on-tertiary;
+    cursor: pointer;
+  }
+  .pageList {
     position: relative;
-    width: 40px;
-    height: 40px;
-    margin-left: 10px;
-    border-radius: 50%;
+    margin-left: 15px;
+    padding-left: 15px;
+    &::before {
+      position: absolute;
+      content: ' ';
+      left: 0;
+      top: calc(50% - 8px);
+      width: 6px;
+      height: 16px;
+      border-radius: 2px;
+      background-color: @theme-sub1;
+    }
+    .pageItem {
+      color: @on-tertiary;
+    }
+    li>span:nth-child(2) {
+      color: @on-tertiary;
+      opacity: 0.5;
+    }
+    li:not(:last-child) {
+      opacity: 0.85;
+    }
+    
+  }
+}
+// 产品导航
+.navListBox {
+  height: 56px;
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  .navItemBox {
+    padding: 0 15px;
+    height: 56px;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: all 0.2s ease;
-    border: 2px solid transparent;
-    cursor: pointer;
-    .avatar {
-      width: 36px;
-      height: 36px;
-      object-fit: cover;
-      border-radius: 50%;
+    .navItem {
+      position: relative;
+      height: 56px;
+      padding: 0 10px;
+      color: @on-tertiary;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.2s ease;
+      &:active,
+      &:visited,
+      &:hover {
+        color: @on-tertiary;
+      }
+      &::after {
+        position: absolute;
+        content: " ";
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 4px;
+        background-color: @theme-sub1;
+        transition: all 0.2s ease;
+      }
+      &:not(.active) {
+        cursor: pointer;
+      }
+      .icon {
+        margin-right: 5px;
+        font-size: 16px;
+        opacity: 0.7;
+        transition: all 0.2s ease;
+      }
+      .text {
+        height: 56px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.7;
+        transition: all 0.2s ease;
+      }
+      &:not(.active):hover,
+      &.active {
+        .icon,
+        .text {
+          opacity: 1;
+        }
+        &::after {
+          left: 0;
+          width: 100%;
+        }
+      }
     }
-    &:hover {
-      border: 2px solid @theme-sub1;
-    }
-    &.notice::after {
-      position: absolute;
-      content: ' ';
-      z-index: 2;
-      top: 0px;
-      right: 0px;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: @theme-error;
-    }
+  }
+}
+// 用户头像
+.userAvaBox {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  cursor: pointer;
+  .avatar {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  &:hover {
+    border: 2px solid @theme-sub1;
+  }
+  &.notice::after {
+    position: absolute;
+    content: " ";
+    z-index: 2;
+    top: 0px;
+    right: 0px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: @theme-error;
   }
 }

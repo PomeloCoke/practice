@@ -25,6 +25,7 @@ const getMenuItem = (routes:ROUTER[],isChild=false) => {
       name_c: item.menu.name_c || '',
       name_e: item.menu.name_e || '',
       icon: item.menu.icon || '',
+      route: item.menu.route || '',
       children: [] as MenuListData[]
     }
     if (item.children && item.children.length > 0) {

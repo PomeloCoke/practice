@@ -33,7 +33,7 @@ const defaultLayout = () => {
   }));
   return (
     <div className="layout__default__container">
-      <NavBar navList={state.navlist}/>
+      <NavBar navList={state.navlist} menuList={state.menulist}/>
       <div className='layout__main'>
         <MenuBar menuList={state.menulist}/>
         <div className='layout__slot__mid'>

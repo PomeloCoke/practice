@@ -40,7 +40,10 @@ declare global {
       },
       menubar: {
         status: boolean,
-        active: number[],
+        active_item: number[],
+        active_list:[
+          number[]?
+        ]
       },
       pagebar: {
         status: boolean,
@@ -71,6 +74,7 @@ declare global {
     getSystemInfo(): void,
     setLogin(status: boolean): void,
     toggleMenuBar(status: boolean): void,
+    toggleMenuList(menuIdx: number[]): void,
     changeMenuBar(menuIdx: number[], item: MenuListData): void,
     changePage(page: curPageData): void
   }

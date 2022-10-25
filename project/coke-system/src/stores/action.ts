@@ -1,4 +1,5 @@
 import { curMenuData, curPageData } from "./type"
+import { remove as _remove, isEqual as _isEqual } from "lodash"
 const common = {
   /**
    * 存储系统信息
@@ -33,12 +34,22 @@ const layout = {
     this.data.layout.menubar.status = status
     this.setSystemInfo()
   },
+  toggleMenuList(menuIdx: number[]): void {
+    const isActive = this.data.layout.menubar.active_list.filter((item:Number[])=>_isEqual(item, menuIdx)).length == 1 
+    if (isActive) {
+      _remove(this.data.layout.menubar.active_list, function(item) {
+        return _isEqual(item, menuIdx)
+      })
+    } else {
+      this.data.layout.menubar.active_list.push(menuIdx)
+    }
+    this.setSystemInfo()
+  },
   changeMenuBar(menuIdx: number[], item:curMenuData): void {
-    this.data.layout.menubar.active = [0,0,0,0,0]
+    this.data.layout.menubar.active_item = [0,0,0,0,0]
     menuIdx.map((item, idx)=> {
-      this.data.layout.menubar.active[idx] = item
+      this.data.layout.menubar.active_item[idx] = item
     })
-
     if(item.children.length == 0) {
       const {name_c, name_e, route} = item
       const curPage = {
@@ -46,7 +57,6 @@ const layout = {
       }
       this.changePage(curPage)
     }
-
     this.setSystemInfo()
   },
   changePage(page:curPageData):void {
