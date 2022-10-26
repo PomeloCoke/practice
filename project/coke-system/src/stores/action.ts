@@ -61,7 +61,11 @@ const layout = {
   },
   changePage(page:curPageData):void {
     this.data.layout.pagebar.cur_page = page
-  }
+  },
+  toggleRightPanel(status: boolean): void {
+    this.data.layout.rightPannel.status = status
+    this.setSystemInfo()
+  },
 }
 
 const action: STORE_ACTION = {

@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev:start": "electron .",
-    "dev:react-webpack": "webpack serve --hot  --mode development --config webpack.config.js",
+    "serve": "webpack serve --hot  --mode development --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {

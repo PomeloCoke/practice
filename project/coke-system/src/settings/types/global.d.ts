@@ -54,6 +54,10 @@ declare global {
           route: string,
           params?: any
         }
+      },
+      rightPannel: {
+        status: boolean,
+        active: number,
       }
     },
     user: {
@@ -61,7 +65,7 @@ declare global {
       token: string,
       uid: number,
       pid: string,
-      user_name: string,
+      nickname: string,
       avatar: string,
       birthday: string,
       age: number,
@@ -76,7 +80,8 @@ declare global {
     toggleMenuBar(status: boolean): void,
     toggleMenuList(menuIdx: number[]): void,
     changeMenuBar(menuIdx: number[], item: MenuListData): void,
-    changePage(page: curPageData): void
+    changePage(page: curPageData): void,
+    toggleRightPanel(status: boolean): void,
   }
   interface STORE extends STORE_ACTION {
     data: STORE_STATE

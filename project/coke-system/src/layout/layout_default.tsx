@@ -1,12 +1,13 @@
 import * as React from 'react'; 
+import { useState } from 'react';
 import { routes } from '@/routes';
 import { observer, useLocalStore } from 'mobx-react-lite';
 
-import { NavListData, MenuListData } from "./type";
 import getMenuList from './menubar/config';
 import RouterView from '@/routes/view_util';
 import NavBar from './navbar'
 import MenuBar from './menubar'
+import RightPanel from './right_panel'
 import './index.less'
 
 
@@ -31,6 +32,7 @@ const defaultLayout = () => {
     // mock 菜单列表
     menulist: menuList
   }));
+
   return (
     <div className="layout__default__container">
       <NavBar navList={state.navlist} menuList={state.menulist}/>
@@ -40,6 +42,7 @@ const defaultLayout = () => {
         <RouterView routes={routes}/>
         </div>
       </div>
+      <RightPanel/>
     </div>
   )
 }

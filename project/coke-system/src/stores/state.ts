@@ -20,6 +20,10 @@ const state:STORE_STATE = {
         name_e: 'dashboard',
         route: '/dashboard',
       }
+    },
+    rightPannel: {
+      status: false,
+      active: 0
     }
   },
   user: {
@@ -27,7 +31,7 @@ const state:STORE_STATE = {
     token: '123',
     uid: 0,
     pid: '',
-    user_name: '',
+    nickname: 'PomeloCoke',
     avatar: 'https://www.ygexing.com/upload/150/new/20210303/16137992359659254.jpg',
     birthday: '',
     age: 0,

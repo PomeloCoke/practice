@@ -1,50 +1,79 @@
 import * as React from "react";
-import { useEffect } from "react";
 import { observer, useLocalStore } from "mobx-react-lite";
 import useStore from "@/stores";
 import envConfig from "@/settings";
 
 import { MenuListData, NavListData } from "../type";
-import { Breadcrumb } from "antd";
+import { Breadcrumb, Dropdown, Menu } from "antd";
 import IconFont from "@/components/iconfont";
 import styles from "./index.module.less";
 
 type props = {
-  navList: NavListData[],
-  menuList: MenuListData[]
-}
+  navList: NavListData[];
+  menuList: MenuListData[];
+};
+
+/**
+ * 获取子菜单列表
+ * @param item 父菜单项
+ * @param idx 子菜单项索引
+ * @returns {MenuListData} 子菜单项
+ */
+const getParentItem = (item: MenuListData, idx: number): MenuListData => {
+  return item.children[idx];
+};
+
+const avatarMenu = (
+  store: STORE
+) => {
+  const {status} = store.data.layout.rightPannel
+  return (
+    <Menu
+    style={{marginTop: '5px'}}
+    items={
+      [
+        { label: (
+          <div onClick={()=>store.toggleRightPanel(!status)} className={styles.menu_item}>个人中心</div>
+        ), key: 'ava-menu-item-1' },
+        { label: (
+          <div className={styles.menu_item}>设置</div>
+        ), key: 'ava-menu-item-2' },
+        { type: 'divider' },
+        { label: (
+          <div className={styles.menu_item}>退出</div>
+        ), key: 'ava-menu-item-3' },
+      ]
+    }
+  ></Menu>
+  )
+};
 
 const navbar = (prop: props) => {
   const store = useStore();
   const state = useLocalStore(() => ({
-    // mock 产品导航列表
-    navlist: prop.navList,
-    menulist: prop.menuList,
     // mock 通知数量
-    notice_num: 0
+    notice_num: 0,
   }));
   const { navbar, menubar } = store.data.layout;
-  const { avatar } = store.data.user
+  const { avatar } = store.data.user;
 
-  let pageList:MenuListData[] = []
-  let parentItem = prop.menuList[menubar.active_item[0]] 
-  
-  
-  const getParentItem = (item:MenuListData, idx: number):MenuListData => {
-    return item.children[idx]
-  }
+  let pageList: MenuListData[] = [];
+  let parentItem = prop.menuList[menubar.active_item[0]];
 
-  for (let item of menubar.active_item) {
-    pageList.push(parentItem)
-    console.log('getNav',item, parentItem)
-    if (parentItem && parentItem.children && parentItem.children.length > 0) {
-      parentItem = getParentItem(parentItem,item)
-    } else {
-      break
+  // 遍历活跃菜单索引数组，获取活跃菜单路径
+  for (let i = 0; i < menubar.active_item.length; i++) {
+    if (i == 0) {
+      parentItem = prop.menuList[menubar.active_item[0]];
+      pageList.push(parentItem);
+    }
+    if (i != 0 && parentItem.children.length > 0) {
+      parentItem = getParentItem(parentItem, menubar.active_item[i]);
+      pageList.push(parentItem);
+    } else if (i != 0 && parentItem.children.length == 0) {
+      break;
     }
   }
 
-  
   return (
     <>
       <header className={styles.layout__navbar}>
@@ -73,17 +102,24 @@ const navbar = (prop: props) => {
             className={styles.icon}
             onClick={() => store.toggleMenuBar(!menubar.status)}
           >
-            {menubar.status ? <IconFont name="icon-outdent" /> : <IconFont name="icon-indent" />}
+            {menubar.status ? (
+              <IconFont name="icon-outdent" />
+            ) : (
+              <IconFont name="icon-indent" />
+            )}
           </div>
           <div className={styles.pageList}>
             <Breadcrumb>
-              {
-                pageList.map((item, idx) => {
-                  return (
-                    <Breadcrumb.Item className={styles.pageItem} key={`breadcrumbItem-${idx}`}>{item.name_c}</Breadcrumb.Item>
-                  )
-                })
-              }
+              {pageList.map((item, idx) => {
+                return (
+                  <Breadcrumb.Item
+                    className={styles.pageItem}
+                    key={`breadcrumbItem-${idx}`}
+                  >
+                    {item.name_c}
+                  </Breadcrumb.Item>
+                );
+              })}
             </Breadcrumb>
           </div>
         </div>
@@ -91,7 +127,7 @@ const navbar = (prop: props) => {
 
         {/*产品导航 start***********************************/}
         <div className={styles.navListBox}>
-          {state.navlist.map((item, idx) => {
+          {prop.navList.map((item, idx) => {
             return (
               <div className={styles.navItemBox} key={`navitem-${idx}`}>
                 <nav
@@ -110,11 +146,15 @@ const navbar = (prop: props) => {
         {/*产品导航 end*************************************/}
 
         {/*用户头像 start***********************************/}
-        <div className={window.className([
-          styles.userAvaBox,
-          state.notice_num ? styles.notice : ''
-        ])}>
-          <img className={styles.avatar} src={avatar} alt="用户头像" />
+        <div
+          className={window.className([
+            styles.userAvaBox,
+            state.notice_num ? styles.notice : "",
+          ])}
+        >
+          <Dropdown overlay={avatarMenu(store)} placement="bottomRight" >
+            <img className={styles.avatar} src={avatar} alt="用户头像" onClick={()=>store.toggleRightPanel(!store.data.layout.rightPannel.status)} />
+          </Dropdown>
         </div>
         {/*用户头像 end*************************************/}
       </header>
