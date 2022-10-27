@@ -27,13 +27,17 @@ const avatarMenu = (
   store: STORE
 ) => {
   const {status} = store.data.layout.rightPannel
+  const menuStyle = {
+    marginTop: '5px',
+    width: '80px'
+  }
   return (
     <Menu
-    style={{marginTop: '5px'}}
+    style={menuStyle}
     items={
       [
         { label: (
-          <div onClick={()=>store.toggleRightPanel(!status)} className={styles.menu_item}>个人中心</div>
+          <div onClick={()=>store.toggleRightPanel(!status)}>个人中心</div>
         ), key: 'ava-menu-item-1' },
         { label: (
           <div className={styles.menu_item}>设置</div>

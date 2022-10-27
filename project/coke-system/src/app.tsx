@@ -13,11 +13,15 @@ import ENUM from '@/settings/enums'
 import Layout from '@/layout';
 
 const App = observer(() => {
-  // 进入app初始化store
-  const store = useStore()
-  const { theme, theme_mod } = store.data.layout
 
-  store.getSystemInfo()
+  const Store = useStore()
+  const StoreData = Store.data
+  
+  // 读取用户的缓存系统配置信息
+  Store.getSystemInfo()
+
+  // 初始化配置系统主体类名
+  const { theme, theme_mod } = StoreData.layout
   document.getElementsByTagName('html')[0].className = `theme__${theme_mod} theme__${theme}`
 
   return (

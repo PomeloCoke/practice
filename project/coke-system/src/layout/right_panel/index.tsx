@@ -20,8 +20,8 @@ const rightPanel = () => {
         placement="right"
         closable={false}
         onClose={() => store.toggleRightPanel(!status)}
-        visible={status}
-        // visible={true}
+        // visible={status}
+        visible={true}
         bodyStyle={bodyStyle}
       >
         <div className={styles.right_panel_container}>
