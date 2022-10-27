@@ -23,7 +23,7 @@ const state:STORE_STATE = {
     },
     rightPannel: {
       status: false,
-      active: 0
+      active: 1
     }
   },
   user: {

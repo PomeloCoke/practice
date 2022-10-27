@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
 import useStore from '@/stores';
-import 'antd/dist/antd.less'; 
+import '@/assets/style/index.less'
 import '/public/style/theme.css'
 import '@/utils'
 import '@/utils/style'
@@ -25,11 +25,11 @@ const App = observer(() => {
   document.getElementsByTagName('html')[0].className = `theme__${theme_mod} theme__${theme}`
 
   return (
-    <React.StrictMode>
+    // <React.StrictMode>
       <Router>
       <Layout></Layout>
       </Router>
-    </React.StrictMode>
+    // </React.StrictMode>
   )
 })
 

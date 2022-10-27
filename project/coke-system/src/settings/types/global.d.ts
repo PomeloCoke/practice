@@ -82,6 +82,7 @@ declare global {
     changeMenuBar(menuIdx: number[], item: MenuListData): void,
     changePage(page: curPageData): void,
     toggleRightPanel(status: boolean): void,
+    changeRightPanelTab(active: number): void
   }
   interface STORE extends STORE_ACTION {
     data: STORE_STATE

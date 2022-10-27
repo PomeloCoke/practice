@@ -23,33 +23,50 @@ const getParentItem = (item: MenuListData, idx: number): MenuListData => {
   return item.children[idx];
 };
 
-const avatarMenu = (
-  store: STORE
-) => {
-  const {status} = store.data.layout.rightPannel
+const avatarMenu = (store: STORE) => {
+  const { status } = store.data.layout.rightPannel;
   const menuStyle = {
-    marginTop: '5px',
-    width: '80px'
-  }
+    marginTop: "5px",
+    width: "80px",
+  };
   return (
     <Menu
-    style={menuStyle}
-    items={
-      [
-        { label: (
-          <div onClick={()=>store.toggleRightPanel(!status)}>个人中心</div>
-        ), key: 'ava-menu-item-1' },
-        { label: (
-          <div className={styles.menu_item}>设置</div>
-        ), key: 'ava-menu-item-2' },
-        { type: 'divider' },
-        { label: (
-          <div className={styles.menu_item}>退出</div>
-        ), key: 'ava-menu-item-3' },
-      ]
-    }
-  ></Menu>
-  )
+      style={menuStyle}
+      items={[
+        {
+          label: (
+            <div
+              onClick={() => {
+                store.toggleRightPanel(true);
+                store.changeRightPanelTab(1);
+              }}
+            >
+              个人中心
+            </div>
+          ),
+          key: "ava-menu-item-1",
+        },
+        {
+          label: (
+            <div
+              onClick={() => {
+                store.toggleRightPanel(true);
+                store.changeRightPanelTab(2);
+              }}
+            >
+              设置
+            </div>
+          ),
+          key: "ava-menu-item-2",
+        },
+        { type: "divider" },
+        {
+          label: <div className={styles.menu_item}>退出</div>,
+          key: "ava-menu-item-3",
+        },
+      ]}
+    ></Menu>
+  );
 };
 
 const navbar = (prop: props) => {
@@ -156,8 +173,16 @@ const navbar = (prop: props) => {
             state.notice_num ? styles.notice : "",
           ])}
         >
-          <Dropdown overlay={avatarMenu(store)} placement="bottomRight" >
-            <img className={styles.avatar} src={avatar} alt="用户头像" onClick={()=>store.toggleRightPanel(!store.data.layout.rightPannel.status)} />
+          <Dropdown overlay={avatarMenu(store)} placement="bottomRight">
+            <img
+              className={styles.avatar}
+              src={avatar}
+              alt="用户头像"
+              onClick={() => {
+                store.toggleRightPanel(true);
+                store.changeRightPanelTab(1);
+              }}
+            />
           </Dropdown>
         </div>
         {/*用户头像 end*************************************/}

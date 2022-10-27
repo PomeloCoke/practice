@@ -66,6 +66,10 @@ const layout = {
     this.data.layout.rightPannel.status = status
     this.setSystemInfo()
   },
+  changeRightPanelTab(active:number):void {
+    this.data.layout.rightPannel.active = active
+    this.setSystemInfo()
+  }
 }
 
 const action: STORE_ACTION = {
