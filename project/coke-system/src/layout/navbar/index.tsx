@@ -8,7 +8,6 @@ import Styles from "./index.module.less";
 import { Breadcrumb, Dropdown, Menu } from "antd";
 import IconFont from "@/components/iconfont";
 
-
 type propType = {
   Store?: STORE,
   navList?: NavListData[];

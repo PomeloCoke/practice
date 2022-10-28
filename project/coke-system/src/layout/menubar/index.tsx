@@ -69,7 +69,6 @@ const menubar = (prop: propType) => {
   );
 };
 
-
 const createMenuItem = (
   menu: MenuListData[],
   hasChild:hasChildFunction,
