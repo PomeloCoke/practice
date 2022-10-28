@@ -1,22 +1,22 @@
 import * as React from "react";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { observer, useLocalStore } from "mobx-react-lite";
 import useStore from "@/stores";
 
-import { isEqual as _isEqual } from "lodash"
 import { MenuListData } from "../types";
+import Styles from "./index.module.less";
+import { isEqual as _isEqual } from "lodash"
 import IconFont from "@/components/iconfont";
-import styles from "./index.module.less";
 
-type props = {
+type propType = {
+  Store?: STORE,
   menuList: MenuListData[];
 };
 
 type hasChildFunction = (item: MenuListData) => boolean
 type createMenuItemFunction = (menuIdx: number[], item: MenuListData) => void
 
-const menubar = (prop: props) => {
+const menubar = (prop: propType) => {
   const store = useStore();
   const navigate = useNavigate()
   const { menubar } = store.data.layout;
@@ -54,11 +54,11 @@ const menubar = (prop: props) => {
     <>
       <div
         className={window.className([
-          styles.layout__menubar,
-          menubar.status ? styles.active : "",
+          Styles.layout__menubar,
+          menubar.status ? Styles.active : "",
         ])}
       >
-        <div className={styles.menuListBox}>
+        <div className={Styles.menuListBox}>
           {createMenuItem(
             state.menulist,
             hasChild,
@@ -93,31 +93,31 @@ const createMenuItem = (
         return (
           <div
             className={window.className([
-              styles.menuListItem,
-              !isChild ? styles.rootList : "",
-              isActive ? styles.active : "",
-              (menubar.status && isOpen) ? styles.open : ""
+              Styles.menuListItem,
+              !isChild ? Styles.rootList : "",
+              isActive ? Styles.active : "",
+              (menubar.status && isOpen) ? Styles.open : ""
             ])}
             key={menuKey}
           >
             <div
               className={window.className([
-                styles.menuItemBox,
-                !isChild ? styles.rootItem : "",
-                isActive ? styles.active : "",
-                !isChild || hasChild(item) ? styles.parentItem : ""
+                Styles.menuItemBox,
+                !isChild ? Styles.rootItem : "",
+                isActive ? Styles.active : "",
+                !isChild || hasChild(item) ? Styles.parentItem : ""
               ])}
               onClick={() => clickMenuItem(menuIdx, item)}
             >
-              <div className={styles.icon}>
+              <div className={Styles.icon}>
                 {item.icon && <IconFont name={item.icon} />}
               </div>
-              <div className={styles.text}>{item.name_c}</div>
+              <div className={Styles.text}>{item.name_c}</div>
               <div
                 className={window.className([
-                  styles.more,
-                  // isActive && hasChild(item) ? styles.active : "",
-                  isOpen && hasChild(item) ? styles.active : ""
+                  Styles.more,
+                  // isActive && hasChild(item) ? Styles.active : "",
+                  isOpen && hasChild(item) ? Styles.active : ""
                 ])}
               >
                 {hasChild(item) && <IconFont name="icon-arrow-down" />}

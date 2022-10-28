@@ -34,16 +34,21 @@ const DefaultLayout = () => {
     menuList: menuList
   }));
 
+  // 组件实例
+  const navBar = <NavBar navList={state.navList} menuList={state.menuList} Store={Store}/>
+  const menuBar = <MenuBar menuList={state.menuList}/>
+  const routerView = <RouterView routes={routes}/>
+  const rightPanel = <RightPanel/>
   return (
     <div className="layout__default__container">
-      <NavBar navList={state.navList} menuList={state.menuList}/>
+      {navBar}
       <div className='layout__main'>
-        <MenuBar menuList={state.menuList}/>
+        {menuBar}
         <div className='layout__slot__mid'>
-        <RouterView routes={routes}/>
+        {routerView}
         </div>
       </div>
-      <RightPanel/>
+      {rightPanel}
     </div>
   )
 }

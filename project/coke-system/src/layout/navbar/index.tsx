@@ -4,14 +4,20 @@ import useStore from "@/stores";
 import envConfig from "@/settings";
 
 import { MenuListData, NavListData } from "../types";
+import Styles from "./index.module.less";
 import { Breadcrumb, Dropdown, Menu } from "antd";
 import IconFont from "@/components/iconfont";
-import styles from "./index.module.less";
 
-type props = {
-  navList: NavListData[];
-  menuList: MenuListData[];
+
+type propType = {
+  Store?: STORE,
+  navList?: NavListData[];
+  menuList?: MenuListData[];
 };
+
+interface modulePropType extends propType {
+  StoreData?: STORE_STATE
+}
 
 /**
  * 获取子菜单列表
@@ -61,7 +67,7 @@ const avatarMenu = (store: STORE) => {
         },
         { type: "divider" },
         {
-          label: <div className={styles.menu_item}>退出</div>,
+          label: <div className={Styles.menu_item}>退出</div>,
           key: "ava-menu-item-3",
         },
       ]}
@@ -69,8 +75,36 @@ const avatarMenu = (store: STORE) => {
   );
 };
 
-const navbar = (prop: props) => {
+/*logo start***********************************/
+const LogoModule = (prop: modulePropType) => {
+  const { StoreData } = prop
+  const { menubar } = StoreData.layout
+  return (
+    <div
+      className={window.className([
+        Styles.logoBox,
+        menubar.status ? Styles.active : "",
+      ])}
+    >
+      {/* logo图片 */}
+      <div
+        className={window.className([
+          Styles.logoImg,
+          envConfig.envAlias != "prod" ? Styles[envConfig.envAlias] : "",
+        ])}
+      ></div>
+      {/* logo文字 */}
+      <div className={Styles.logoText}>Pomelode</div>
+    </div>
+  )
+}
+/*logo end*************************************/
+
+
+const navbar = (prop: propType) => {
   const store = useStore();
+  const { Store } = prop
+  const StoreData = Store.data
   const state = useLocalStore(() => ({
     // mock 通知数量
     notice_num: 0,
@@ -95,32 +129,16 @@ const navbar = (prop: props) => {
     }
   }
 
+  // 组件实例
+  const logoModule = <LogoModule StoreData={StoreData}/>
   return (
     <>
-      <header className={styles.layout__navbar}>
-        {/*logo start***********************************/}
-        <div
-          className={window.className([
-            styles.logoBox,
-            menubar.status ? styles.active : "",
-          ])}
-        >
-          {/* logo图片 */}
-          <div
-            className={window.className([
-              styles.logoImg,
-              envConfig.envAlias != "prod" ? styles[envConfig.envAlias] : "",
-            ])}
-          ></div>
-          {/* logo文字 */}
-          <div className={styles.logoText}>Pomelode</div>
-        </div>
-        {/*logo end*************************************/}
-
+      <header className={Styles.layout__navbar}>
+        {logoModule}
         {/*面包屑 start***********************************/}
-        <div className={window.className([styles.breadcrumbBox])}>
+        <div className={window.className([Styles.breadcrumbBox])}>
           <div
-            className={styles.icon}
+            className={Styles.icon}
             onClick={() => store.toggleMenuBar(!menubar.status)}
           >
             {menubar.status ? (
@@ -129,12 +147,12 @@ const navbar = (prop: props) => {
               <IconFont name="icon-indent" />
             )}
           </div>
-          <div className={styles.pageList}>
+          <div className={Styles.pageList}>
             <Breadcrumb>
               {pageList.map((item, idx) => {
                 return (
                   <Breadcrumb.Item
-                    className={styles.pageItem}
+                    className={Styles.pageItem}
                     key={`breadcrumbItem-${idx}`}
                   >
                     {item.name_c}
@@ -147,18 +165,18 @@ const navbar = (prop: props) => {
         {/*面包屑 end*************************************/}
 
         {/*产品导航 start***********************************/}
-        <div className={styles.navListBox}>
+        <div className={Styles.navListBox}>
           {prop.navList.map((item, idx) => {
             return (
-              <div className={styles.navItemBox} key={`navitem-${idx}`}>
+              <div className={Styles.navItemBox} key={`navitem-${idx}`}>
                 <nav
                   className={window.className([
-                    styles.navItem,
-                    navbar.active === idx ? styles.active : "",
+                    Styles.navItem,
+                    navbar.active === idx ? Styles.active : "",
                   ])}
                 >
-                  <IconFont className={styles.icon} name={item.icon} />
-                  <div className={styles.text}>{item.name_c}</div>
+                  <IconFont className={Styles.icon} name={item.icon} />
+                  <div className={Styles.text}>{item.name_c}</div>
                 </nav>
               </div>
             );
@@ -169,13 +187,13 @@ const navbar = (prop: props) => {
         {/*用户头像 start***********************************/}
         <div
           className={window.className([
-            styles.userAvaBox,
-            state.notice_num ? styles.notice : "",
+            Styles.userAvaBox,
+            state.notice_num ? Styles.notice : "",
           ])}
         >
           <Dropdown overlay={avatarMenu(store)} placement="bottomRight">
             <img
-              className={styles.avatar}
+              className={Styles.avatar}
               src={avatar}
               alt="用户头像"
               onClick={() => {
