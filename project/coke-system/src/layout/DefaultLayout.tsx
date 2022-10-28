@@ -1,21 +1,21 @@
 import * as React from 'react'; 
-import { useState } from 'react';
 import { routes } from '@/routes';
 import { observer, useLocalStore } from 'mobx-react-lite';
+import useStore from "@/stores";
 
-import getMenuList from './menubar/config';
-import RouterView from '@/routes/view_util';
-import NavBar from './navbar'
-import MenuBar from './menubar'
-import RightPanel from './right_panel'
 import './index.less'
+import getMenuList from './MenuBar/config';
+import RouterView from '@/routes/RouterView';
+import NavBar from './NavBar'
+import MenuBar from './MenuBar'
+import RightPanel from './RightPanel'
 
-
-const defaultLayout = () => {
+const DefaultLayout = () => {
+  const Store = useStore();
   const menuList = getMenuList('blog')
   const state = useLocalStore(() => ({
     // mock 产品导航列表
-    navlist: [
+    navList: [
       {
         id: 1,
         name_c: "博客",
@@ -30,14 +30,15 @@ const defaultLayout = () => {
       },
     ],
     // mock 菜单列表
-    menulist: menuList
+    // TODO 后期需要跟接口配合展示该用户可见菜单
+    menuList: menuList
   }));
 
   return (
     <div className="layout__default__container">
-      <NavBar navList={state.navlist} menuList={state.menulist}/>
+      <NavBar navList={state.navList} menuList={state.menuList}/>
       <div className='layout__main'>
-        <MenuBar menuList={state.menulist}/>
+        <MenuBar menuList={state.menuList}/>
         <div className='layout__slot__mid'>
         <RouterView routes={routes}/>
         </div>
@@ -47,4 +48,4 @@ const defaultLayout = () => {
   )
 }
 
-export default observer(defaultLayout)
+export default observer(DefaultLayout)

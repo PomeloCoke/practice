@@ -3,11 +3,7 @@ import { observer } from "mobx-react-lite";
 import useStore from "@/stores";
 
 import Styles from "./index.module.less";
-import {
-  Sticky as AntSticky,
-  StickyContainer as AntStickyContainer,
-} from "react-sticky";
-import { Drawer as AntDrawer, Tabs as AntTabs, TabsProps } from "antd";
+import { Drawer as AntDrawer, Tabs as AntTabs } from "antd";
 import IconFont from "@/components/iconfont";
 
 const bodyStyle = {
@@ -92,7 +88,7 @@ const rightPanel = () => {
               </div>
             </div>
             {/*基本展示 end*************************************/}
-            {/* <AntStickyContainer> */}
+
             {/*标签页 start***********************************/}
             <AntTabs
               defaultActiveKey="right-pannel-tab-item-1"
@@ -102,7 +98,7 @@ const rightPanel = () => {
               centered={true}
             />
             {/*标签页 end*************************************/}
-          {/* </AntStickyContainer> */}
+
         </div>
       </AntDrawer>
     </>

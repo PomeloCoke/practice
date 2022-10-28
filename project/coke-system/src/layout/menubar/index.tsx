@@ -5,7 +5,7 @@ import { observer, useLocalStore } from "mobx-react-lite";
 import useStore from "@/stores";
 
 import { isEqual as _isEqual } from "lodash"
-import { MenuListData } from "../type";
+import { MenuListData } from "../types";
 import IconFont from "@/components/iconfont";
 import styles from "./index.module.less";
 

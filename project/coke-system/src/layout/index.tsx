@@ -1,10 +1,10 @@
 import * as React from 'react'; 
-import { routes } from '@/routes';
 import { observer } from 'mobx-react-lite';
+import { routes } from '@/routes';
 import useStore from '@/stores';
 
-import RouterView from '@/routes/view_util';
-import DefaultLayout from './layout_default'
+import RouterView from '@/routes/RouterView';
+import DefaultLayout from './DefaultLayout'
 
 const Layout = () => {
   const store = useStore()

@@ -1,4 +1,4 @@
-import { MenuListData } from "@/layout/type"
+import { MenuListData } from "@/layout/types"
 import { curPageData } from "@/stores/type"
 export { }
 declare global {

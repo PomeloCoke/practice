@@ -3,7 +3,7 @@ import { observer, useLocalStore } from "mobx-react-lite";
 import useStore from "@/stores";
 import envConfig from "@/settings";
 
-import { MenuListData, NavListData } from "../type";
+import { MenuListData, NavListData } from "../types";
 import { Breadcrumb, Dropdown, Menu } from "antd";
 import IconFont from "@/components/iconfont";
 import styles from "./index.module.less";

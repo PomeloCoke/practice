@@ -1,5 +1,6 @@
-import { defaultRoutes, blogRoutes } from "@/routes";
-import { MenuListData } from "../type";
+import { defaultRoutes } from "@/routes";
+import blogRoutes from "@/routes/configs/blog";
+import { MenuListData } from "../types";
 
 const getMenuList = (type: string):MenuListData[] => {
   let routes = defaultRoutes
