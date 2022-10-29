@@ -6,10 +6,6 @@ import Styles from "./index.module.less";
 import { Drawer as AntDrawer, Tabs as AntTabs } from "antd";
 import IconFont from "@/components/iconfont";
 
-const bodyStyle = {
-  padding: "0",
-};
-
 const CountTabList = () => {
   return <div>我是账户面板</div>;
 };
@@ -67,7 +63,9 @@ const rightPanel = () => {
         onClose={() => Store.toggleRightPanel(!status)}
         open={status}
         // open={true}
-        bodyStyle={bodyStyle}
+        bodyStyle={{
+          padding: "0",
+        }}
       >
         <div className={Styles.right_panel_container}>
           

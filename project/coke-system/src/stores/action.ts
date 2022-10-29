@@ -1,80 +1,121 @@
-import { curMenuData, curPageData } from "./type"
-import { remove as _remove, isEqual as _isEqual } from "lodash"
+import { curMenuType, curPageType } from "./types";
+import { remove as _remove, isEqual as _isEqual } from "lodash";
 const common = {
   /**
    * 存储系统信息
    * @description 将store中的数据存储到浏览器的localstorage中
    */
-   setSystemInfo(): void {
-    localStorage.setItem('system_info', JSON.stringify(this.data))
+  setSystemInfo(): void {
+    localStorage.setItem("system_info", JSON.stringify(this.data));
   },
+
   /**
    * 获取系统信息
    * @description 将浏览器的localstorage中的数据存储到store中
    */
-   getSystemInfo(): void {
-    if (localStorage.getItem('system_info')) {
-      this.data = JSON.parse(localStorage.getItem('system_info'))
+  getSystemInfo(): void {
+    if (localStorage.getItem("system_info")) {
+      this.data = JSON.parse(localStorage.getItem("system_info"));
     }
   },
+
   /**
    * 存储登录态
    * @description 将登录态存储到store对应的字段，并更新浏览器缓存的系统信息数据
-   * @param status 
+   * @param status
    */
-   setLogin(status: boolean): void {
-    this.data.user.login = status
-    this.data.user.token = status ? '123' : ''
-    this.setSystemInfo()
+  setLogin(status: boolean): void {
+    this.data.user.login = status;
+    this.data.user.token = status ? "123" : "";
+    this.setSystemInfo();
   },
-}
+};
 
 const layout = {
+  /**
+   * 切换菜单栏状态
+   * @description 打开/收起菜单栏
+   * @param status 菜单状态
+   */
   toggleMenuBar(status: boolean): void {
-    this.data.layout.menubar.status = status
-    this.setSystemInfo()
+    this.data.layout.menuBar.status = status;
+    this.setSystemInfo();
   },
+
+  /**
+   * 切换菜单列表项状态
+   * @description 打开/收起菜单列表项
+   * @param menuIdx 菜单列表项对应的ids
+   */
   toggleMenuList(menuIdx: number[]): void {
-    const isActive = this.data.layout.menubar.active_list.filter((item:Number[])=>_isEqual(item, menuIdx)).length == 1 
+    const isActive =
+      this.data.layout.menuBar.active_list.filter((item: Number[]) =>
+        _isEqual(item, menuIdx)
+      ).length == 1;
     if (isActive) {
-      _remove(this.data.layout.menubar.active_list, function(item) {
-        return _isEqual(item, menuIdx)
-      })
+      _remove(this.data.layout.menuBar.active_list, function (item) {
+        return _isEqual(item, menuIdx);
+      });
     } else {
-      this.data.layout.menubar.active_list.push(menuIdx)
+      this.data.layout.menuBar.active_list.push(menuIdx);
     }
-    this.setSystemInfo()
+    this.setSystemInfo();
   },
-  changeMenuBar(menuIdx: number[], item:curMenuData): void {
-    this.data.layout.menubar.active_item = [0,0,0,0,0]
-    menuIdx.map((item, idx)=> {
-      this.data.layout.menubar.active_item[idx] = item
-    })
-    if(item.children.length == 0) {
-      const {name_c, name_e, route} = item
+
+  /**
+   * 改变活跃的菜单项
+   * @description 将活跃菜单项的相关信息存储到系统信息中
+   * @param menuIdx 活跃菜单项的ids
+   * @param item 活跃菜单项数据
+   */
+  changeMenuBar(menuIdx: number[], item: curMenuType): void {
+    this.data.layout.menuBar.active_item = [0, 0, 0, 0, 0];
+    menuIdx.map((item, idx) => {
+      this.data.layout.menuBar.active_item[idx] = item;
+    });
+    if (item.children.length == 0) {
+      const { name_c, name_e, route } = item;
       const curPage = {
-        name_c, name_e, route
-      }
-      this.changePage(curPage)
+        name_c,
+        name_e,
+        route,
+      };
+      this.changePage(curPage);
     }
-    this.setSystemInfo()
+    this.setSystemInfo();
   },
-  changePage(page:curPageData):void {
-    this.data.layout.pagebar.cur_page = page
+
+  /**
+   * 改变活跃页面
+   * @param page 页面相关信息
+   */
+  changePage(page: curPageType): void {
+    this.data.layout.pageBar.cur_page = page;
   },
+
+  /**
+   * 切换右侧个人面板状态
+   * @description 打开/收起面板
+   * @param status 面板状态
+   */
   toggleRightPanel(status: boolean): void {
-    this.data.layout.rightPannel.status = status
-    this.setSystemInfo()
+    this.data.layout.rightPannel.status = status;
+    this.setSystemInfo();
   },
-  changeRightPanelTab(active:number):void {
-    this.data.layout.rightPannel.active = active
-    this.setSystemInfo()
-  }
-}
+
+  /**
+   * 改变个人面板中的tab项
+   * @param active 活跃的tab项id
+   */
+  changeRightPanelTab(active: number): void {
+    this.data.layout.rightPannel.active = active;
+    this.setSystemInfo();
+  },
+};
 
 const action: STORE_ACTION = {
   ...common,
-  ...layout
-}
+  ...layout,
+};
 
-export default action
+export default action;

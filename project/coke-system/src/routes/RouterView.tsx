@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import { routeGurad } from './utils';
-import LayoutLoading from "@/layout/loading";
+import LayoutLoading from "@/layout/Loading";
 
 type propType = {
   routes: ROUTER[]

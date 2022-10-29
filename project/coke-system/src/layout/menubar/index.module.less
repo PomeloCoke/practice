@@ -26,14 +26,14 @@
     box-shadow: 0 0px 4px rgba(0, 0, 0, 0.3);
     cursor: pointer;
   }
-  .menuListBox {
+  .menu_list_box {
     width: 100%;
   }
 
-  .menuListItem {
+  .menu_list_item {
     position: relative;
     width: 100%;
-    .menuItemBox {
+    .menu_item_box {
       position: relative;
       z-index: 2;
       width: 100%;
@@ -79,13 +79,14 @@
       }
     }
   }
-  .rootList {
+  .root_list {
+    height: auto;
     transition: all 0.3s ease;
     .parentItem {
       z-index: 2;
       background-color: @for-tertiary;
     }
-    &.open .menuListItem {
+    &.open .menu_list_item {
       background-color: @for-tertiary;
       transform: translateY(0);
       transition: all 0.3s ease;
@@ -94,12 +95,13 @@
       height: 48px;
       overflow: hidden;
     }
-    &:not(.open)>.menuListItem {
+    &:not(.open)>.menu_list_item {
+      background-color: @for-tertiary;
       transform: translateY(-100%);
       overflow: hidden;
     }
   }
-  // .menuListItem:not(.rootList) {
+  // .menu_list_item:not(.root_list) {
   //   display: none;
   // }
 }
@@ -130,16 +132,16 @@
   .parentItem {
     background-color: @for-primary;
   }
-  // .active>.menuListItem:not(.rootList) {
+  // .active>.menu_list_item:not(.root_list) {
   //   display: block;
   // }
-  .rootList {
-    .menuItemBox.rootItem:hover::after,
-    &.active .menuItemBox.rootItem::after {
+  .root_list {
+    .menu_item_box.root_item:hover::after,
+    &.active .menu_item_box.root_item::after {
       width: 6px;
     }
-    .menuItemBox.rootItem:hover,
-    .menuItemBox.rootItem.active  {
+    .menu_item_box.root_item:hover,
+    .menu_item_box.root_item.active  {
       .icon,
       .text,
       .more {
@@ -147,8 +149,8 @@
       }
     }
   }
-  .menuItemBox:not(.rootItem):hover,
-  .menuItemBox:not(.rootItem).active {
+  .menu_item_box:not(.root_item):hover,
+  .menu_item_box:not(.root_item).active {
     background-color: @theme-secondary;
     .icon,
     .text,
@@ -159,7 +161,7 @@
 }
 
 .layout__menubar:not(.active) {
-  .rootList.active .menuItemBox.rootItem {
+  .root_list.active .menu_item_box.root_item {
     background-color: @for-primary;
   }
 }

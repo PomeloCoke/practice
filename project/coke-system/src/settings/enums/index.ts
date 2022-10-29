@@ -1,9 +1,10 @@
 import DATE from './date'
 import CLIENT from './client'
 import API from './api'
+import BASIC from './basic'
 
 // TODO 枚举变量类型定义
-let enumImportList: any = { DATE, CLIENT, API }
+let enumImportList: any = { DATE, CLIENT, API, BASIC }
 let enumExportList:any = {}
 
 Object.keys(enumImportList).map(key=> {

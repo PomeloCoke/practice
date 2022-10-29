@@ -12,7 +12,6 @@ import '@/utils/style'
 import Layout from '@/layout';
 
 const App = observer(() => {
-
   const Store = useStore()
   const StoreData = Store.data
   

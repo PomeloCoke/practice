@@ -111,7 +111,7 @@ function routeSearch (path: string, routes: ROUTER[]): ROUTER | null {
 
 /**
  * 导航守卫
- * @param routes 
+ * @param routes 路由列表
  * @returns if 路由未被拦截=>返回路由列表元素 else =>执行beforeEach中的判断
  */
  export function routeGurad(routes: ROUTER[]) {

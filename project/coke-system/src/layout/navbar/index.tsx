@@ -1,36 +1,137 @@
 import * as React from "react";
-import { observer, useLocalStore } from "mobx-react-lite";
-import useStore from "@/stores";
+import { observer } from "mobx-react-lite";
 import envConfig from "@/settings";
 
-import { MenuListData, NavListData } from "../types";
+import { menuListType, navListType } from "../types";
 import Styles from "./index.module.less";
 import { Breadcrumb, Dropdown, Menu } from "antd";
 import IconFont from "@/components/iconfont";
 
 type propType = {
-  Store?: STORE,
-  navList?: NavListData[];
-  menuList?: MenuListData[];
+  Store?: STORE;
+  navList?: navListType[];
+  menuList?: menuListType[];
 };
 
 interface modulePropType extends propType {
-  StoreData?: STORE_STATE,
-  notice_num?: number
+  StoreData?: STORE_STATE;
+  notice_num?: number;
 }
 
+/*logo start***********************************/
+const LogoModule = (prop: modulePropType) => {
+  const { StoreData } = prop;
+  const { menuBar } = StoreData.layout;
+  return (
+    <div
+      className={window.className([
+        Styles.logo_box,
+        menuBar.status ? Styles.active : "",
+      ])}
+    >
+      {/* logo图片 */}
+      <div
+        className={window.className([
+          Styles.logo_img,
+          envConfig.envAlias != "prod" ? Styles[envConfig.envAlias] : "",
+        ])}
+      ></div>
+      {/* logo文字 */}
+      <div className={Styles.logo_text}>Pomelode</div>
+    </div>
+  );
+};
+/*logo end*************************************/
+
+/*面包屑 start***********************************/
 /**
  * 获取子菜单列表
  * @param item 父菜单项
  * @param idx 子菜单项索引
- * @returns {MenuListData} 子菜单项
+ * @returns {menuListType} 子菜单项
  */
-const getParentItem = (item: MenuListData, idx: number): MenuListData => {
+const getParentItem = (item: menuListType, idx: number): menuListType => {
   return item.children[idx];
 };
 
-const avatarMenu = (store: STORE) => {
-  const { status } = store.data.layout.rightPannel;
+const BreadcrumbModule = (prop: modulePropType) => {
+  const { Store, StoreData } = prop;
+  const { menuBar } = StoreData.layout;
+  let page_list: menuListType[] = [];
+  let parentItem = prop.menuList[menuBar.active_item[0]];
+  // 遍历活跃菜单索引数组，获取活跃菜单路径
+  for (let i = 0; i < menuBar.active_item.length; i++) {
+    if (i == 0) {
+      parentItem = prop.menuList[menuBar.active_item[0]];
+      page_list.push(parentItem);
+    }
+    if (i != 0 && parentItem.children.length > 0) {
+      parentItem = getParentItem(parentItem, menuBar.active_item[i]);
+      page_list.push(parentItem);
+    } else if (i != 0 && parentItem.children.length == 0) {
+      break;
+    }
+  }
+
+  return (
+    <div className={window.className([Styles.breadcrumb_box])}>
+      <div
+        className={Styles.icon}
+        onClick={() => Store.toggleMenuBar(!menuBar.status)}
+      >
+        {menuBar.status ? (
+          <IconFont name="icon-outdent" />
+        ) : (
+          <IconFont name="icon-indent" />
+        )}
+      </div>
+      <div className={Styles.page_list}>
+        <Breadcrumb>
+          {page_list.map((item, idx) => {
+            return (
+              <Breadcrumb.Item
+                className={Styles.page_item}
+                key={`breadcrumbItem-${idx}`}
+              >
+                {item.name_c}
+              </Breadcrumb.Item>
+            );
+          })}
+        </Breadcrumb>
+      </div>
+    </div>
+  );
+};
+/*面包屑 end*************************************/
+
+/*产品导航 start***********************************/
+const NavigationModule = (prop: modulePropType) => {
+  const { StoreData } = prop;
+  const { navBar } = StoreData.layout;
+  return (
+    <div className={Styles.nav_list_box}>
+      {prop.navList.map((item, idx) => {
+        return (
+          <div className={Styles.nav_item_box} key={`navitem-${idx}`}>
+            <nav
+              className={window.className([
+                Styles.nav_item,
+                navBar.active === idx ? Styles.active : "",
+              ])}
+            >
+              <IconFont className={Styles.icon} name={item.icon} />
+              <div className={Styles.text}>{item.name_c}</div>
+            </nav>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+/*产品导航 end*************************************/
+
+/*用户头像 start***********************************/
+const AvatarMenu = (Store: STORE) => {
   const menuStyle = {
     marginTop: "5px",
     width: "80px",
@@ -43,8 +144,8 @@ const avatarMenu = (store: STORE) => {
           label: (
             <div
               onClick={() => {
-                store.toggleRightPanel(true);
-                store.changeRightPanelTab(1);
+                Store.toggleRightPanel(true);
+                Store.changeRightPanelTab(1);
               }}
             >
               个人中心
@@ -56,8 +157,8 @@ const avatarMenu = (store: STORE) => {
           label: (
             <div
               onClick={() => {
-                store.toggleRightPanel(true);
-                store.changeRightPanelTab(2);
+                Store.toggleRightPanel(true);
+                Store.changeRightPanelTab(2);
               }}
             >
               设置
@@ -67,7 +168,7 @@ const avatarMenu = (store: STORE) => {
         },
         { type: "divider" },
         {
-          label: <div className={Styles.menu_item}>退出</div>,
+          label: <div>退出</div>,
           key: "ava-menu-item-3",
         },
       ]}
@@ -75,123 +176,18 @@ const avatarMenu = (store: STORE) => {
   );
 };
 
-/*logo start***********************************/
-const LogoModule = (prop: modulePropType) => {
-  const { StoreData } = prop
-  const { menubar } = StoreData.layout
-  return (
-    <div
-      className={window.className([
-        Styles.logoBox,
-        menubar.status ? Styles.active : "",
-      ])}
-    >
-      {/* logo图片 */}
-      <div
-        className={window.className([
-          Styles.logoImg,
-          envConfig.envAlias != "prod" ? Styles[envConfig.envAlias] : "",
-        ])}
-      ></div>
-      {/* logo文字 */}
-      <div className={Styles.logoText}>Pomelode</div>
-    </div>
-  )
-}
-/*logo end*************************************/
-
-/*面包屑 start***********************************/
-const BreadcrumbModule = (prop: modulePropType) => {
-  const { Store, StoreData } = prop
-  const { menubar } = StoreData.layout
-
-  let pageList: MenuListData[] = [];
-  let parentItem = prop.menuList[menubar.active_item[0]];
-  // 遍历活跃菜单索引数组，获取活跃菜单路径
-  for (let i = 0; i < menubar.active_item.length; i++) {
-    if (i == 0) {
-      parentItem = prop.menuList[menubar.active_item[0]];
-      pageList.push(parentItem);
-    }
-    if (i != 0 && parentItem.children.length > 0) {
-      parentItem = getParentItem(parentItem, menubar.active_item[i]);
-      pageList.push(parentItem);
-    } else if (i != 0 && parentItem.children.length == 0) {
-      break;
-    }
-  }
-
-  return (
-    <div className={window.className([Styles.breadcrumbBox])}>
-      <div
-        className={Styles.icon}
-        onClick={() => Store.toggleMenuBar(!menubar.status)}
-      >
-        {menubar.status ? (
-          <IconFont name="icon-outdent" />
-        ) : (
-          <IconFont name="icon-indent" />
-        )}
-      </div>
-      <div className={Styles.pageList}>
-        <Breadcrumb>
-          {pageList.map((item, idx) => {
-            return (
-              <Breadcrumb.Item
-                className={Styles.pageItem}
-                key={`breadcrumbItem-${idx}`}
-              >
-                {item.name_c}
-              </Breadcrumb.Item>
-            );
-          })}
-        </Breadcrumb>
-      </div>
-    </div>
-  )
-
-}
-/*面包屑 end*************************************/
-
-/*产品导航 start***********************************/
-const NavigationModule = (prop: modulePropType) => {
-  const { StoreData } = prop
-  const { navbar } = StoreData.layout
-  return (
-    <div className={Styles.navListBox}>
-      {prop.navList.map((item, idx) => {
-        return (
-          <div className={Styles.navItemBox} key={`navitem-${idx}`}>
-            <nav
-              className={window.className([
-                Styles.navItem,
-                navbar.active === idx ? Styles.active : "",
-              ])}
-            >
-              <IconFont className={Styles.icon} name={item.icon} />
-              <div className={Styles.text}>{item.name_c}</div>
-            </nav>
-          </div>
-        );
-      })}
-    </div>
-  )
-}
-/*产品导航 end*************************************/
-
-/*用户头像 start***********************************/
 const AvatarModule = (prop: modulePropType) => {
-  const { Store, StoreData } = prop
-  const { avatar } = StoreData.user
+  const { Store, StoreData } = prop;
+  const { avatar } = StoreData.user;
 
   return (
     <div
       className={window.className([
-        Styles.userAvaBox,
+        Styles.user_avatar_box,
         prop.notice_num ? Styles.notice : "",
       ])}
     >
-      <Dropdown overlay={avatarMenu(Store)} placement="bottomRight">
+      <Dropdown overlay={AvatarMenu(Store)} placement="bottomRight">
         <img
           className={Styles.avatar}
           src={avatar}
@@ -203,41 +199,23 @@ const AvatarModule = (prop: modulePropType) => {
         />
       </Dropdown>
     </div>
-  )
-}
+  );
+};
 /*用户头像 end*************************************/
 
-const navbar = (prop: propType) => {
-  const store = useStore();
-  const { Store } = prop
-  const StoreData = Store.data
-  const state = useLocalStore(() => ({
-    // mock 通知数量
-    notice_num: 0,
-  }));
-  const { navbar, menubar } = store.data.layout;
-  const { avatar } = store.data.user;
-
-  // 组件实例
-  const logoModule = <LogoModule StoreData={StoreData} />
-  const breadcrumbModule = <BreadcrumbModule Store={Store} StoreData={StoreData} />
-  const navigationModule = <NavigationModule Store={Store} StoreData={StoreData} />
-  const avatarModule = <AvatarModule Store={Store} StoreData={StoreData} />
-
+const NavBar = (prop: propType) => {
+  const { Store, menuList, navList } = prop;
+  const StoreData = Store.data;
   return (
     <>
       <header className={Styles.layout__navbar}>
-        {logoModule}
-        {breadcrumbModule}
-        {navigationModule}
-        {avatarModule}
-
-        {/*用户头像 start***********************************/}
-
-        {/*用户头像 end*************************************/}
+        {LogoModule({StoreData})}
+        {BreadcrumbModule({Store,StoreData,menuList})}
+        {NavigationModule({Store,StoreData,navList})}
+        {AvatarModule({Store,StoreData})}
       </header>
     </>
   );
 };
 
-export default observer(navbar);
+export default observer(NavBar);

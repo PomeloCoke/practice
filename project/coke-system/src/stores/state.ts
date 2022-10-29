@@ -3,16 +3,16 @@ const state:STORE_STATE = {
     loading: false,
     theme: 'vitality',
     theme_mod: 'light',
-    navbar: {
+    navBar: {
       status: true,
       active: 0,
     },
-    menubar: {
+    menuBar: {
       status: false,
       active_item: [0,0,0,0,0],
       active_list:[],
     },
-    pagebar: {
+    pageBar: {
       status: true,
       active: 0,
       cur_page: {
