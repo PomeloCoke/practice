@@ -8,6 +8,7 @@ import getMenuList from "./MenuBar/configs";
 import RouterView from "@/routes/RouterView";
 import NavBar from "./NavBar";
 import MenuBar from "./MenuBar";
+import PageBar from './PageBar'
 import RightPanel from "./RightPanel";
 
 const DefaultLayout = () => {
@@ -33,19 +34,17 @@ const DefaultLayout = () => {
     menuList: getMenuList(1),
   }));
 
-  // 组件实例
-  const navBar = <NavBar Store={Store} navList={state.navList} menuList={state.menuList} />;
-  const menuBar = <MenuBar Store={Store} menuList={state.menuList} />;
-  const routerView = <RouterView routes={routes} />;
-  const rightPanel = <RightPanel />;
   return (
     <div className="layout__default__container">
-      {navBar}
+      <NavBar Store={Store} navList={state.navList} menuList={state.menuList} />
       <div className="layout__main">
-        {menuBar}
-        <div className="layout__slot__mid">{routerView}</div>
+        <MenuBar Store={Store} menuList={state.menuList} />
+        <div className="layout__slot__mid">
+          <PageBar Store={Store} />
+          <RouterView routes={routes} />
+        </div>
       </div>
-      {rightPanel}
+      <RightPanel />
     </div>
   );
 };

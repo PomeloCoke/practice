@@ -35,15 +35,14 @@ const beforeEach = (
       return false
     }
   }
-
-  console.log('getMenuIdx', routeInfo)
+  
   const pageItem = {
     name_c: routeInfo.menu.name_c,
     name_e: routeInfo.menu.name_e,
     route: pathname
   }
-  Store.changeMenuBar(routeInfo.idxs, pageItem)
 
+  Store.changeMenuBar(routeInfo.idxs, pageItem)
   document.title = routeInfo.meta.title
 
   return true
@@ -68,7 +67,6 @@ function routeSearch(path: string, routes: ROUTER[], id: number[] = []): ROUTER 
     if (routes[i].children) res = routeSearch(path, routes[i].children, idxs)
   }
   return res
-  
 }
 
 /**

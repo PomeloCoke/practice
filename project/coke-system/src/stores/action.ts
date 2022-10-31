@@ -80,17 +80,9 @@ const layout = {
         name_e,
         route,
       };
-      this.changePage(curPage);
+      this.addPageItem(curPage);
     }
     this.setSystemInfo();
-  },
-
-  /**
-   * 改变活跃页面
-   * @param page 页面相关信息
-   */
-  changePage(page: curPageType): void {
-    this.data.layout.pageBar.cur_page = page;
   },
 
   /**
@@ -111,6 +103,16 @@ const layout = {
     this.data.layout.rightPannel.active = active;
     this.setSystemInfo();
   },
+  /**
+   * 增加页面标签栏项
+   * @description 改变活跃页面
+   * @param page 页面相关信息
+   */
+  addPageItem(page: curPageType) {
+    this.data.layout.pageBar.cur_page = page;
+    const hasItem = this.data.layout.pageBar.cache_list.filter((item: curPageType[])=>_isEqual(item, page)).length == 1
+    if (!hasItem) this.data.layout.pageBar.cache_list.push(page)
+  }
 };
 
 const action: STORE_ACTION = {

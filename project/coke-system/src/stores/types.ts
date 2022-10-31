@@ -40,7 +40,8 @@ export type STATE = {
         name_e?: string,
         route: string,
         params?: any
-      }
+      },
+      cache_list:curPageType[] | []
     },
     rightPannel: {
       status: boolean,
@@ -68,7 +69,7 @@ export type ACTION = {
   toggleMenuBar(status: boolean): void,
   toggleMenuList(menuIdx: number[]): void,
   changeMenuBar(menuIdx: number[], item: curMenuType): void,
-  changePage(page: curPageType): void,
   toggleRightPanel(status: boolean): void,
-  changeRightPanelTab(active: number): void
+  changeRightPanelTab(active: number): void,
+  addPageItem(page: curPageType): void,
 }

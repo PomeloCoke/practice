@@ -19,7 +19,8 @@ const state:STORE_STATE = {
         name_c: '仪表盘',
         name_e: 'dashboard',
         route: '/dashboard',
-      }
+      },
+      cache_list: []
     },
     rightPannel: {
       status: false,

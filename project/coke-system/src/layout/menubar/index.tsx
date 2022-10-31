@@ -119,7 +119,7 @@ const MenuBar = (prop: propType) => {
    * @param item 菜单项
    */
   const clickMenuItem = (menuIdx: number[], item: menuListType) => {
-    if (!hasChild(item)) {
+    if (!hasChild(item) && menuBar.status) {
       if (menuBar.status) Store.changeMenuBar(menuIdx, item);
       navigate(item.route, { replace: true });
     } else {
