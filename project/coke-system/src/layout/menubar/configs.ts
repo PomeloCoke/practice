@@ -38,13 +38,13 @@ const getMenuList = (product_id: number): menuListType[] => {
 const createMenuList = (routes: ROUTER[], isChild = false) => {
   let list: menuListType[] = [];
   routes
-    .filter((item) => item.menu.is_show)
     .map((item, idx) => {
       let listItem = {
         id: idx + 1,
         name_c: item.menu.name_c || "",
         name_e: item.menu.name_e || "",
         icon: item.menu.icon || "",
+        is_show: item.menu.is_show || false,
         route: item.menu.route || "",
         children: [] as menuListType[],
       };

@@ -73,7 +73,7 @@ const layout = {
     menuIdx.map((item, idx) => {
       this.data.layout.menuBar.active_item[idx] = item;
     });
-    if (item.children.length == 0) {
+    if (item.children && item.children.length == 0) {
       const { name_c, name_e, route } = item;
       const curPage = {
         name_c,

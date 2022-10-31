@@ -51,6 +51,7 @@ const createMenuItem = (
           <div
             className={window.className([
               Styles.menu_list_item,
+              !item.is_show ? Styles.hide : "",
               !isChild ? Styles.root_list : "",
               isActive ? Styles.active : "",
               menuBar.status && isOpen ? Styles.open : "",
@@ -79,7 +80,7 @@ const createMenuItem = (
                 {hasChild(item) && <IconFont name="icon-arrow-down" />}
               </div>
             </div>
-            {hasChild(item) &&
+            {hasChild(item) && item.is_show &&
               createMenuItem(
                 StoreData,
                 item.children,

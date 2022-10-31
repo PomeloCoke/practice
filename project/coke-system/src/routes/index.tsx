@@ -6,6 +6,7 @@ export const defaultRoutes: ROUTER[] = [
     path: '/',
     redirect: '/login',
     meta: {
+      fullpath: '/',
       is_verify: false,
       is_login: false,
     },
@@ -17,6 +18,7 @@ export const defaultRoutes: ROUTER[] = [
     path: '/login',
     component: React.lazy(() => import('@/views/single/login')),
     meta: {
+      fullpath: '/login',
       title: '登录',
       is_verify: false,
       is_login: false,
@@ -29,6 +31,7 @@ export const defaultRoutes: ROUTER[] = [
     path: '/dashboard',
     component: React.lazy(() => import("@/views/index")),
     meta: {
+      fullpath: '/dashboard',
       title: '仪表盘',
       is_verify: false,
       is_login: true,

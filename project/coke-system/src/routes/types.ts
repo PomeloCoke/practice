@@ -3,6 +3,7 @@ export type Router = {
   redirect?: string,
   component?: any
   meta: {
+    fullpath: string,
     title?: string,
     is_verify: boolean,
     is_login: boolean,
@@ -15,5 +16,6 @@ export type Router = {
     icon?: string,
 
   },
-  children?: Router[]
+  children?: Router[],
+  idxs?: number[]
 }

@@ -9,7 +9,7 @@ const state:STORE_STATE = {
     },
     menuBar: {
       status: false,
-      active_item: [0,0,0,0,0],
+      active_item: [2,0,0,0,0],
       active_list:[],
     },
     pageBar: {

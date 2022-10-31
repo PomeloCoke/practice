@@ -33,6 +33,9 @@
   .menu_list_item {
     position: relative;
     width: 100%;
+    &.hide {
+      display: none;
+    }
     .menu_item_box {
       position: relative;
       z-index: 2;
@@ -132,9 +135,6 @@
   .parentItem {
     background-color: @for-primary;
   }
-  // .active>.menu_list_item:not(.root_list) {
-  //   display: block;
-  // }
   .root_list {
     .menu_item_box.root_item:hover::after,
     &.active .menu_item_box.root_item::after {

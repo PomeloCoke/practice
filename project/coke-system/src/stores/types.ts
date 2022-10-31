@@ -1,7 +1,7 @@
 import { menuListType } from "@/layout/types"
 
 export type curMenuType = {
-  id: number,
+  id?: number,
   name_c: string,
   name_e: string,
   route?: string,
@@ -67,7 +67,7 @@ export type ACTION = {
   setLogin(status: boolean): void,
   toggleMenuBar(status: boolean): void,
   toggleMenuList(menuIdx: number[]): void,
-  changeMenuBar(menuIdx: number[], item: menuListType): void,
+  changeMenuBar(menuIdx: number[], item: curMenuType): void,
   changePage(page: curPageType): void,
   toggleRightPanel(status: boolean): void,
   changeRightPanelTab(active: number): void

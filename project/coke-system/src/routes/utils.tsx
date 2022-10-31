@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import { useEffect } from 'react';
-import { Navigate, Routes, Route, useLocation, useNavigate, NavigateFunction } from 'react-router-dom';
+import { Navigate, Routes, Route, useLocation, useNavigate, NavigateFunction, matchPath } from 'react-router-dom';
 import useStore from '@/stores';
 
 /**
@@ -17,25 +17,35 @@ const beforeEach = (
   location: any,
   navigate: NavigateFunction,
   routes: ROUTER[],
-  storeData: STORE_STATE
+  Store: STORE,
+  StoreData: STORE_STATE
 ) => {
   const { pathname } = location
   const routeInfo = routeSearch(pathname, routes)
-
+  
   // TODO 404页面
   if (!routeInfo) return false
 
   if (routeInfo.meta.is_login) {
     // TODO 接口校验token是否有效
-    const token = storeData.user.token
+    const token = StoreData.user.token
     if (!token) {
-      console.log('token无效，登录', storeData.user)
+      console.log('token无效，登录', StoreData.user)
       navigate('/login', { replace: true })
       return false
     }
   }
 
+  console.log('getMenuIdx', routeInfo)
+  const pageItem = {
+    name_c: routeInfo.menu.name_c,
+    name_e: routeInfo.menu.name_e,
+    route: pathname
+  }
+  Store.changeMenuBar(routeInfo.idxs, pageItem)
+
   document.title = routeInfo.meta.title
+
   return true
 }
 
@@ -46,12 +56,19 @@ const beforeEach = (
  * @param routes 路由列表
  * @returns if 存在=>返回该路由的信息 else=>返回null
  */
-function routeSearch (path: string, routes: ROUTER[]): ROUTER | null {
-  for (let item of routes) {
-    if (item.path === path) return item
-    if (item.children) return routeSearch(path, item.children)
+function routeSearch(path: string, routes: ROUTER[], id: number[] = []): ROUTER | null {
+  let res:ROUTER | null = null
+  for (let i = 0; i < routes.length; i++) {
+    let idxs = [...id, i]
+    const routeItem = { ...routes[i], idxs }
+    if (matchPath(routes[i].meta.fullpath, path)) {
+      res = routeItem
+      return routeItem
+    }
+    if (routes[i].children) res = routeSearch(path, routes[i].children, idxs)
   }
-  return null
+  return res
+  
 }
 
 /**
@@ -59,23 +76,24 @@ function routeSearch (path: string, routes: ROUTER[]): ROUTER | null {
  * @param route 路由项
  * @returns 生成的路由元素
  */
- function createRoute(route: ROUTER) {
+function createRoute(route: ROUTER) {
   if (route.children && route.children.length > 0) {
     // 有子路由
     return (
       <Route key={route.path}
-             path={route.path}
+        path={route.path}
+
       >
         {!route.redirect &&
           <Route index
-                 key={route.path}
-                 element={<route.component/>}
+            key={route.path}
+            element={<route.component />}
           ></Route>
         }
         {route.redirect &&
           <Route key={route.path}
-                 path={route.path}
-                 element={<Navigate to={route.redirect} replace/>}
+            path={route.path}
+            element={<Navigate to={route.redirect} replace />}
           ></Route>
         }
         {
@@ -85,7 +103,7 @@ function routeSearch (path: string, routes: ROUTER[]): ROUTER | null {
             )
           })
         }
-    </Route>
+      </Route>
     )
   }
 
@@ -93,8 +111,8 @@ function routeSearch (path: string, routes: ROUTER[]): ROUTER | null {
     // 路由重定向
     return (
       <Route key={route.path}
-             path={route.path}
-             element={<Navigate to={route.redirect} replace/>}
+        path={route.path}
+        element={<Navigate to={route.redirect} replace />}
       >
       </Route>
     )
@@ -102,10 +120,10 @@ function routeSearch (path: string, routes: ROUTER[]): ROUTER | null {
 
   return (
     <Route key={route.path}
-           path={route.path}
-           element={<route.component/>}
-      >
-      </Route>
+      path={route.path}
+      element={<route.component />}
+    >
+    </Route>
   )
 }
 
@@ -114,14 +132,14 @@ function routeSearch (path: string, routes: ROUTER[]): ROUTER | null {
  * @param routes 路由列表
  * @returns if 路由未被拦截=>返回路由列表元素 else =>执行beforeEach中的判断
  */
- export function routeGurad(routes: ROUTER[]) {
+export function routeGurad(routes: ROUTER[]) {
   const navigate = useNavigate()
   const location = useLocation()
-  const store = useStore()
-  const storeData = store.data
-
+  const Store = useStore()
+  const StoreData = Store.data
+  // console.log('getMatch',location.pathname, match)
   useEffect(() => {
-    beforeEach(location, navigate, routes, storeData)
+    beforeEach(location, navigate, routes, Store, StoreData)
   })
 
   return (
@@ -134,5 +152,5 @@ function routeSearch (path: string, routes: ROUTER[]): ROUTER | null {
         })
       }
     </Routes>
-  )  
+  )
 }
