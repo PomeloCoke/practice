@@ -1,5 +1,6 @@
 
 import utils from './utils'
+import { query } from './types/sql'
 declare global {
   interface Array<T> {
     remove(val: T): Array<T>
@@ -21,26 +22,7 @@ declare global {
   }
 
   // 数据库相关
-  type sqlSelect = {
-    name: string,
-    alias?: string
-  }
-  type sqlWhere = {
-    name: string,
-    opt: '=' | '<>' | '>' | '<' | '>=' | '<=' | 'BETWEEN' | 'LIKE' | 'IN',
-    val: number | string 
-  }
-  type sqlOrderBy = {
-    name: string,
-    order?: 'asc' | 'desc'
-  }
-  
-  type querySql = {
-    select: '*' | (string | sqlSelect)[],
-    from: string,
-    where?: (string | sqlWhere)[],
-    order_by?: (string | sqlOrderBy)[]
-  }
+  type querySql = query
 
   const typeData:(data: any, type: string)=>any
 }
