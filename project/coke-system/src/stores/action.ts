@@ -110,7 +110,10 @@ const layout = {
    */
   addPageItem(page: curPageType) {
     this.data.layout.pageBar.cur_page = page;
-    const hasItem = this.data.layout.pageBar.cache_list.filter((item: curPageType[])=>_isEqual(item, page)).length == 1
+    let hasItem = false
+    if (this.data.layout.pageBar.cache_list.length > 0) {
+      hasItem = this.data.layout.pageBar.cache_list.filter((item: curPageType[])=>_isEqual(item, page)).length == 1
+    }
     if (!hasItem) this.data.layout.pageBar.cache_list.push(page)
   }
 };
