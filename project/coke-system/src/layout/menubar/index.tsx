@@ -46,7 +46,7 @@ const createMenuItem = (
         let isOpen =
           menuBar.active_list.filter((item: Number[]) =>
             _isEqual(item, menuIdx)
-          ).length == 1;
+          ).length === 1;
         return (
           <div
             className={window.className([

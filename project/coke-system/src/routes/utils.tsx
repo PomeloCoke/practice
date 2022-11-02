@@ -22,7 +22,6 @@ const beforeEach = (
 ) => {
   const { pathname } = location
   const routeInfo = routeSearch(pathname, routes)
-  console.log('change----',routeInfo)
   // TODO 404页面
   if (!routeInfo) return false
 
@@ -41,7 +40,6 @@ const beforeEach = (
     name_e: routeInfo.menu.name_e,
     route: pathname
   }
-  
   Store.changeMenuBar(routeInfo.idxs, pageItem)
   document.title = routeInfo.meta.title
 
@@ -60,14 +58,13 @@ function routeSearch(path: string, routes: ROUTER[], id: number[] = []): ROUTER 
   for (let i = 0; i < routes.length; i++) {
     let idxs = [...id, i]
     const routeItem = { ...routes[i], idxs }
+    if (routes[i].children) res = routeSearch(path, routes[i].children, idxs)
+    if(res) return res
     if (matchPath(routes[i].meta.fullpath, path)) {
       res = routeItem
-      console.log('change',res)
       return routeItem
     }
-    if (routes[i].children) res = routeSearch(path, routes[i].children, idxs)
   }
-  console.log('change~~~~',res)
   return res
 }
 

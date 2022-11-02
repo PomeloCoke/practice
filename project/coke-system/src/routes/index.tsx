@@ -4,7 +4,7 @@ import blogRoutes from './configs/blog'
 export const defaultRoutes: ROUTER[] = [
   {
     path: '/',
-    redirect: '/login',
+    redirect: '/dashboard',
     meta: {
       fullpath: '/',
       is_verify: false,

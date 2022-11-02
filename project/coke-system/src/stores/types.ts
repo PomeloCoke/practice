@@ -72,4 +72,5 @@ export type ACTION = {
   toggleRightPanel(status: boolean): void,
   changeRightPanelTab(active: number): void,
   addPageItem(page: curPageType): void,
+  delPageItem(idx: number): void,
 }

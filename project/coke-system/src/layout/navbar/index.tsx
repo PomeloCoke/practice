@@ -4,7 +4,7 @@ import envConfig from "@/settings";
 
 import { menuListType, navListType } from "../types";
 import Styles from "./index.module.less";
-import { Breadcrumb, Dropdown, Menu } from "antd";
+import { Breadcrumb as AntBreadcrumb, Dropdown as AntDropdown, Menu as AntMenu } from "antd";
 import IconFont from "@/components/iconfont";
 
 type propType = {
@@ -61,14 +61,14 @@ const BreadcrumbModule = (prop: modulePropType) => {
   let parentItem = prop.menuList[menuBar.active_item[0]];
   // 遍历活跃菜单索引数组，获取活跃菜单路径
   for (let i = 0; i < menuBar.active_item.length; i++) {
-    if (i == 0) {
+    if (i === 0) {
       parentItem = prop.menuList[menuBar.active_item[0]];
       page_list.push(parentItem);
     }
     if (i != 0 && parentItem.children.length > 0) {
       parentItem = getParentItem(parentItem, menuBar.active_item[i]);
       page_list.push(parentItem);
-    } else if (i != 0 && parentItem.children.length == 0) {
+    } else if (i != 0 && parentItem.children.length === 0) {
       break;
     }
   }
@@ -86,18 +86,18 @@ const BreadcrumbModule = (prop: modulePropType) => {
         )}
       </div>
       <div className={Styles.page_list}>
-        <Breadcrumb>
+        <AntBreadcrumb>
           {page_list.map((item, idx) => {
             return (
-              <Breadcrumb.Item
+              <AntBreadcrumb.Item
                 className={Styles.page_item}
                 key={`breadcrumbItem-${idx}`}
               >
                 {item.name_c}
-              </Breadcrumb.Item>
+              </AntBreadcrumb.Item>
             );
           })}
-        </Breadcrumb>
+        </AntBreadcrumb>
       </div>
     </div>
   );
@@ -137,7 +137,7 @@ const AvatarMenu = (Store: STORE) => {
     width: "80px",
   };
   return (
-    <Menu
+    <AntMenu
       style={menuStyle}
       items={[
         {
@@ -172,7 +172,7 @@ const AvatarMenu = (Store: STORE) => {
           key: "ava-menu-item-3",
         },
       ]}
-    ></Menu>
+    ></AntMenu>
   );
 };
 
@@ -187,7 +187,7 @@ const AvatarModule = (prop: modulePropType) => {
         prop.notice_num ? Styles.notice : "",
       ])}
     >
-      <Dropdown overlay={AvatarMenu(Store)} placement="bottomRight">
+      <AntDropdown overlay={AvatarMenu(Store)} placement="bottomRight">
         <img
           className={Styles.avatar}
           src={avatar}
@@ -197,7 +197,7 @@ const AvatarModule = (prop: modulePropType) => {
             Store.changeRightPanelTab(1);
           }}
         />
-      </Dropdown>
+      </AntDropdown>
     </div>
   );
 };

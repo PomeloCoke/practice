@@ -1,5 +1,5 @@
 import { curMenuType, curPageType } from "./types";
-import { remove as _remove, isEqual as _isEqual } from "lodash";
+import { remove as _remove, isEqual as _isEqual, indexOf as _indexOf } from "lodash";
 const common = {
   /**
    * 存储系统信息
@@ -51,7 +51,7 @@ const layout = {
     const isActive =
       this.data.layout.menuBar.active_list.filter((item: Number[]) =>
         _isEqual(item, menuIdx)
-      ).length == 1;
+      ).length === 1;
     if (isActive) {
       _remove(this.data.layout.menuBar.active_list, function (item) {
         return _isEqual(item, menuIdx);
@@ -73,14 +73,17 @@ const layout = {
     menuIdx.map((item, idx) => {
       this.data.layout.menuBar.active_item[idx] = item;
     });
-    if (item.children && item.children.length == 0) {
+    if (item.children && item.children.length === 0 || !item.children) {
       const { name_c, name_e, route } = item;
       const curPage = {
         name_c,
         name_e,
         route,
       };
-      this.addPageItem(curPage);
+      if (route !== '/' && route !== '/login') {
+        this.addPageItem(curPage);
+      }
+      
     }
     this.setSystemInfo();
   },
@@ -109,12 +112,38 @@ const layout = {
    * @param page 页面相关信息
    */
   addPageItem(page: curPageType) {
+    const cache_list = this.data.layout.pageBar.cache_list
     this.data.layout.pageBar.cur_page = page;
     let hasItem = false
-    if (this.data.layout.pageBar.cache_list.length > 0) {
-      hasItem = this.data.layout.pageBar.cache_list.filter((item: curPageType[])=>_isEqual(item, page)).length == 1
+    if (cache_list.length > 0) {
+      hasItem = cache_list.filter((item: curPageType[])=>_isEqual(item, page)).length === 1
     }
-    if (!hasItem) this.data.layout.pageBar.cache_list.push(page)
+    if (!hasItem) {
+      this.data.layout.pageBar.cache_list.push(page)
+      this.data.layout.pageBar.active = this.data.layout.pageBar.cache_list.length - 1
+    } else {
+      
+      for( let i = 0; i < cache_list.length; i++) {
+        if (_isEqual(cache_list[i], page)) {
+          this.data.layout.pageBar.active = i
+          break
+        }
+      }
+    }
+  },
+
+  delPageItem(idx: number) {
+    const cache_list = this.data.layout.pageBar.cache_list
+    if (idx > -1) {
+      if (idx < this.data.layout.pageBar.active) this.data.layout.pageBar.active-- 
+      this.data.layout.pageBar.cache_list = cache_list.filter((item: curPageType, i:number)=> {
+        return i !== idx
+      })
+    } else {
+      this.data.layout.pageBar.active = 0
+      this.data.layout.pageBar.cache_list =[]
+    }
+    this.setSystemInfo();
   }
 };
 

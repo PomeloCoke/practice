@@ -39,7 +39,7 @@ function isPrimitiveValue(value: any): boolean {
     typeof value === 'number' ||
     typeof value === 'boolean' ||
     typeof value === 'symbol' ||
-    value == null ||
+    value === null ||
     Number.isNaN(value)
   )
 }
@@ -49,7 +49,7 @@ function isPrimitiveValue(value: any): boolean {
  */
 export function deepClone(value: any) {
   if (isPrimitiveValue(value)) {
-    return value == null ? '' : value
+    return value === null ? '' : value
   }
   let result
   if (typeof value === 'function') {

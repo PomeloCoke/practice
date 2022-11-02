@@ -20,23 +20,26 @@
     align-items: center;
     overflow: hidden;
   }
-  &_arrow {
-    height: 29px;
-    padding: 0 4px;
-    margin: 0 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: @theme-default-background;
-    border-radius: 3px;
-    cursor: pointer;
-    color: @on-module-terriary;
-    transition: all 0.2s ease;
-    font-size: 20px;
-    &:hover {
-      color: @on-theme-light;
-      background-color: @for-primary;
-    }
+  
+}
+
+.page_list_arrow,
+.more_list {
+  height: 29px;
+  padding: 0 4px;
+  margin: 0 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: @theme-default-background;
+  border-radius: 3px;
+  cursor: pointer;
+  color: @on-module-terriary;
+  transition: all 0.2s ease;
+  font-size: 20px;
+  &:hover {
+    color: @on-theme-light;
+    background-color: @for-primary;
   }
 }
 
@@ -63,8 +66,15 @@
     opacity: 0;
     transition: all 0.15s ease;
   }
-  &:hover {
+  &.active {
     border-color: @theme-primary;
+    background-color: @theme-primary;
+    .page_item_text, .page_item_icon {
+      color: @on-theme-light;
+      transition: all 0.15s ease;
+    }
+  }
+  &:hover {
     .page_item_icon {
       width: auto;
       margin-left: 5px;
@@ -72,6 +82,9 @@
       opacity: 1;
       transition: all 0.15s ease;
     }
+  }
+  &:not(.active):hover {
+    border-color: @theme-primary;
     .page_item_text, .page_item_icon {
       color: @theme-primary;
       transition: all 0.15s ease;
