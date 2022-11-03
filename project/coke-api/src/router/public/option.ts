@@ -1,18 +1,19 @@
-import home from '../../controller'
+import option from '../../controller/public/option'
 import routerGenerator from "../../middleware/router";
 
+const controllerName = '/option'
 const routes: route[] = [
   {
-    path: '/home',
-    controller: home.getHome,
+    path: controllerName + '/home',
+    controller: option.getHome,
     option: {
       method: 'get',
       verifyToken: false,
     }
   },
   {
-    path: '/test',
-    controller: home.getTest,
+    path: controllerName + '/test',
+    controller: option.getTest,
     option: {
       method: 'post',
       verifyToken: true,

@@ -1,16 +1,18 @@
-type select = {
+export type select = {
   name: string,
   alias?: string
 }
-type where = {
+export type where = {
   name: string,
   opt: '=' | '<>' | '>' | '<' | '>=' | '<=' | 'BETWEEN' | 'LIKE' | 'IN',
   val: number | string 
 }
-type orderBy = {
+export type orderBy = {
   name: string,
   order?: 'asc' | 'desc'
 }
+
+export type sqlValType = select | where | orderBy
 
 export type query = {
   select: '*' | (string | select)[],
