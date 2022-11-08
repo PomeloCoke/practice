@@ -12,8 +12,8 @@ const routes: route[] = [
     }
   },
   {
-    path: controllerName + '/test',
-    controller: option.getTest,
+    path: controllerName + '/list',
+    controller: option.getList,
     option: {
       method: 'post',
       verifyToken: true,

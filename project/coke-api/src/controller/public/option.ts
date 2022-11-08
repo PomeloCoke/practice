@@ -1,19 +1,13 @@
-import { querySql } from "../../db"
+import { getOptionList } from "../../model/public/option"
 const getHome = async (ctx: ctx, next: next) => {
   ctx.body = "helloWorld!!"
 }
 
-const getTest = async (ctx: ctx, next: next) => {
-  const sql:querySql = {
-    select: [
-      {
-        name: 'id',
-        alias: 'option_id'
-      }
-    ],
-    from: 't_public_setting_option'
-  }
-  const res = await querySql(sql)
+const getList = async (ctx: ctx, next: next) => {
+  
+  const { id, parent_id, name_c, side, page, page_count } = ctx.request.body
+  const params = { id, parent_id, name_c, side, page, page_count }
+  const res = await getOptionList(params)
   console.log('getSqlRes', res)
   ctx.success({
     data: res
@@ -22,5 +16,5 @@ const getTest = async (ctx: ctx, next: next) => {
 
 export default {
   getHome,
-  getTest
+  getList
 }

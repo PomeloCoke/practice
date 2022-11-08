@@ -36,11 +36,11 @@ async function validator(ctx: ctx) {
       msg: '无法找到对应的入参检验文件'
     }
   }
-  const validate = ajv.compile(JSON.parse(schema))
-  const valid = validate(params)
+  const valid = ajv.validate(JSON.parse(schema),params)
+  console.log('getValid', valid)
   return {
     res: valid,
-    msg: ''
+    msg: !valid ? ajv.errors : ''
   }
 }
 
