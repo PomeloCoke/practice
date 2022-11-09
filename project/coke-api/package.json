@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "nodemon ./src/index.ts",
+    "build:test": "webpack --mode test",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "PomeloCoke",
