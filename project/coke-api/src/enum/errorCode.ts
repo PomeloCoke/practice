@@ -6,4 +6,5 @@ export enum ErrorCode {
   DATA_EXIST,
   INSERT_FAIL,
   UPDATE_FAIL,
+  DELETE_FAIL
 }

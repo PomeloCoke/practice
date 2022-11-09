@@ -106,7 +106,7 @@ const delOption = async (ctx: ctx, next: next) => {
     })
   } else {
     ctx.error({
-      code: ctx.state.ErrorCode.UPDATE_FAIL,
+      code: ctx.state.ErrorCode.DELETE_FAIL,
       msg: res.msg
     })
   }
