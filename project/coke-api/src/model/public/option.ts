@@ -1,4 +1,4 @@
-import { querySql } from "../../db";
+import { querySql, insertSql, updateSql, deleteSql } from "../../db";
 import { getPageLimit } from "./select";
 
 const optionTableName = "t_public_setting_option";
@@ -207,4 +207,117 @@ export async function editOptionValid(params: editVaildType) {
     res: res.length === 0 ? true : false,
     msg: res.length === 0 ? "可以添加" : "同名筛选项已存在",
   };
+}
+
+type addOptionType = {
+  parent_id?: number,
+  name_e?: string,
+  name_c: string;
+  side: number;
+}
+
+export async function addOptionItem(params: addOptionType) {
+  const addSql: insertSql = {
+    table: optionTableName,
+    values: [
+      { key: 'parent_id', value: params.parent_id },
+      { key: 'name_e', value: params.name_e },
+      { key: 'name_c', value: params.name_c },
+      { key: 'side', value: params.side },
+    ]
+  }
+  try {
+    const res = await insertSql(addSql)
+    return {
+      res: true,
+      msg: "",
+    }
+  } catch (error) {
+    return {
+      res: false,
+      msg: error,
+    }
+  }
+}
+
+type editOptionType = {
+  id: number,
+  parent_id?: number,
+  name_e?: string,
+  name_c: string;
+  side: number;
+}
+export async function editOptionItem(params: editOptionType) {
+  const editSql: updateSql = {
+    table: optionTableName,
+    values: [
+      { key: 'parent_id', value: params.parent_id },
+      { key: 'name_e', value: params.name_e },
+      { key: 'name_c', value: params.name_c },
+      { key: 'side', value: params.side },
+    ],
+    where: [
+      { name: 'id', opt: '=', val: params.id }
+    ]
+  }
+
+  try {
+    const res = await updateSql(editSql)
+    return {
+      res: true,
+      msg: "",
+    }
+  } catch (error) {
+    return {
+      res: false,
+      msg: error,
+    }
+  }
+}
+
+type delVaildType = {
+  id: number
+};
+export async function delOptionValid(params: delVaildType) {
+  const vaildSql: querySql = {
+    select: "*",
+    from: optionTableName,
+    where: [
+      {
+        name: "parent_id",
+        opt: "=",
+        val: params.id,
+      },
+    ],
+  };
+  const res = await querySql(vaildSql);
+  return {
+    res: res.length === 0 ? true : false,
+    msg: res.length === 0 ? "可以删除" : "请先删除子筛选项",
+  };
+}
+
+type delOptionType = {
+  id: number
+};
+export async function delOptionItem(params: delOptionType) {
+  const editSql: deleteSql = {
+    table: optionTableName,
+    where: [
+      { name: 'id', opt: '=', val: params.id }
+    ]
+  }
+
+  try {
+    const res = await deleteSql(editSql)
+    return {
+      res: true,
+      msg: "",
+    }
+  } catch (error) {
+    return {
+      res: false,
+      msg: error,
+    }
+  }
 }

@@ -1,6 +1,6 @@
 
 import utils from './utils'
-import { query } from './types/sql'
+import { insert, query, update, del } from './types/sql'
 declare global {
   interface Array<T> {
     remove(val: T): Array<T>
@@ -23,6 +23,9 @@ declare global {
 
   // 数据库相关
   type querySql = query
+  type insertSql = insert
+  type updateSql = update
+  type deleteSql = del
 
   const typeData:(data: any, type: string)=>any
 }

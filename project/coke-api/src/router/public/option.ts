@@ -27,6 +27,22 @@ const routes: route[] = [
       verifyToken: false,
     }
   },
+  {
+    path: controllerName + '/edit',
+    controller: option.editOption,
+    option: {
+      method: 'post',
+      verifyToken: false,
+    }
+  },
+  {
+    path: controllerName + '/del',
+    controller: option.delOption,
+    option: {
+      method: 'post',
+      verifyToken: false,
+    }
+  },
 ]
 
 const routers = routerGenerator(routes)

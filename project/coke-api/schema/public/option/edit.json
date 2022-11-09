@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "parent_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "name_c": {
+      "type": "string"
+    },
+    "name_e": {
+      "type": "string"
+    },
+    "side": {
+      "type": "integer",
+      "enum": [1,2,3],
+      "minimum": 1
+    }
+  },
+  "required": ["id", "name_c", "side"]
+}

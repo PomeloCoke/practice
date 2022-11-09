@@ -22,6 +22,11 @@ export type limit = {
   count: number
 }
 
+export type values = {
+  key: string,
+  value: any
+}
+
 export type sqlValType = select | where | orderBy
 
 export type query = {
@@ -31,4 +36,22 @@ export type query = {
   group_by?: string,
   order_by?: (string | orderBy)[],
   limit?: string | limit 
+}
+
+export type insert = {
+  table: string,
+  values: values[] | string
+}
+
+export type update = {
+  table: string,
+  values: values[],
+  where?: (string | where)[]
+}
+
+export type del = {
+  table: string,
+  values?: values[],
+  where: (string | where)[],
+  force?: boolean
 }
