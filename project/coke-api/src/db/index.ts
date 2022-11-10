@@ -9,6 +9,7 @@ import deleteSqlStr from './delete'
 // 创建数据池
 const pool = mysql.createPool({
   host: config.host,
+  port: config.port,
   user: config.user,
   password: config.password,
   database: config.database

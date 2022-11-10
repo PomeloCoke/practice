@@ -1,6 +1,6 @@
 type sqlConfig = {
   host: string,
-  port: string,
+  port: number,
   user: string,
   password: string,
   database: string
@@ -8,7 +8,7 @@ type sqlConfig = {
 
 const testSql: sqlConfig = {
   host: '119.45.60.225',
-  port: '3306',
+  port: 2119,
   user: 'coke',
   password: 'lytz+01@19!lovey',
   database: 'test'
