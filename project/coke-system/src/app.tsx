@@ -23,11 +23,11 @@ const App = observer(() => {
   document.getElementsByTagName('html')[0].className = `theme__${theme_mod} theme__${theme}`
 
   return (
-    <React.StrictMode>
+    // <React.StrictMode>
       <Router>
       <Layout></Layout>
       </Router>
-    </React.StrictMode>
+    // </React.StrictMode>
   )
 })
 

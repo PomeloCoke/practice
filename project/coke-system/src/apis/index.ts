@@ -1,17 +1,14 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-interface ResponseData<T = any> {
-  code: number
-  msg: any
-  data: T
-}
-interface NewAxiosInstance extends AxiosInstance {
-  (config: AxiosRequestConfig): Promise<ResponseData>
-}
-const instance: NewAxiosInstance = axios.create({
-  timeout: 5000, // 请求超时时间
-  baseURL: 'http://119.45.60.225:3002/api/'
-}) as unknown as NewAxiosInstance
+import axios from "axios";
+
+const instance = axios.create({
+  timeout: 5000,
+  // baseURL: 'http://119.45.60.225:3002'
+})
+
+instance.defaults.timeout = 20 * 1000
+// instance.defaults.baseURL = 'http://119.45.60.225:3002/api/'
 instance.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
+// instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 
 // request拦截器
 instance.interceptors.request.use(
@@ -48,10 +45,27 @@ instance.interceptors.response.use((res) => {
 
 export default instance
 
-export function post(url: string, params: any) {
-  return instance({
-    method: 'post',
-    url: url,
-    data: params
+export function post(url:string, params:any = {}, headers:any  = {}, other:any  = {}) {
+  return new Promise<any>((resolve, reject) => {
+    let sendData = {
+      ...params
+    }
+    instance
+      .post(
+        `${url}`,
+        sendData,
+        {
+          timeout: other.timeout || 20 * 1000,
+          headers: {
+            ...headers
+          }
+        }
+      )
+      .then(res => {
+        resolve(res.data)
+      })
+      .catch(error => {
+        reject(error)
+      })
   })
 }

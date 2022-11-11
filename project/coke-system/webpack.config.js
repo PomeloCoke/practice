@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 
 module.exports = {
   target: 'web',
@@ -77,11 +78,20 @@ module.exports = {
     historyApiFallback: true,
     compress: true,
     port: 5000,
-    hot: true
+    hot: true,
+    proxy: {
+      '/api': {
+        target: 'http://119.45.60.225:3002/',
+        changeOrigin: true,
+        ws: true,
+        secure: false
+      }
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html'
-    })
+    }),
+    new NodePolyfillPlugin()
   ]
 }
