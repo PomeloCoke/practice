@@ -1,7 +1,9 @@
 import path from 'path'
 import fs from 'fs'
 import Ajv from 'ajv'
+import formatAjv from 'ajv-formats'
 const ajv = new Ajv()
+formatAjv(ajv)
 
 // 读取JSON Schema
 function readSchema(url: string) {

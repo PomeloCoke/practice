@@ -1,0 +1,28 @@
+{
+    "type": "object",
+    "properties": {
+      "product_id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "uid": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "area_code": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "mobile": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string",
+        "format": "email"
+      },
+      "password": {
+        "type": "string"
+      }
+    },
+    "required": ["password"]
+  }

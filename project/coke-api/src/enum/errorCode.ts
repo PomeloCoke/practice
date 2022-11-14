@@ -7,5 +7,7 @@ export enum ErrorCode {
   QUERY_FAIL,
   INSERT_FAIL,
   UPDATE_FAIL,
-  DELETE_FAIL
+  DELETE_FAIL,
+  VALID_FAIL,
+  PARAM_LACK
 }

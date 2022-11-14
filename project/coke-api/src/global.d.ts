@@ -27,7 +27,15 @@ declare global {
   type updateSql = update
   type deleteSql = del
 
+  type validResType = {
+    res: boolean,
+    data: any,
+    code: number,
+    msg: any
+  }
+
   const typeData:(data: any, type: string)=>any
+
 }
 
 export { }
