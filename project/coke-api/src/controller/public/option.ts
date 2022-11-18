@@ -1,6 +1,6 @@
 import { addOptionItem, editOptionItem, delOptionItem, editOptionValid, delOptionValid, getOptionDetail, getOptionList } from "../../model/public/option"
 import { typeData } from '../../utils'
-import redis from '../../middleware/redis'
+import redis from '../../cache'
 // 获取筛选项列表
 const getList = async (ctx: ctx, next: next) => {
   const { id, parent_id, name_c, side, page, page_count } = ctx.request.body
