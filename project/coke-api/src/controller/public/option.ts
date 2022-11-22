@@ -7,7 +7,7 @@ const getList = async (ctx: ctx, next: next) => {
 
   const params = { id, parent_id, name_c, side, page, page_count }
   const res = await getOptionList(params)
-  await redis.set('test','lllll')
+  // await redis.set('test','lllll')
   ctx.success({
     data: res
   })

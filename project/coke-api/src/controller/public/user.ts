@@ -2,9 +2,9 @@ import userModel from '../../model/public/user'
 
 // 用户登录接口
 const login = async (ctx: ctx, next: next) => {
-  const { uid, mobile, email, password, product_id } = ctx.request.body
+  const { uid, mobile, area_code, email, password, product_id } = ctx.request.body
 
-  const validCountParams = { uid, mobile, email, password }
+  const validCountParams = { uid, mobile, area_code, email, password }
   const hasCountRes = await userModel.validHasUser(validCountParams)
   if (!hasCountRes.res) {
     ctx.error({
@@ -51,6 +51,27 @@ const login = async (ctx: ctx, next: next) => {
   }
   
 }
+
+const sign = async (ctx: ctx, next: next) => {
+  const { mobile, area_code, email } = ctx.request.body
+}
+
+// 后台添加用户
+const addUser = async (ctx: ctx, next: next) => {
+  const { mobile, area_code, email } = ctx.request.body
+
+  const validCountParams = { mobile, area_code, email }
+  const hasCountRes = await userModel.validHasUser(validCountParams)
+  if (hasCountRes.res) {
+    ctx.error({
+      code: hasCountRes.code,
+      msg: hasCountRes.msg
+    })
+    return
+  }
+
+}
+
 
 export default {
   login

@@ -166,7 +166,7 @@ type loginParamsType = {
  */
 export async function login(params: loginParamsType) {
   let res = {}
-  const baseSql:querySql = {
+  const baseSql: querySql = {
     select: [
       'id',
       'create_time',
@@ -191,8 +191,8 @@ export async function login(params: loginParamsType) {
       }
     ]
   }
-  
-  const countSql:querySql = {
+
+  const countSql: querySql = {
     select: [
       'id',
       'create_time',
@@ -220,8 +220,37 @@ export async function login(params: loginParamsType) {
     msg: ''
   }
 }
-// 注册
-// 添加用户
+
+type addUserParamsType = {
+  area_code?: number,
+  mobile?: string,
+  email?: string,
+  is_staff: 0 | 1,
+  info_detail?: {
+    birthday?: string,
+    id_number?: string,
+    sex?: 1 | 2
+  }
+}
+/**
+ * 注册、添加用户
+ * @param params 
+ */
+export async function addUser({
+  is_staff = 0,
+  ...params
+}: addUserParamsType) {
+  let addSql: insertSql = {
+    table: userBaseTable,
+    values: []
+  }
+  let valueArr = [
+    { key: 'is_staff', value: is_staff },
+  ] as any[]
+  if (params.mobile) {
+    valueArr.push({ key: 'area_code', value: params.area_code }, { key: 'mobile', value: params.mobile })
+  }
+}
 // 添加账户
 // 添加登录日志
 // 编辑基本信息
