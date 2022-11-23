@@ -250,6 +250,29 @@ export async function addUser({
   if (params.mobile) {
     valueArr.push({ key: 'area_code', value: params.area_code }, { key: 'mobile', value: params.mobile })
   }
+  if (params.email) {
+    valueArr.push({ key: 'email', value: params.email })
+  }
+  if (params.info_detail) {
+    type keyType = keyof typeof params.info_detail
+    Object.keys(params.info_detail).map((key) => {
+      const val = params.info_detail![key as keyType]
+      valueArr.push({ key: key, value: val })
+    })
+  }
+
+  try {
+    const res = await insertSql(addSql)
+    return {
+      res: true,
+      msg: "",
+    }
+  } catch (error) {
+    return {
+      res: false,
+      msg: error,
+    }
+  }
 }
 // 添加账户
 // 添加登录日志
