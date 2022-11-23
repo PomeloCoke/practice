@@ -256,8 +256,7 @@ export async function addUser({
   if (params.info_detail) {
     type keyType = keyof typeof params.info_detail
     Object.keys(params.info_detail).map((key) => {
-      const val = params.info_detail![key as keyType]
-      valueArr.push({ key: key, value: val })
+      valueArr.push({ key: key, value: params.info_detail![key as keyType] })
     })
   }
 
