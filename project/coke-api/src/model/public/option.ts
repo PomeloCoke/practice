@@ -202,6 +202,7 @@ export async function editOptionValid(params: editVaildType) {
       },
     ],
   };
+  // TODO 当有parent_id时，先判断是否存在父筛选项
   const res = await querySql(vaildSql);
   return {
     res: res.length === 0 ? true : false,

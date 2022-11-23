@@ -10,6 +10,14 @@ const routes: route[] = [
       method: 'post',
       verifyToken: false,
     }
+  },
+  {
+    path: controllerName + '/add',
+    controller: user.addUser,
+    option: {
+      method: 'post',
+      verifyToken: true,
+    }
   }
 ]
 

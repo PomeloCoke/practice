@@ -154,8 +154,8 @@ export async function validPassword(params: validPasswordType) {
   }
 }
 
-// 用户列表
-// 用户详情
+// TODO 用户列表
+// TODO 用户详情
 type loginParamsType = {
   id: number
 }
@@ -214,6 +214,8 @@ export async function login(params: loginParamsType) {
   res = {
     ...baseInfo[0]
   }
+  // TODO 获取对应产品账户信息
+  // TODO 记录token，登录日志，session
   return {
     data: res,
     res: true,
@@ -227,6 +229,7 @@ type addUserParamsType = {
   email?: string,
   is_staff: 0 | 1,
   info_detail?: {
+    name?: string,
     birthday?: string,
     id_number?: string,
     sex?: 1 | 2
@@ -244,8 +247,11 @@ export async function addUser({
     table: userBaseTable,
     values: []
   }
+  // TODO 随机默认头像
   let valueArr = [
     { key: 'is_staff', value: is_staff },
+    { key: 'nickname', value: `用户${new Date().getTime()}` },
+    { key: 'password', value: bcrypt.hashSync('123456', 10) }
   ] as any[]
   if (params.mobile) {
     valueArr.push({ key: 'area_code', value: params.area_code }, { key: 'mobile', value: params.mobile })
@@ -259,6 +265,7 @@ export async function addUser({
       valueArr.push({ key: key, value: params.info_detail![key as keyType] })
     })
   }
+  addSql.values = valueArr
 
   try {
     const res = await insertSql(addSql)
@@ -270,20 +277,24 @@ export async function addUser({
     return {
       res: false,
       msg: error,
+      code: ErrorCode.INSERT_FAIL
     }
   }
+
+  // TODO 用户根据product_id添加对应账户，员工添加所有产品对应账户
 }
-// 添加账户
-// 添加登录日志
-// 编辑基本信息
-// 编辑重要信息
-// 编辑员工相关信息
-// 更改密码
-// 账户更改更新状态
-// 更改用户状态
+// TODO 添加账户
+// TODO 添加登录日志
+// TODO 编辑基本信息
+// TODO 编辑重要信息
+// TODO 编辑员工相关信息
+// TODO 更改密码
+// TODO 账户更改更新状态
+// TODO 更改用户状态
 
 export default {
   validHasUser,
   validPassword,
-  login
+  login,
+  addUser
 }

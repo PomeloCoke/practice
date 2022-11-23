@@ -39,7 +39,7 @@ async function validator(ctx: ctx) {
     }
   }
   const valid = ajv.validate(JSON.parse(schema),params)
-  console.log('getValid', valid)
+  // console.log('getValid', valid)
   return {
     res: valid,
     msg: !valid ? ajv.errors : ''
