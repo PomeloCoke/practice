@@ -1,4 +1,4 @@
-import { addOptionItem, editOptionItem, delOptionItem, editOptionValid, delOptionValid, getOptionDetail, getOptionList } from "../../model/public/option"
+import * as optionModel from "../../model/public/option" 
 import { typeData } from '../../utils'
 import redis from '../../cache'
 // 获取筛选项列表
@@ -6,7 +6,7 @@ const getList = async (ctx: ctx, next: next) => {
   const { id, parent_id, name_c, side, page, page_count } = ctx.request.body
 
   const params = { id, parent_id, name_c, side, page, page_count }
-  const res = await getOptionList(params)
+  const res = await optionModel.getOptionList(params)
   // await redis.set('test','lllll')
   ctx.success({
     data: res
@@ -18,7 +18,7 @@ const getDetail = async (ctx: ctx, next: next) => {
   const { id } = ctx.request.body
 
   const params = { id }
-  const res = await getOptionDetail(params)
+  const res = await optionModel.getOptionDetail(params)
   if (typeData(res, 'Array') && res.length === 0) {
     ctx.error({
       code: ctx.state.ErrorCode.DATA_INEXISTENCE,
@@ -36,7 +36,7 @@ const addOption = async (ctx: ctx, next: next) => {
   const { parent_id, name_c, name_e, side } = ctx.request.body
 
   const vaildParams = { parent_id, name_c, side }
-  const vaild = await editOptionValid(vaildParams)
+  const vaild = await optionModel.editOptionValid(vaildParams)
   if (!vaild.res) {
     ctx.error({
       code: ctx.state.ErrorCode.DATA_EXIST,
@@ -46,7 +46,7 @@ const addOption = async (ctx: ctx, next: next) => {
   }
 
   const params = { parent_id, name_c, name_e, side }
-  const res = await addOptionItem(params)
+  const res = await optionModel.addOptionItem(params)
   if (res.res) {
     ctx.success({
       msg: '添加筛选项成功'
@@ -59,11 +59,12 @@ const addOption = async (ctx: ctx, next: next) => {
   }
 }
 
+// 编辑筛选项
 const editOption = async (ctx: ctx, next: next) => {
   const { id, parent_id, name_c, name_e, side } = ctx.request.body
 
   const vaildParams = { parent_id, name_c, side }
-  const vaild = await editOptionValid(vaildParams)
+  const vaild = await optionModel.editOptionValid(vaildParams)
   if (!vaild.res) {
     ctx.error({
       code: ctx.state.ErrorCode.DATA_EXIST,
@@ -73,7 +74,7 @@ const editOption = async (ctx: ctx, next: next) => {
   }
 
   const params = { id, parent_id, name_c, name_e, side }
-  const res = await editOptionItem(params)
+  const res = await optionModel.editOptionItem(params)
   if (res.res) {
     ctx.success({
       msg: '编辑筛选项成功'
@@ -86,11 +87,12 @@ const editOption = async (ctx: ctx, next: next) => {
   }
 }
 
+// 删除筛选项
 const delOption = async (ctx: ctx, next: next) => {
   const { id } = ctx.request.body
 
   const vaildParams = { id }
-  const vaild = await delOptionValid(vaildParams)
+  const vaild = await optionModel.delOptionValid(vaildParams)
   if (!vaild.res) {
     ctx.error({
       code: ctx.state.ErrorCode.DATA_EXIST,
@@ -100,7 +102,7 @@ const delOption = async (ctx: ctx, next: next) => {
   }
 
   const params = { id }
-  const res = await delOptionItem(params)
+  const res = await optionModel.delOptionItem(params)
   if (res.res) {
     ctx.success({
       msg: '删除筛选项成功'
@@ -114,8 +116,8 @@ const delOption = async (ctx: ctx, next: next) => {
 }
 
 export default {
-  getDetail,
   getList,
+  getDetail,
   addOption,
   editOption,
   delOption

@@ -1,19 +1,59 @@
 import { querySql, insertSql, updateSql, deleteSql } from "../../db";
+import * as paramsType from '../../types/option_model_type'
 import { getPageLimit } from "./select";
 
 const optionTableName = "t_public_setting_option";
-type listParamsType = {
-  id?: number;
-  parent_id?: number;
-  name_c?: string;
-  side?: 0 | 1 | 2;
-  page?: number;
-  page_count?: number;
-};
 
-export async function getOptionList(params: listParamsType) {
+/**
+ * 获取筛选项子项
+ * @param parent_id 
+ * @returns 
+ */
+async function getOptionChildren(parent_id: number): Promise<any> {
+  /** sql语句 start */
+  const childSql: querySql = {
+    select: [
+      "id",
+      "create_time",
+      "edit_time",
+      "parent_id",
+      "name_c",
+      "name_e",
+      "side",
+    ],
+    from: optionTableName,
+    where: [
+      { name: "is_del", opt: "=", val: 0 },
+      { name: "parent_id", opt: "=", val: parent_id }
+    ],
+  };
+  /** sql语句 end */
+
+  const res = await querySql(childSql);
+  if (res.length === 0) {
+    return res;
+  } else {
+    let childrenArr = [];
+    for (let child of res) {
+      const children = await getOptionChildren(child.id);
+      childrenArr.push({
+        ...child,
+        children,
+      });
+    }
+    return childrenArr;
+  }
+}
+
+/**
+ * 获取筛选项列表
+ * @param params 
+ * @returns 
+ */
+export async function getOptionList(params: paramsType.list) {
   let resArr = [] as any[];
   const { limitStr, limitCount } = getPageLimit(params.page, params.page_count);
+  /** sql语句 start */
   const countSql: querySql = {
     select: [
       "SQL_CALC_FOUND_ROWS id",
@@ -26,16 +66,8 @@ export async function getOptionList(params: listParamsType) {
     ],
     from: optionTableName,
     where: [
-      {
-        name: "is_del",
-        opt: "=",
-        val: 0,
-      },
-      {
-        name: "parent_id",
-        opt: "IS",
-        val: "NULL",
-      },
+      { name: "is_del", opt: "=", val: 0 },
+      { name: "parent_id", opt: "IS", val: "NULL" }
     ],
     limit: limitStr,
   };
@@ -65,6 +97,7 @@ export async function getOptionList(params: listParamsType) {
       val: params.side,
     });
   }
+  /** sql语句 end */
 
   const res = await querySql(countSql);
   const total = await querySql(totalSql);
@@ -84,53 +117,13 @@ export async function getOptionList(params: listParamsType) {
   };
 }
 
-type detailParamsType = {
-  id: number;
-};
-
-// 获取筛选项子项
-async function getOptionChildren(parent_id: number): Promise<any> {
-  const childSql: querySql = {
-    select: [
-      "id",
-      "create_time",
-      "edit_time",
-      "parent_id",
-      "name_c",
-      "name_e",
-      "side",
-    ],
-    from: optionTableName,
-    where: [
-      {
-        name: "is_del",
-        opt: "=",
-        val: 0,
-      },
-      {
-        name: "parent_id",
-        opt: "=",
-        val: parent_id,
-      },
-    ],
-  };
-  const res = await querySql(childSql);
-  if (res.length === 0) {
-    return res;
-  } else {
-    let childrenArr = [];
-    for (let child of res) {
-      const children = await getOptionChildren(child.id);
-      childrenArr.push({
-        ...child,
-        children,
-      });
-    }
-    return childrenArr;
-  }
-}
-
-export async function getOptionDetail(params: detailParamsType) {
+/**
+ * 获取筛选项详情
+ * @param params 
+ * @returns 
+ */
+export async function getOptionDetail(params: paramsType.detail) {
+  /** sql语句 start */
   const detailSql: querySql = {
     select: [
       "id",
@@ -143,65 +136,46 @@ export async function getOptionDetail(params: detailParamsType) {
     ],
     from: optionTableName,
     where: [
-      {
-        name: "is_del",
-        opt: "=",
-        val: 0,
-      },
-      {
-        name: "id",
-        opt: "=",
-        val: params.id,
-      },
+      { name: "is_del", opt: "=", val: 0 },
+      { name: "id", opt: "=", val: params.id }
     ],
   };
+  /** sql语句 end */
 
   const res = await querySql(detailSql);
   if (res.length === 0) {
     return res;
   }
-
   const children = await getOptionChildren(params.id);
-
   return {
     ...res[0],
     children,
   };
 }
 
-type editVaildType = {
-  parent_id?: number;
-  name_c: string;
-  side: number;
-};
-// 判断是否可以添加、编辑筛选项
-export async function editOptionValid(params: editVaildType) {
+/**
+ *  判断是否可以添加、编辑筛选项
+ * @param params 
+ * @returns 
+ */
+export async function editOptionValid(params: paramsType.editValid) {
+  /** sql语句 start */
   const vaildSql: querySql = {
     select: "*",
     from: optionTableName,
     where: [
-      {
-        name: "is_del",
-        opt: "=",
-        val: 0,
-      },
-      {
-        name: "name_c",
-        opt: "=",
-        val: params.name_c,
-      },
-      {
-        name: "side",
-        opt: "=",
-        val: params.side,
-      },
+      { name: "is_del", opt: "=", val: 0 },
+      { name: "name_c", opt: "=", val: params.name_c },
+      { name: "side", opt: "=", val: params.side },
       {
         name: "parent_id",
         opt: params.parent_id ? "=" : "IS",
-        val: params.parent_id ? params.parent_id : "NULL",
+        val: params.parent_id ? params.parent_id : "NULL"
       },
     ],
   };
+  /** sql语句 end */
+
   // TODO 当有parent_id时，先判断是否存在父筛选项
   const res = await querySql(vaildSql);
   return {
@@ -210,14 +184,13 @@ export async function editOptionValid(params: editVaildType) {
   };
 }
 
-type addOptionType = {
-  parent_id?: number,
-  name_e?: string,
-  name_c: string;
-  side: number;
-}
-
-export async function addOptionItem(params: addOptionType) {
+/**
+ * 添加筛选项
+ * @param params 
+ * @returns 
+ */
+export async function addOptionItem(params: paramsType.add) {
+  /** sql语句 start */
   const addSql: insertSql = {
     table: optionTableName,
     values: [
@@ -227,6 +200,8 @@ export async function addOptionItem(params: addOptionType) {
       { key: 'side', value: params.side },
     ]
   }
+  /** sql语句 end */
+
   try {
     const res = await insertSql(addSql)
     return {
@@ -241,14 +216,13 @@ export async function addOptionItem(params: addOptionType) {
   }
 }
 
-type editOptionType = {
-  id: number,
-  parent_id?: number,
-  name_e?: string,
-  name_c: string;
-  side: number;
-}
-export async function editOptionItem(params: editOptionType) {
+/**
+ * 编辑筛选项
+ * @param params 
+ * @returns 
+ */
+export async function editOptionItem(params: paramsType.edit) {
+  /** sql语句 start */
   const editSql: updateSql = {
     table: optionTableName,
     values: [
@@ -261,6 +235,7 @@ export async function editOptionItem(params: editOptionType) {
       { name: 'id', opt: '=', val: params.id }
     ]
   }
+  /** sql语句 end */
 
   try {
     const res = await updateSql(editSql)
@@ -276,10 +251,13 @@ export async function editOptionItem(params: editOptionType) {
   }
 }
 
-type delVaildType = {
-  id: number
-};
-export async function delOptionValid(params: delVaildType) {
+/**
+ * 判断筛选项是否可删除
+ * @param params 
+ * @returns 
+ */
+export async function delOptionValid(params: paramsType.delValid) {
+  /** sql语句 start */
   const vaildSql: querySql = {
     select: "*",
     from: optionTableName,
@@ -291,6 +269,8 @@ export async function delOptionValid(params: delVaildType) {
       },
     ],
   };
+  /** sql语句 end */
+
   const res = await querySql(vaildSql);
   return {
     res: res.length === 0 ? true : false,
@@ -298,16 +278,20 @@ export async function delOptionValid(params: delVaildType) {
   };
 }
 
-type delOptionType = {
-  id: number
-};
-export async function delOptionItem(params: delOptionType) {
+/**
+ * 删除筛选项
+ * @param params 
+ * @returns 
+ */
+export async function delOptionItem(params: paramsType.del) {
+  /** sql语句 start */
   const editSql: deleteSql = {
     table: optionTableName,
     where: [
       { name: 'id', opt: '=', val: params.id }
     ]
   }
+  /** sql语句 end */
 
   try {
     const res = await deleteSql(editSql)

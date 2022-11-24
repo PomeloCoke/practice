@@ -1,11 +1,10 @@
-import userModel from '../../model/public/user'
+import * as userModel from '../../model/public/user'
 import { UserStatus } from '../../enum/defaultOption'
 
-/**
- * 用户登录接口
- */
+// 用户登录接口
 const login = async (ctx: ctx, next: next) => {
   const { uid, mobile, area_code, email, password, product_id } = ctx.request.body
+
   // 检验用户是否存在
   const validCountParams = { uid, mobile, area_code, email, password }
   const hasCountRes = await userModel.validHasUser(validCountParams)
@@ -60,19 +59,16 @@ const login = async (ctx: ctx, next: next) => {
 
 }
 
-/**
- * 用户注册接口
- */
+// 用户注册接口
 const sign = async (ctx: ctx, next: next) => {
   // TODO 完善注册接口
   const { mobile, area_code, email, product_id } = ctx.request.body
 }
 
-/**
- * 后台添加用户
- */
+// 后台添加用户
 const addUser = async (ctx: ctx, next: next) => {
   const { mobile, area_code, email, birthday, id_number, sex, name, is_staff, product_id } = ctx.request.body
+
   // 校验用户是否已存在
   const validCountParams = { mobile, area_code, email }
   const hasCountRes = await userModel.validHasUser(validCountParams)
@@ -90,6 +86,7 @@ const addUser = async (ctx: ctx, next: next) => {
     })
     return
   }
+
   // 添加用户操作
   const addParams = {
     area_code,

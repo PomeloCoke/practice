@@ -38,6 +38,7 @@ export async function validHasUser(params: paramsType.validUser): Promise<validR
     }
   }
 
+  /** sql语句 start */
   const totalSql: querySql = {
     select: ['password', 'status', { name: 'id', alias: 'uid' }],
     from: userBaseTable,
@@ -73,6 +74,7 @@ export async function validHasUser(params: paramsType.validUser): Promise<validR
       val: uid
     })
   }
+  /** sql语句 end */
 
   try {
     const total = await querySql(totalSql)
@@ -107,7 +109,7 @@ export async function validHasUser(params: paramsType.validUser): Promise<validR
  * @param params 
  * @returns 
  */
-export async function validPassword(params: paramsType.validPassword) {
+export async function validPassword(params: paramsType.validPassword): Promise<validResType> {
   const { pwd_val, pwd_res, uid } = params
   if (pwd_res) {
     return {
@@ -118,6 +120,7 @@ export async function validPassword(params: paramsType.validPassword) {
     }
   }
 
+  /** sql语句 start */
   const getPasswordSql: querySql = {
     select: 'password',
     from: userBaseTable,
@@ -127,6 +130,8 @@ export async function validPassword(params: paramsType.validPassword) {
       val: uid
     }]
   }
+  /** sql语句 end */
+
   try {
     const res = await querySql(getPasswordSql)
     return {
@@ -147,16 +152,16 @@ export async function validPassword(params: paramsType.validPassword) {
 
 // TODO 用户列表
 // TODO 用户详情
-type loginParamsType = {
-  id: number
-}
+
 /**
  * 用户登录
  * @param params 
  * @returns
  */
-export async function login(params: loginParamsType) {
+export async function login(params: paramsType.login) {
   let res = {}
+
+  /** sql语句 start */
   const baseSql: querySql = {
     select: [
       'id',
@@ -174,15 +179,8 @@ export async function login(params: loginParamsType) {
       'is_staff'
     ],
     from: userBaseTable,
-    where: [
-      {
-        name: 'id',
-        opt: '=',
-        val: params.id
-      }
-    ]
+    where: [{ name: 'id', opt: '=', val: params.id }]
   }
-
   const countSql: querySql = {
     select: [
       'id',
@@ -194,48 +192,42 @@ export async function login(params: loginParamsType) {
       'permission_names'
     ],
     from: userCountTable,
-    where: [{
-      name: 'user_id',
-      opt: '=',
-      val: params.id
-    }]
+    where: [{ name: 'user_id', opt: '=', val: params.id }]
   }
-  const baseInfo = await querySql(baseSql)
+  /** sql语句 end */
 
-  res = {
-    ...baseInfo[0]
+  try {
+    const baseInfo = await querySql(baseSql)
+
+    // TODO 获取对应产品账户信息
+    // TODO 记录token，登录日志，session
+    res = {
+      ...baseInfo[0]
+    }
+    return {
+      data: res,
+      res: true,
+      msg: ''
+    }
+  } catch (error) {
+    return {
+      code: ErrorCode.OPERATE_FAIL,
+      res: false,
+      data: '',
+      msg: error
+    }
   }
-  // TODO 获取对应产品账户信息
-  // TODO 记录token，登录日志，session
-  return {
-    data: res,
-    res: true,
-    msg: ''
-  }
+
 }
 
-type addUserParamsType = {
-  area_code?: number,
-  mobile?: string,
-  email?: string,
-  is_staff?: 0 | 1,
-  product_id: string,
-  info_detail?: {
-    name?: string,
-    birthday?: string,
-    id_number?: string,
-    sex?: 1 | 2
-  }
-}
+
 /**
  * 注册、添加用户
  * @param params 
  */
-export async function addUser({
-  is_staff = 0,
-  ...params
-}: addUserParamsType) {
+export async function addUser({ is_staff = 0, ...params }: paramsType.addUser) {
   let uid
+  /** sql语句 end */
   let addSql: insertSql = {
     table: userBaseTable,
     values: []
@@ -259,10 +251,10 @@ export async function addUser({
     })
   }
   addSql.values = valueArr
+  /** sql语句 end */
 
   try {
     const res = await insertSql(addSql)
-
     uid = res.insertId
   } catch (error) {
     return {
@@ -275,6 +267,7 @@ export async function addUser({
   try {
     if (is_staff === 1) {
       let product_ids = [] as number[]
+      /** sql语句 start */
       const queryProductSql: querySql = {
         select: 'id',
         from: optionTable,
@@ -286,6 +279,8 @@ export async function addUser({
           }
         ]
       }
+      /** sql语句 end */
+
       const queryRes = await querySql(queryProductSql)
       for (let item of queryRes) {
         product_ids.push(item.id)
@@ -310,12 +305,10 @@ export async function addUser({
 
 }
 
-type addCountParamsType = {
-  product_id: string,
-  uid: number
-}
+
 // TODO 添加账户
-export async function addCount(params: addCountParamsType) {
+export async function addCount(params: paramsType.addCount) {
+  /** sql语句 start */
   let addSql: insertSql = {
     table: userCountTable,
     values: `(create_time,edit_time,edit_id,user_id,batch,product_id) VALUES `
@@ -327,10 +320,10 @@ export async function addCount(params: addCountParamsType) {
     valueStr.push(itemStr)
   })
   addSql.values += valueStr.join(',') + ';'
+  /** sql语句 end */
 
   try {
-    const res = await insertSql(addSql)
-    console.log(`%c getCountInsert`,`color: #1890FF;`, res)
+    await insertSql(addSql)
     return {
       res: true,
       msg: "",
@@ -350,10 +343,3 @@ export async function addCount(params: addCountParamsType) {
 // TODO 更改密码
 // TODO 账户更改更新状态
 // TODO 更改用户状态
-
-export default {
-  validHasUser,
-  validPassword,
-  login,
-  addUser
-}
