@@ -29,6 +29,5 @@
         "type": "integer",
         "enum": [0,1,2]
       }
-    },
-    "required": ["is_staff"]
+    }
   }

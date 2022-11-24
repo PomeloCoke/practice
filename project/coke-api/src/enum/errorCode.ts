@@ -9,5 +9,6 @@ export enum ErrorCode {
   UPDATE_FAIL,
   DELETE_FAIL,
   VALID_FAIL,
+  OPERATE_FAIL,
   PARAM_LACK
 }
