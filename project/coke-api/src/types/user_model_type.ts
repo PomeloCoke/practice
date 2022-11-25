@@ -6,6 +6,11 @@ export type validUser = {
   password?: string
 }
 
+export type validCount = {
+  uid: number,
+  product_id: string
+}
+
 export type validPassword = {
   pwd_val: string,
   pwd_res?: string,
@@ -13,7 +18,8 @@ export type validPassword = {
 }
 
 export type login = {
-  id: number
+  id: number,
+  product_id: number
 }
 
 export type addUser = {

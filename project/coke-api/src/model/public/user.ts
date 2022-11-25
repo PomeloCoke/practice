@@ -104,6 +104,51 @@ export async function validHasUser(params: paramsType.validUser): Promise<validR
 
 }
 
+export async function validCount(params: paramsType.validCount): Promise<validResType> {
+  const product_ids = params.product_id.split(',')
+  /** sql语句 start */
+  const totalSql: querySql = {
+    select: ['product_id'],
+    from: userCountTable,
+    where: [
+      { name: 'is_del', opt: '=', val: 0 },
+      { name: 'user_id', opt: '=', val: params.uid }
+    ]
+  }
+  /** sql语句 end */
+  try {
+    const total = await querySql(totalSql)
+    const lack_ids = [] as number[]
+    product_ids.map((id: string) => {
+      const is_lack = total.filter((item:any)=>{item.product_id === Number(id)
+      }).length === 0
+      if (is_lack) lack_ids.push(Number(id))
+    })
+    if (lack_ids.length === 0) {
+      return {
+        code: ErrorCode.DATA_INEXISTENCE,
+        res: false,
+        msg: '账户不存在',
+        data: lack_ids
+      }
+    } else {
+      return {
+        code: ErrorCode.DATA_EXIST,
+        res: true,
+        msg: '账户已存在',
+        data: lack_ids
+      }
+    }
+  } catch (error) {
+    return {
+      code: ErrorCode.VALID_FAIL,
+      res: false,
+      msg: error,
+      data: ''
+    }
+  }
+}
+
 /**
  * 判断用户密码是否正确（相同）
  * @param params 
@@ -192,17 +237,22 @@ export async function login(params: paramsType.login) {
       'permission_names'
     ],
     from: userCountTable,
-    where: [{ name: 'user_id', opt: '=', val: params.id }]
+    where: [
+      { name: 'user_id', opt: '=', val: params.id },
+      { name: 'product_id', opt: '=', val: params.product_id }
+    ]
   }
   /** sql语句 end */
 
   try {
     const baseInfo = await querySql(baseSql)
+    const coutInfo = await querySql(countSql)
 
     // TODO 获取对应产品账户信息
     // TODO 记录token，登录日志，session
     res = {
-      ...baseInfo[0]
+      ...baseInfo[0],
+      count_info: coutInfo[0]
     }
     return {
       data: res,

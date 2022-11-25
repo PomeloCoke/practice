@@ -6,8 +6,18 @@ const login = async (ctx: ctx, next: next) => {
   const { uid, mobile, area_code, email, password, product_id } = ctx.request.body
 
   // 检验用户是否存在
-  const validCountParams = { uid, mobile, area_code, email, password }
-  const hasCountRes = await userModel.validHasUser(validCountParams)
+  const validUserParams = { uid, mobile, area_code, email, password }
+  const hasUserRes = await userModel.validHasUser(validUserParams)
+  if (!hasUserRes.res) {
+    ctx.error({
+      code: hasUserRes.code,
+      msg: hasUserRes.msg
+    })
+    return
+  }
+  // 校验账户是否存在
+  const validCountParams = { uid, product_id }
+  const hasCountRes = await userModel.validCount(validCountParams)
   if (!hasCountRes.res) {
     ctx.error({
       code: hasCountRes.code,
