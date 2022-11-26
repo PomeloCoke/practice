@@ -120,11 +120,13 @@ export async function validCount(params: paramsType.validCount): Promise<validRe
     const total = await querySql(totalSql)
     const lack_ids = [] as number[]
     product_ids.map((id: string) => {
-      const is_lack = total.filter((item:any)=>{item.product_id === Number(id)
+      const is_lack = total.filter((item:any)=>{console.log('getLackValid---:',item.product_id)
+        return item.product_id === Number(id)
       }).length === 0
       if (is_lack) lack_ids.push(Number(id))
     })
-    if (lack_ids.length === 0) {
+    console.log('getCount', totalSql, total,lack_ids)
+    if (lack_ids.length !== 0) {
       return {
         code: ErrorCode.DATA_INEXISTENCE,
         res: false,

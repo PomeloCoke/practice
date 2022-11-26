@@ -16,7 +16,7 @@ const login = async (ctx: ctx, next: next) => {
     return
   }
   // 校验账户是否存在
-  const validCountParams = { uid, product_id }
+  const validCountParams = { uid: hasUserRes.data.uid, product_id }
   const hasCountRes = await userModel.validCount(validCountParams)
   if (!hasCountRes.res) {
     ctx.error({
@@ -26,8 +26,8 @@ const login = async (ctx: ctx, next: next) => {
     return
   }
   // 校验用户状态
-  if (hasCountRes.data.status != UserStatus.NORMAL &&
-    hasCountRes.data.status != UserStatus.FREQUENT) {
+  if (hasUserRes.data.status != UserStatus.NORMAL &&
+    hasUserRes.data.status != UserStatus.FREQUENT) {
     ctx.error({
       code: ctx.state.ErrorCode.DATA_EXIST,
       msg: '用户状态异常，无法登录'

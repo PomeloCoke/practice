@@ -2,8 +2,7 @@
     "type": "object",
     "properties": {
       "product_id": {
-        "type": "integer",
-        "minimum": 1
+        "type": "string"
       },
       "uid": {
         "type": "integer",
