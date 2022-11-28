@@ -37,8 +37,8 @@ const login = async (ctx: ctx, next: next) => {
   // 校验用户密码是否正确
   const validPasswordParams = {
     pwd_val: password,
-    pwd_res: hasCountRes.data.password,
-    uid: hasCountRes.data.uid
+    pwd_res: hasUserRes.data.password,
+    uid: hasUserRes.data.uid
   }
   const passwordRes = await userModel.validPassword(validPasswordParams)
   if (!passwordRes.res) {
@@ -51,8 +51,9 @@ const login = async (ctx: ctx, next: next) => {
 
   // 登录操作
   const loginParams = {
-    id: hasCountRes.data.uid,
-    product_id: product_id
+    id: hasUserRes.data.uid,
+    product_id: product_id,
+    device: ctx.request.header['device']
   }
   const res = await userModel.login(loginParams)
   if (res.res) {

@@ -19,7 +19,8 @@ export type validPassword = {
 
 export type login = {
   id: number,
-  product_id: number
+  product_id: number,
+  device: string,
 }
 
 export type addUser = {
@@ -39,4 +40,10 @@ export type addUser = {
 export type addCount = {
   product_id: string,
   uid: number
+}
+
+export type addLog = {
+  uid: number,
+  product_id: number,
+  device: string
 }

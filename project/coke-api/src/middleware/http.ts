@@ -3,7 +3,7 @@ function setResHeader(ctx: ctx) {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Max-Age': '1800',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
-    'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS'
+    'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
   }
   ctx.request.headers = {...ctx.request.headers,...headerConfig}
 }

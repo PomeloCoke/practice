@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import { query } from "@/types/sql";
+import jwt from 'jsonwebtoken'
 import { querySql, insertSql, updateSql, deleteSql } from "../../db";
 import { getPageLimit } from "./select";
 import * as paramsType from '../../types/user_model_type'
@@ -120,12 +120,9 @@ export async function validCount(params: paramsType.validCount): Promise<validRe
     const total = await querySql(totalSql)
     const lack_ids = [] as number[]
     product_ids.map((id: string) => {
-      const is_lack = total.filter((item:any)=>{console.log('getLackValid---:',item.product_id)
-        return item.product_id === Number(id)
-      }).length === 0
+      const is_lack = total.filter((item: any) => { return item.product_id === Number(id) }).length === 0
       if (is_lack) lack_ids.push(Number(id))
     })
-    console.log('getCount', totalSql, total,lack_ids)
     if (lack_ids.length !== 0) {
       return {
         code: ErrorCode.DATA_INEXISTENCE,
@@ -244,11 +241,17 @@ export async function login(params: paramsType.login) {
       { name: 'product_id', opt: '=', val: params.product_id }
     ]
   }
+
   /** sql语句 end */
 
   try {
     const baseInfo = await querySql(baseSql)
     const coutInfo = await querySql(countSql)
+    await addLoginLog({
+      uid: params.id,
+      product_id: params.product_id,
+      device: params.device
+    })
 
     // TODO 获取对应产品账户信息
     // TODO 记录token，登录日志，session
@@ -389,6 +392,31 @@ export async function addCount(params: paramsType.addCount) {
   }
 }
 // TODO 添加登录日志
+export async function addLoginLog(params: paramsType.addLog) {
+  const payload = {
+    uid: params.uid
+  }
+  const searctKey = 'jwtSecret'
+  // const tokenExpiresTime = 1000 * 60 * 60 * 24 * 7
+  const tokenExpiresTime = 1000 * 30
+  const token = jwt.sign(payload, searctKey, {
+    expiresIn: tokenExpiresTime
+  })
+  console.log('getToken', params, token)
+
+  /** sql语句 start */
+  let addSql: insertSql = {
+    table: userLogTable,
+    values: [
+      { key: 'user_id', value: params.uid },
+      { key: 'ip', value: `192.168.0.13` },
+      { key: 'product_id', value: params.product_id },
+      { key: 'token', value: token },
+      { key: 'device', value: params.device },
+    ]
+  }
+  /** sql语句 end */
+}
 // TODO 编辑基本信息
 // TODO 编辑重要信息
 // TODO 编辑员工相关信息
