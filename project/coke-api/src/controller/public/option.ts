@@ -1,13 +1,11 @@
 import * as optionModel from "../../model/public/option" 
 import { typeData } from '../../utils'
-import redis from '../../cache'
 // 获取筛选项列表
 const getList = async (ctx: ctx, next: next) => {
   const { id, parent_id, name_c, side, page, page_count } = ctx.request.body
 
   const params = { id, parent_id, name_c, side, page, page_count }
   const res = await optionModel.getOptionList(params)
-  // await redis.set('test','lllll')
   ctx.success({
     data: res
   })

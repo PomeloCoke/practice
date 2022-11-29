@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import redis from '../../cache'
 import { querySql, insertSql, updateSql, deleteSql } from "../../db";
 import { getPageLimit } from "./select";
 import * as paramsType from '../../types/user_model_type'
@@ -241,24 +242,34 @@ export async function login(params: paramsType.login) {
       { name: 'product_id', opt: '=', val: params.product_id }
     ]
   }
-
+  const logParams = {
+    uid: params.id,
+    product_id: params.product_id,
+    device: params.device
+  }
   /** sql语句 end */
 
   try {
     const baseInfo = await querySql(baseSql)
-    const coutInfo = await querySql(countSql)
-    await addLoginLog({
-      uid: params.id,
-      product_id: params.product_id,
-      device: params.device
-    })
+    const countInfo = await querySql(countSql)
+    const logInfo = await addLoginLog(logParams)
 
     // TODO 获取对应产品账户信息
     // TODO 记录token，登录日志，session
     res = {
       ...baseInfo[0],
-      count_info: coutInfo[0]
+      token: logInfo.data,
+      count_info: countInfo[0],
     }
+    
+    /** redis存入session start */
+    const sessionParams = {
+      uid: baseInfo.id,
+      permission_ids: countInfo.permission_ids ? countInfo.permission_ids.split(',') : []
+    }
+    const cache = await redis.set(logInfo.data || '',JSON.stringify(sessionParams))
+    /** redis存入session end */
+
     return {
       data: res,
       res: true,
@@ -274,7 +285,6 @@ export async function login(params: paramsType.login) {
   }
 
 }
-
 
 /**
  * 注册、添加用户
@@ -360,8 +370,10 @@ export async function addUser({ is_staff = 0, ...params }: paramsType.addUser) {
 
 }
 
-
-// TODO 添加账户
+/**
+ * 添加账户
+ * @param params 
+ */
 export async function addCount(params: paramsType.addCount) {
   /** sql语句 start */
   let addSql: insertSql = {
@@ -391,18 +403,23 @@ export async function addCount(params: paramsType.addCount) {
     }
   }
 }
-// TODO 添加登录日志
+
+/**
+ * 添加登录日志
+ * @param params 
+ */
 export async function addLoginLog(params: paramsType.addLog) {
-  const payload = {
-    uid: params.uid
-  }
+  /** 创建token start */
+  const payload = { uid: params.uid }
+  // TODO 更改加密密钥
   const searctKey = 'jwtSecret'
+  // 时间戳的格式是错误的，因为它应该是秒（10位数字）而不是毫秒（13位数字）（请参阅RFC7519中的NumericDate）
   // const tokenExpiresTime = 1000 * 60 * 60 * 24 * 7
-  const tokenExpiresTime = 1000 * 30
+  const tokenExpiresTime = 60 * 60 * 24 * 15
   const token = jwt.sign(payload, searctKey, {
     expiresIn: tokenExpiresTime
   })
-  console.log('getToken', params, token)
+  /** 创建token end */
 
   /** sql语句 start */
   let addSql: insertSql = {
@@ -410,12 +427,28 @@ export async function addLoginLog(params: paramsType.addLog) {
     values: [
       { key: 'user_id', value: params.uid },
       { key: 'ip', value: `192.168.0.13` },
-      { key: 'product_id', value: params.product_id },
+      { key: 'product_id', value: Number(params.product_id) },
       { key: 'token', value: token },
       { key: 'device', value: params.device },
+      { key: 'create_time', value: new Date().toLocaleString() }
     ]
   }
   /** sql语句 end */
+  try {
+    await insertSql(addSql,true,false)
+    return {
+      res: true,
+      msg: "",
+      data: token
+    }
+  } catch (error) {
+    return {
+      res: false,
+      msg: error,
+      code: ErrorCode.INSERT_FAIL
+    }
+  }
+
 }
 // TODO 编辑基本信息
 // TODO 编辑重要信息

@@ -1,22 +1,25 @@
 import { values as ValValuesType } from '../types/sql'
 
-export default function createSqlStr(sql: insertSql, user: boolean): string {
+export default function createSqlStr(sql: insertSql, user: boolean, def_insert: boolean): string {
   let str = `INSERT INTO ${sql.table} `
 
   if (typeof sql.values === 'string') {
     return str + sql.values
   }
 
-  let valArr: ValValuesType[] = [
-    {
-      key: 'create_time',
-      value: new Date().toLocaleString()
-    },
-    {
-      key: 'edit_time',
-      value: new Date().toLocaleString()
-    },
-  ]
+  let valArr = [] as ValValuesType[]
+  if (def_insert) {
+    valArr = [
+      {
+        key: 'create_time',
+        value: new Date().toLocaleString()
+      },
+      {
+        key: 'edit_time',
+        value: new Date().toLocaleString()
+      },
+    ]
+  }
   if (!user) {
     valArr.push({
       key: 'edit_id',

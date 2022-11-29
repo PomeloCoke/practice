@@ -39,8 +39,8 @@ export function querySql(sql: querySql) {
 }
 
 
-export function insertSql(sql: insertSql, user = false) {
-  const sqlStr = insertSqlStr(sql, user)
+export function insertSql(sql: insertSql, user = false, def_insert = true) {
+  const sqlStr = insertSqlStr(sql, user, def_insert)
   console.log('getSqlStr', sqlStr)
 
   return new Promise<any>((resolve, reject) => {
