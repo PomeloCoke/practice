@@ -20,7 +20,7 @@ instance.interceptors.request.use(
     console.log('接口:', config.url)
     console.log('参数:', config.data || 'null') */
     config.headers['uid'] = 1
-    config.headers['token'] = ''
+    config.headers['authorization'] = ''
     config.headers['appkey'] = 'pomelode'
     
     return config
