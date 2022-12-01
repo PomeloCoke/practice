@@ -20,6 +20,4 @@ app.use(authority)
 app.use(session(app))
 app.use(routerFrame.routes()).use(routerFrame.allowedMethods())
 
-app.listen(3002, () => {
-
-})
+app.listen(3002, () => {})
