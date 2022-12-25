@@ -1,7 +1,7 @@
 const state:STORE_STATE = {
   layout: {
     loading: false,
-    theme: 'vitality',
+    theme: 'default',
     theme_mod: 'light',
     navBar: {
       status: true,
@@ -28,7 +28,7 @@ const state:STORE_STATE = {
     }
   },
   user: {
-    login: true,
+    login: false,
     token: '123',
     uid: 0,
     pid: '',

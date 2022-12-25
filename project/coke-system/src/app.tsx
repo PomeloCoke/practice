@@ -6,7 +6,7 @@ import useStore from '@/stores';
 
 import ENUM from '@/settings/enums'
 import '@/assets/style/index.less'
-import '/public/style/theme.css'
+import '/public/style/default.css'
 import '@/utils'
 import '@/utils/style'
 import Layout from '@/layout';
