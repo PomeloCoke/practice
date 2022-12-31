@@ -1,22 +1,17 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { observer, useLocalObservable } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import useStore from '@/stores';
 
-import styles from './index.module.less'
+import Styles from './index.module.less'
+import IconFont from "@/components/iconfont";
 
 function Login() {
-  /*State Start*************************************************/
-  const store = useStore()
-  // const state = useLocalStore(()=>({
-
-  // }))
-  /*State End***************************************************/
-  const storeLogin = store.data.user.login
+  
 
   return (
-    <div className={styles.page__single__login}>
-      <input className={styles.text} placeholder="啦啦啦"/>
+    <div className={Styles.page__single__login}>
+      <IconFont className={Styles.logo} name="icon-logo" />
+      
     </div>
   )
 }

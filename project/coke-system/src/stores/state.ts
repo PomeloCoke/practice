@@ -29,7 +29,7 @@ const state:STORE_STATE = {
   },
   user: {
     login: false,
-    token: '123',
+    token: '',
     uid: 0,
     pid: '',
     nickname: 'PomeloCoke',
