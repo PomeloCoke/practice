@@ -6,7 +6,7 @@ type props = {
   className?: string
 }
 const Icon = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3846552_ebfeep6418c.js'
+  scriptUrl: '//at.alicdn.com/t/c/font_3846552_61nytod6yud.js'
 })
 
 const iconFont = (prop: props) => {

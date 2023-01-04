@@ -2,6 +2,7 @@
   min-width: 1200px;
   height: 100vh;
   overflow-x: auto;
+  background-color: @basic-background;
 }
 
 html {
@@ -10,11 +11,11 @@ html {
     height: 8px;
   }
   &::-webkit-scrollbar-track {
-    background-color: @theme-module-background;
+    background-color: @basic-background;
   }
   &::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background-color: @on-module-sub1;
+    background-color: @theme-primary;
     box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2);
     &:hover {
       cursor: pointer;
@@ -103,7 +104,7 @@ footer {
 html,body {
   font-size: 14px;
   font-family:  PingFang SC,Microsoft Yahei,Microsoft Yahei UI,Segoe UI,Tahoma,SimSun,sans-serif,Hiragino Sans GB;
-  color: @on-theme-default;
+  color: @basic-on-background;
 }
 
 address,

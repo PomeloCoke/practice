@@ -44,6 +44,7 @@
   --basic-surface-variant: #E1E4D5;
   --basic-on-surface-variant: #45483D;
   --basic-outline: #75786C;
+  --basic-border: #E4E3DB;
   --basic-99: #FBFEEE;
   --basic-98: #F8FBEB;
   --basic-95: #F0F2E3;
@@ -130,6 +131,7 @@
   --basic-surface-variant: #45483D;
   --basic-on-surface-variant: #C5C8B9;
   --basic-outline: #8F9285;
+  --basic-border: #393D32;
   --basic-99: #0C0D0A;
   --basic-98: #191D13;
   --basic-95: #23261D;

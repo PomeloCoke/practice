@@ -7,8 +7,9 @@ import useStore from '@/stores';
 import ENUM from '@/settings/enums'
 import '@/assets/style/index.less'
 import '/public/style/default.css'
+import { ConfigProvider } from 'antd';
 import '@/utils'
-import '@/utils/style'
+import * as StyleUtils from '@/utils/style'
 import Layout from '@/layout';
 
 const App = observer(() => {
@@ -25,7 +26,11 @@ const App = observer(() => {
   return (
     // <React.StrictMode>
       <Router>
-      <Layout></Layout>
+      <ConfigProvider
+      theme={StyleUtils.getThemeVariable(theme_mod, theme)}>
+        <Layout></Layout>
+      </ConfigProvider>
+      
       </Router>
     // </React.StrictMode>
   )
