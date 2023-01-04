@@ -43,11 +43,11 @@
     align-items: center;
 
     .header {
-      width: 100%;
-      height: 32px;
-
-      &_main {
+      &>div {
         width: 100%;
+      }
+      &_main {
+        height: 32px;
         margin-bottom: 15px;
         display: flex;
         justify-content: flex-start;
@@ -69,7 +69,7 @@
       }
 
       &_sub {
-        width: 100%;
+        margin-bottom: 32px;
         line-height: 14px;
         font-size: 14px;
         font-weight: 400;
