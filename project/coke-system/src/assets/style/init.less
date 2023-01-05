@@ -1,8 +1,15 @@
 #layout__app__container {
-  min-width: 1200px;
+  min-width: 1000px;
   height: 100vh;
+  min-height: 600px;
   overflow-x: auto;
   background-color: @basic-background;
+}
+
+@media screen and (max-width: 1000px) {
+  #layout__app__container {
+    height: calc(100vh - 8px);
+  }
 }
 
 html {

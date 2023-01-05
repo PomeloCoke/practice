@@ -1,3 +1,4 @@
+import { ThemeConfig } from 'antd/es/config-provider/context'
 import { ACTION, STATE } from "@/stores/types"
 import { Router } from "@/routes/types"
 export { }
@@ -8,6 +9,8 @@ declare global {
   interface Window {
     className: Function
   }
+
+  type AntThemeConfig = ThemeConfig
 
   type ROUTER = Router
 

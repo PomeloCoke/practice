@@ -4,6 +4,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  container-type: size;
 
   .slot__left {
     flex: 1;
@@ -12,7 +13,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 0 60px;
+    padding: 0 min(5cqw,100px);
+    // padding: 0 7.5cqw;
 
     .logo {
       margin-top: -10%;
@@ -27,11 +29,50 @@
   }
 
   .slot__right {
+    position: relative;
     width: 61.8%;
     height: 100%;
     overflow: hidden;
-    container-name: slotRight;
-    container-type: size;
+
+    .background {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: auto;
+    }
+    @media screen and (min-width: 1920px) and (max-height: 1080px) {
+      .background {
+        width: 100%;
+        height: auto;
+      }
+    }
+    @media screen and (max-width: 1920px) and (min-height: 1080px) {
+      .background {
+        height: 100%;
+        width: auto;
+      }
+    }
+
+    .pic_ct {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .pic {
+        width: 88.4%;
+        max-width: 1117.4px;
+        height: auto;
+      }
+    }
+    
   }
 
   .form__login {
@@ -41,12 +82,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     .header {
-      &>div {
-        width: 100%;
-      }
       &_main {
+        width: 100%;
         height: 32px;
         margin-bottom: 15px;
         display: flex;
@@ -69,6 +107,7 @@
       }
 
       &_sub {
+        width: 100%;
         margin-bottom: 32px;
         line-height: 14px;
         font-size: 14px;
@@ -76,34 +115,32 @@
         color: @text-40;
       }
     }
-  }
-}
-
-/** 右侧容器自适应布局 */
-@container slotRight (max-height: 100cqw) {
-  .background {
-    width: auto;
-    height: 100cqh;
-  }
-}
-
-@container slotRight (min-height: 100cqw) {
-  .background {
-    width: 100cqw;
-    height: auto;
-  }
-}
-
-@container slotRight (min-width: 1265px) {
-  .background {
-    width: 100cqw;
-    height: auto;
-  }
-}
-
-@container slotRight (min-height: 1080px) {
-  .background {
-    width: auto;
-    height: 100cqh;
+    .mod_login_form_login {
+      width: 100%;
+      :global {
+        .ant-form-item {
+          margin-top: 6px;
+          margin-bottom: 32px;
+        }
+        .ant-input-affix-wrapper {
+          border-radius: 8px;
+        }
+        .ant-form-item-label {
+          padding-bottom: 3px;
+        }
+        label {
+          line-height: 20px;
+          font-size: 16px !important;
+          font-weight: 500;
+        }
+      }
+    }
+    .login_btn {
+      width: 100%;
+      margin-top: 32px;
+      line-height: 20px;
+      font-size: 20px;
+      font-weight: 600;
+    }
   }
 }
