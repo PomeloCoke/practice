@@ -50,6 +50,7 @@ export default function() {
   return async function (ctx: ctx, next: next) {
     try {
       const validRes = await validator(ctx)
+      
       if (validRes.res) {
         await next()
       } else {

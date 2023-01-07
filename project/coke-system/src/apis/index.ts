@@ -45,7 +45,7 @@ instance.interceptors.response.use((res) => {
 
 export default instance
 
-export function post(url:string, params:any = {}, headers:any  = {}, other:any  = {}) {
+export function post(url:string, params:any = {}, headers:any  = {}, other:any  = {}): Promise<any> {
   return new Promise<any>((resolve, reject) => {
     let sendData = {
       ...params
@@ -62,7 +62,7 @@ export function post(url:string, params:any = {}, headers:any  = {}, other:any  
         }
       )
       .then(res => {
-        resolve(res.data)
+        resolve(res)
       })
       .catch(error => {
         reject(error)

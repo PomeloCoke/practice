@@ -35,6 +35,7 @@ const addOption = async (ctx: ctx, next: next) => {
 
   const vaildParams = { parent_id, name_c, side }
   const vaild = await optionModel.editOptionValid(vaildParams)
+  
   if (!vaild.res) {
     ctx.error({
       code: ctx.state.ErrorCode.DATA_EXIST,
@@ -45,6 +46,7 @@ const addOption = async (ctx: ctx, next: next) => {
 
   const params = { parent_id, name_c, name_e, side }
   const res = await optionModel.addOptionItem(params)
+  
   if (res.res) {
     ctx.success({
       msg: '添加筛选项成功'

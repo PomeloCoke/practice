@@ -1,6 +1,18 @@
 export enum RES_STATUS {
   Success = 0,
 
+  SERVER = 100000,
+  MIDDLEWARE,
+  DATABASE,
+  DATA_INEXISTENCE,
+  DATA_EXIST,
+  QUERY_FAIL,
+  INSERT_FAIL,
+  UPDATE_FAIL,
+  DELETE_FAIL,
+  VALID_FAIL,
+  OPERATE_FAIL,
+  PARAM_LACK
 }
 
 export default {

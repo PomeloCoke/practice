@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite';
 import { BrowserRouter as Router } from 'react-router-dom';
 import useStore from '@/stores';
 
-import ENUM from '@/settings/enums'
 import '@/assets/style/index.less'
 import '/public/style/default.css'
 import { ConfigProvider } from 'antd';
