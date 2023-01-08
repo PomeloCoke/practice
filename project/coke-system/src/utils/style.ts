@@ -22,7 +22,9 @@ export const getThemeVariable = (theme_mod: string, theme: string):AntThemeConfi
     success_container,
 
     basic_background,
-    basic_border
+    basic_border,
+
+    text_primary
   } = modItem
   
 
@@ -34,7 +36,8 @@ export const getThemeVariable = (theme_mod: string, theme: string):AntThemeConfi
       colorError: theme_error,
       colorSuccess: theme_success,
       colorBgBase: basic_background,
-      colorBorder: basic_border
+      colorBorder: basic_border,
+      colorTextBase: text_primary
     }
   }
   return config

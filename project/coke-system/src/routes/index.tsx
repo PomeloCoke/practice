@@ -8,7 +8,7 @@ export const defaultRoutes: ROUTER[] = [
     meta: {
       fullpath: '/',
       is_verify: false,
-      is_login: false,
+      is_login: true,
     },
     menu: {
       is_show:false,

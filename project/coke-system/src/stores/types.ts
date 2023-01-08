@@ -16,6 +16,32 @@ export type curPageType = {
   params?: any
 }
 
+export type STATE_USER = {
+  login: boolean, // 是否登录
+  token: string, // 密钥
+  uid: number, // 用户id
+  nickname: string,  // 昵称
+  avatar: string | null,  // 头像
+  birthday: string | null,  // 生日
+  sex: number | null, // 性别
+  description: string | null, // 个人介绍
+  count_info: {
+    id: number,  // 账户id
+    batch: number, // 账户批次
+    create_time: string, // 创建时间
+    is_update: 0 | 1, // 是否已更新
+    need_update: 0 | 1, //是否需要更新
+    permission_ids: string | null, // 权限组id
+    permission_names: string | null, // 权限组名
+  }
+  advance_info: {
+    email: string | null, // 邮箱
+    area_code: number, // 手机区号
+    mobile: string, // 手机号
+    id_number: string | null, // 身份证号
+  }
+}
+
 export type STATE = {
   layout: {
     loading: boolean,
@@ -48,24 +74,13 @@ export type STATE = {
       active: number,
     }
   },
-  user: {
-    login: boolean,
-    token: string,
-    uid: number,
-    pid: string,
-    nickname: string,
-    avatar: string,
-    birthday: string,
-    age: number,
-    gender: number
-    // is_new: boolean,
-  }
+  user: STATE_USER
 }
 
 export type ACTION = {
   setSystemInfo(): void,
   getSystemInfo(): void,
-  setLogin(status: boolean): void,
+  setLogin(status: boolean, user: STATE_USER): void,
   toggleMenuBar(status: boolean): void,
   toggleMenuList(menuIdx: number[]): void,
   changeMenuBar(menuIdx: number[], item: curMenuType): void,

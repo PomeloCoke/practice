@@ -11,7 +11,9 @@ export default {
       success_container: "#CEE5FF",
 
       basic_background: "#FEFCF5",
-      basic_border: "#C7C7C0"
+      basic_border: "#C7C7C0",
+
+      text_primary: "#1B1C18"
     },
     dark: {
       theme_primary: "#C6E099",
@@ -24,7 +26,9 @@ export default {
       success_container: "#1D4973",
 
       basic_background: "#1B1C18",
-      basic_border: "#393D32"
+      basic_border: "#393D32",
+
+      text_primary: "#E4E3DB"
     }
   }
 }

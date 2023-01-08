@@ -24,15 +24,18 @@ const beforeEach = (
   const routeInfo = routeSearch(pathname, routes)
   // TODO 404页面
   if (!routeInfo) return false
-
+  const token = StoreData.user.token
   if (routeInfo.meta.is_login) {
     // TODO 接口校验token是否有效
-    const token = StoreData.user.token
     if (!token) {
       console.log('token无效，登录', StoreData.user)
       navigate('/login', { replace: true })
       return false
     }
+  }
+  if(token && pathname === '/login') {
+    console.log('已登录', StoreData.user)
+    navigate('/', { replace: true })
   }
   
   const pageItem = {

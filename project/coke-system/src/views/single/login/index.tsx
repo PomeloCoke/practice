@@ -3,6 +3,9 @@ import { runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import useStore from "@/stores";
 
+import { RES_STATUS } from "@/settings/enums/api";
+import { STATE_USER } from "@/stores/types";
+import Public from "@/apis/public";
 import Styles from "./index.module.less";
 import {
   Button as AntButton,
@@ -12,8 +15,6 @@ import {
   ConfigProvider,
 } from "antd";
 import IconFont from "@/components/iconfont";
-import Public from "@/apis/public";
-import { RES_STATUS } from "@/settings/enums/api";
 
 const formStyleConfig: AntThemeConfig = {
   token: {
@@ -22,6 +23,8 @@ const formStyleConfig: AntThemeConfig = {
 };
 
 const Login = () => {
+  const Store = useStore();
+
   const formRef = React.useRef(null);
   const [form] = AntForm.useForm();
   const [messageApi, contextHolder] = AntMessage.useMessage();
@@ -45,7 +48,10 @@ const Login = () => {
 
   // 登录按钮
   const loginSubmit = async () => {
-    if (!state.loading) {
+    const validRes = await window.validFormValue(form);
+    if (!validRes) {
+      return;
+    } else if (validRes && !state.loading) {
       runInAction(() => {
         state.loading = true;
       });
@@ -55,15 +61,51 @@ const Login = () => {
         password: form.getFieldValue("password"),
         product_id: "14",
       };
-
-      const res = await Public.loginAdmin(sendData);
-      if (res.code === RES_STATUS.Success) {
-        messageApi.success(res.message);
-      } else {
-        messageApi.error(res.msg);
+      try {
+        const res = await Public.loginAdmin(sendData);
+        if (res.code === RES_STATUS.Success) {
+          const {
+            token,
+            id,
+            nickname,
+            avatar,
+            birthday,
+            sex,
+            description,
+            count_info,
+            email,
+            area_code,
+            mobile,
+            id_number,
+          } = res.data;
+          const userInfo: STATE_USER = {
+            login: true,
+            uid: id,
+            token,
+            nickname,
+            avatar,
+            birthday,
+            sex,
+            description,
+            count_info,
+            advance_info: {
+              email,
+              area_code,
+              mobile,
+              id_number,
+            },
+          };
+          messageApi.success(res.msg);
+          Store.setLogin(true, userInfo);
+        } else {
+          messageApi.error(res.msg);
+        }
+      } catch (error) {
+        messageApi.error(error);
       }
+
       runInAction(() => {
-        state.loading = true;
+        state.loading = false;
       });
     }
   };
@@ -80,7 +122,7 @@ const Login = () => {
               <div className={Styles.header_main_ename}>LOGIN</div>
             </div>
             <div className={Styles.header_sub}>
-              欢迎登录 Pomelode 工作室管理系统
+              欢迎使用 Pomelode 工作室管理系统
             </div>
 
             <div className={Styles.mod_login_form_login}>

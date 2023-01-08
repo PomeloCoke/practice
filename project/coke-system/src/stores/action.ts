@@ -1,4 +1,4 @@
-import { curMenuType, curPageType } from "./types";
+import { curMenuType, curPageType, STATE_USER } from "./types";
 import { remove as _remove, isEqual as _isEqual, indexOf as _indexOf } from "lodash";
 const common = {
   /**
@@ -24,9 +24,11 @@ const common = {
    * @description 将登录态存储到store对应的字段，并更新浏览器缓存的系统信息数据
    * @param status
    */
-  setLogin(status: boolean): void {
+  setLogin(status: boolean, user?: STATE_USER): void {
+    if (status) {
+      this.data.user = user
+    }
     this.data.user.login = status;
-    this.data.user.token = status ? "123" : "";
     this.setSystemInfo();
   },
 };

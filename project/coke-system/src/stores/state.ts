@@ -31,12 +31,26 @@ const state:STORE_STATE = {
     login: false,
     token: '',
     uid: 0,
-    pid: '',
     nickname: 'PomeloCoke',
     avatar: 'https://www.ygexing.com/upload/150/new/20210303/16137992359659254.jpg',
     birthday: '',
-    age: 0,
-    gender: 0
+    sex: null,
+    description: null,
+    count_info: {
+      id: 1,
+      batch: 1,
+      create_time: '',
+      is_update: 1,
+      need_update: 0,
+      permission_ids: null,
+      permission_names: null
+    },
+    advance_info: {
+      email: null,
+      area_code: 86,
+      mobile: '',
+      id_number: null
+    }
   }
 }
 
