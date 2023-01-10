@@ -10,16 +10,19 @@ flowchart TB
   %% 路由列表
 	Routes["路由"]:::catalog --> publicRoutes["公共路由"] & contentRoutes["内容路由"]
 	publicRoutes:::catalog --> login
-	contentRoutes:::catalog --> dashboard
+	contentRoutes:::catalog --> platformRoutes["中台路由"]
+	contentRoutes --> blogRoutes["博客路由"]
+	blogRoutes:::catalog --> blog_dashboard("/blog/dashboard-仪表盘"):::page
+	platformRoutes:::catalog --> dashboard
 
   %% 登录流程图
 
   Operate1_1["地址栏输入后台相关路由\n刷新路由"]:::operate --> Status1_1["已登录"] & Status1_2["未登录"]
 		Status1_1 --> Target1_1["登录页"] & Target1_2["内容页"]
 			Target1_1 -.-> |token已过期| login("/login"):::page
-			Target1_1 -.-> |token未过期| dashboard("/dashboard"):::page
+			Target1_1 -.-> |token未过期| dashboard("/dashboard-仪表盘"):::page
 			Target1_2 -.-> |token已过期| login
-			Target1_2 -.-> |token未过期| dashboard
+			Target1_2 -.-> |token未过期| contentRoutes
 		Status1_2 -.-> login
 
 
@@ -30,6 +33,8 @@ flowchart TB
 			form2_1["账号\ncount"] & form2_2["密码\npassword"]
 				form2_1 --> valid2_1_1["必填"] & valid2_1_2["手机号格式"]
 				form2_2 --> valid2_2_1["必填"] & valid2_2_2["数字、英文、下划线"]
+
+				
 		end
 		Operate2_1:::operate -->ValidLoginForm
 		Operate2_2:::operate -->ValidLoginForm
