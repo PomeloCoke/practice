@@ -27,6 +27,11 @@ const state:STORE_STATE = {
       active: 1
     }
   },
+  layoutMenuBar: {
+    open: true,
+    visible: true,
+    activeItem: []
+  },
   user: {
     login: false,
     token: '',

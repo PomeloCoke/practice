@@ -18,10 +18,10 @@ flowchart TB
   stateLayout --> stateLayout_menuBar["menuBar 菜单栏"]
     stateLayout_menuBar --> stateLayout_menuBar_open["open"]
       stateLayout_menuBar_open --> stateLayout_menuBar_open_status_1["true"] & stateLayout_menuBar_open_status_2["false"]
-        stateLayout_menuBar_open_status_1 -.-> |打开菜单栏| component_menuBar
-        stateLayout_menuBar_open_status_2 -.-> |关闭菜单栏| component_menuBar
+        stateLayout_menuBar_open_status_1 -.-> |"打开菜单栏"| component_menuBar
+        stateLayout_menuBar_open_status_2 -.-> |"关闭菜单栏"| component_menuBar
 
-        stateLayout_menuBar_open -.-> |根据status改变logo的位置和大小| component_menuBar_logo
+        stateLayout_menuBar_open -.-> |"根据status改变logo的位置和大小"| component_menuBar_logo
 
     stateLayout_menuBar -->stateLayout_menuBar_visible["visible"]
     stateLayout_menuBar --> stateLayout_menuBar_["active_item"]
@@ -34,13 +34,13 @@ flowchart TB
   %% 菜单栏
   component_menuBar --> component_menuBar_logo("logo图标"):::element
   component_menuBar --> component_menuBar_toggle("打开/收起按钮"):::element
-  component_menuBar --> component_menuBar_logout("突出系统按钮"):::element
+  component_menuBar --> component_menuBar_logout("退出系统按钮"):::element
   component_menuBar --> component_menuBar_menuList("菜单列表"):::element
     component_menuBar_menuList --> component_menuBar_menuItem("菜单子项"):::element
   
   component_menuBar_toggle --> operate_menuBar_1["点击"] & operate_menuBar_2["悬浮"]
-    operate_menuBar_1:::operate --> |菜单栏未打开| stateLayout_menuBar_open_status_1
-    operate_menuBar_1:::operate --> |菜单栏已打开| stateLayout_menuBar_open_status_2
+    operate_menuBar_1:::operate --> |"菜单栏未打开"| stateLayout_menuBar_open_status_1
+    operate_menuBar_1:::operate --> |"菜单栏已打开"| stateLayout_menuBar_open_status_2
     
     operate_menuBar_2:::operate
 

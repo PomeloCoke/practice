@@ -14,3 +14,15 @@ export type menuListType = {
   icon?: string,
   children?: menuListType[]
 }
+
+export type activeMenuItemType = {
+  id: number,
+  nextId: number | null,
+  open: boolean,
+  info: {
+    icon: string,
+    name_c: string,
+    name_e: string,
+    path?: string
+  }
+}

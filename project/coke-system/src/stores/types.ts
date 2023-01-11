@@ -42,6 +42,18 @@ export type STATE_USER = {
   }
 }
 
+type menuItemType = {
+  id: number,
+  nextId: number | null,
+  open: boolean,
+  info: {
+    icon: string,
+    name_c: string,
+    name_e: string,
+    path?: string
+  }
+}
+
 export type STATE = {
   layout: {
     loading: boolean,
@@ -74,6 +86,11 @@ export type STATE = {
       active: number,
     }
   },
+  layoutMenuBar: {
+    open: boolean,
+    visible: boolean,
+    activeItem: menuItemType[] 
+  }
   user: STATE_USER
 }
 

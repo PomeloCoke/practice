@@ -40,7 +40,8 @@ const layout = {
    * @param status 菜单状态
    */
   toggleMenuBar(status: boolean): void {
-    this.data.layout.menuBar.status = status;
+    this.data.layoutMenuBar.open = status;
+    console.log('getToggle', status)
     this.setSystemInfo();
   },
 

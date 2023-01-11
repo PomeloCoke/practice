@@ -39,20 +39,22 @@ const createMenuList = (routes: ROUTER[], isChild = false) => {
   let list: menuListType[] = [];
   routes
     .map((item, idx) => {
-      let listItem = {
-        id: idx + 1,
-        name_c: item.menu.name_c || "",
-        name_e: item.menu.name_e || "",
-        icon: item.menu.icon || "",
-        is_show: item.menu.is_show || false,
-        route: item.menu.route || "",
-        children: [] as menuListType[],
-      };
-      if (item.children && item.children.length > 0) {
-        const children: menuListType[] = createMenuList(item.children, true);
-        listItem = { ...listItem, children };
+      if (item.menu.is_show) {
+        let listItem = {
+          id: idx + 1,
+          name_c: item.menu.name_c || "",
+          name_e: item.menu.name_e || "",
+          icon: item.menu.icon || "",
+          is_show: item.menu.is_show || false,
+          route: item.menu.route || "",
+          children: [] as menuListType[],
+        };
+        if (item.children && item.children.length > 0) {
+          const children: menuListType[] = createMenuList(item.children, true);
+          listItem = { ...listItem, children };
+        }
+        list.push(listItem);
       }
-      list.push(listItem);
     });
   return list;
 };
