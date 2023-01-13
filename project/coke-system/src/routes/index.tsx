@@ -1,5 +1,5 @@
 import * as React from 'react';
-import blogRoutes from './configs/blog'
+import workRoutes from './configs/blog'
 
 export const defaultRoutes: ROUTER[] = [
   {
@@ -37,7 +37,7 @@ export const defaultRoutes: ROUTER[] = [
       is_login: true,
     },
     menu: {
-      is_show: true,
+      is_show: false,
       name_c: '仪表盘',
       name_e: 'dashboard',
       route: '/dashboard',
@@ -48,5 +48,5 @@ export const defaultRoutes: ROUTER[] = [
 
 export const routes: ROUTER[] = [
   ...defaultRoutes,
-  ...blogRoutes
+  ...workRoutes
 ]

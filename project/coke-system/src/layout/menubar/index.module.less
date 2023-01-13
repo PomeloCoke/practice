@@ -181,8 +181,7 @@
   user-select: none;
 
   .slot__top {
-    
-    flex: 1;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -194,10 +193,9 @@
       font-size: 20px;
     }
   }
-
   .slot__bottom {
+    flex-shrink: 0;
     width: 100%;
-    padding-bottom: 43px;
     .log_out_btn {
       margin-left: -15px;
       display: flex;
@@ -215,7 +213,6 @@
       }
     }
   }
-
   .toggle_open_btn {
     position: absolute;
     z-index: 2;
@@ -232,10 +229,57 @@
       box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2) ;
     }
   }
-
-  // &.open,&.close {
-  //   transition: width 0.2s ease-in;
-  // }
+  .slot__mid {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .active_item_bg {
+      position: absolute;
+      background-color: @basic-surface;
+    }
+    .menu_list {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      .menu_item {
+        flex-shrink: 0;
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        .menu_info {
+          position: relative;
+          z-index: 2;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .name {
+            flex: 1;
+          }
+        }
+        &_root {
+          
+          overflow: hidden;
+        }
+        &_child {
+          position: absolute;
+          left: 0;
+          top: -100%;
+          // transform: scaleY(0);
+        }
+      }
+    }
+  }
 
   &.invisible {
 
@@ -244,30 +288,29 @@
 
 .layout__menubar_1.open {
   transition: all 0.2s ease-in;
-  .slot__top, .slot__top * {
+  .slot__top .logo, .slot__top .text, .log_out_btn {
     transition: all 0.2s ease-in;
-  }
-  .log_out_btn {
-    transition: all 0.1s 0.3s ease-in;
   }
 }
 
 .layout__menubar_1.close {
   transition: all 0.2s 0.2s ease-in;
-  .slot__top, .slot__top * {
-    transition: all 0.2s ease-in;
+  .slot__top .logo {
+    transition: all 0.2s 0.2s ease-in;
   }
   .slot__top .text {
+    transition: all 0.2s 0.2s ease-in;
     margin-top: -30px;
     opacity: 0;
     visibility: hidden;
   }
   .log_out_btn {
-    transition: all 0.2s ease-in;
+    transition: all 0.2s 0.2s ease-in;
     margin-bottom: -43px;
     opacity: 0;
     visibility: hidden;
   }
+  
 }
 
 @media screen and (max-width: 1680px) {
@@ -275,6 +318,9 @@
     padding: 20px 10px;
     .logo {
       font-size: 24px;
+    }
+    .slot__bottom {
+      padding-bottom: 23px;
     }
     .toggle_open_btn {
       width: 28px;
@@ -284,14 +330,50 @@
         font-size: 20px;
       }
     }
+    .slot__mid {
+      padding-top: min(30px, 3.8cqh);
+      padding-bottom: min(35px, 4.55cqh);
+      .menu_item {
+        &_root {
+          padding-top: 18px;
+          padding-bottom: 18px;
+          height: 60px;
+          &>.menu_item_child {
+            width: calc(100% - 24px);
+            margin-left: 24px;
+          }
+        }
+        &_child {
+          height: 30px;
+          padding: 10px 12px;
+          padding-right: 0;
+          border-radius: 8px;
+          .menu_item {
+            margin-left: 8px;
+            width: calc(100% - 8px);
+          }
+          .icon {
+            font-size: 20px !important;
+            margin-right: 0px !important;
+          }
+        }
+        .icon {
+          font-size: 24px;
+          margin-right: 10px;
+        }
+        .arrow {
+          font-size: 24px;
+          margin-left: 10px;
+        }
+      }
+    }
   }
   .layout__menubar_1.open {
+    padding-top: 30px;
     width: 200px;
-    .slot__top {
-      padding-top: 15px;
-      .logo {
-        font-size: 44px;
-      }
+    .slot__top .logo {
+      font-size: 44px;
+      
     }
   }
   .layout__menubar_1.close {
@@ -305,8 +387,14 @@
 @media screen and (min-width: 1680px) {
   .layout__menubar_1 {
     padding: 20px 15px;
+    .slot__top .text {
+      font-size: 22px;
+    }
     .logo {
       font-size: 28px;
+    }
+    .slot__bottom {
+      padding-bottom: 43px;
     }
     .toggle_open_btn {
       width: 32px;
@@ -316,14 +404,50 @@
         font-size: 24px;
       }
     }
+    .slot__mid {
+      padding-top: min(100px, 9.6cqh);
+      padding-bottom: min(142px, 13.65cqh);
+      .menu_item {
+        &_root {
+          height: 68px;
+          padding-top: 20px;
+          padding-bottom: 20px;
+          &>.menu_item_child {
+            width: calc(100% - 28px);
+            margin-left: 28px;
+          }
+        }
+        &_child {
+          height: 52px;
+          padding: 14px 15px;
+          padding-right: 0;
+          border-radius: 10px;
+          .menu_item {
+            margin-left: 10px;
+            width: calc(100% - 10px);
+          }
+          .icon {
+            font-size: 24px !important;
+            margin-right: 0px !important;
+          }
+        }
+        .icon {
+          font-size: 28px;
+          margin-right: 15px;
+        }
+        .arrow {
+          font-size: 28px;
+          margin-left: 15px;
+        }
+      }
+      
+    }
   }
   .layout__menubar_1.open {
+    padding-top: 40px;
     width: 220px;
-    .slot__top {
-      padding-top: 20px;
-      .logo {
-        font-size: 48px;
-      }
+    .slot__top .logo {
+      font-size: 48px;
     }
   }
   .layout__menubar_1.close {

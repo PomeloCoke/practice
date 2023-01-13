@@ -41,7 +41,6 @@ const layout = {
    */
   toggleMenuBar(status: boolean): void {
     this.data.layoutMenuBar.open = status;
-    console.log('getToggle', status)
     this.setSystemInfo();
   },
 

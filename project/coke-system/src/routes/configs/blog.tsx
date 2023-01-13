@@ -1,27 +1,27 @@
 import * as React from 'react';
 
-const blogRoutes: ROUTER[] = [
+const workRoutes: ROUTER[] = [
   {
-    path: '/test',
+    path: '/development',
     redirect: 'dashboard',
     meta: {
-      fullpath: '/test',
+      fullpath: '/development',
       title: '测试页面',
       is_verify: true,
       is_login: true,
     },
     menu: {
       is_show: true,
-      name_c: '测试测试',
-      name_e: 'test',
-      icon: 'icon-question-circle'
+      name_c: '开发',
+      name_e: 'developement',
+      icon: 'icon-code'
     },
     children: [
       {
         path: 'dashboard',
         component: React.lazy(() => import("@/views/single/test")),
         meta: {
-          fullpath: '/test/dashboard',
+          fullpath: '/development/dashboard',
           title: '测试仪表盘',
           is_verify: true,
           is_login: true,
@@ -30,14 +30,15 @@ const blogRoutes: ROUTER[] = [
           is_show: true,
           name_c: '测试仪表盘',
           name_e: 'testboard',
-          route: '/test/dashboard'
+          route: '/development/dashboard'
         }
       },
       {
         path: 'login',
+        redirect: 'dashboard',
         component: React.lazy(() => import("@/views/single/login")),
         meta: {
-          fullpath: '/test/login',
+          fullpath: '/development/login',
           title: '测试登录',
           is_verify: true,
           is_login: true,
@@ -46,16 +47,52 @@ const blogRoutes: ROUTER[] = [
           is_show: true,
           name_c: '测试登录',
           name_e: 'testlogin',
-          route: '/test/login'
-        }
+          icon: 'icon-code'
+          // route: '/development/login'
+        },
+        children: [
+          {
+            path: 'dashboard',
+            component: React.lazy(() => import("@/views/single/test")),
+            meta: {
+              fullpath: '/development/login/dashboard',
+              title: '测试仪表盘',
+              is_verify: true,
+              is_login: true,
+            },
+            menu: {
+              is_show: true,
+              name_c: '测试仪表盘',
+              name_e: 'testboard',
+              route: '/development/login/dashboard'
+            }
+          },
+          {
+            path: 'login',
+            component: React.lazy(() => import("@/views/single/login")),
+            meta: {
+              fullpath: '/development/login/login',
+              title: '测试登录',
+              is_verify: true,
+              is_login: true,
+            },
+            menu: {
+              is_show: true,
+              name_c: '测试登录',
+              name_e: 'testlogin',
+              route: '/development/login/login'
+            },
+            
+          }
+        ]
       }
     ]
   },
   {
-    path: '/yes',
+    path: '/design',
     redirect: 'dashboard',
     meta: {
-      fullpath: '/yes',
+      fullpath: '/design',
       title: '测试页面',
       is_verify: true,
       is_login: true,
@@ -63,7 +100,7 @@ const blogRoutes: ROUTER[] = [
     menu: {
       is_show: true,
       name_c: '测试测试',
-      name_e: 'test',
+      name_e: 'design',
       icon: 'icon-question-circle'
     },
     children: [
@@ -71,7 +108,7 @@ const blogRoutes: ROUTER[] = [
         path: 'dashboard',
         component: React.lazy(() => import("@/views/single/test")),
         meta: {
-          fullpath: '/yes/dashboard',
+          fullpath: '/design/dashboard',
           title: '测试仪表盘',
           is_verify: true,
           is_login: true,
@@ -80,14 +117,14 @@ const blogRoutes: ROUTER[] = [
           is_show: true,
           name_c: '测试仪表盘',
           name_e: 'testboard',
-          route: '/yes/dashboard'
+          route: '/design/dashboard'
         }
       },
       {
         path: 'login/:id',
         component: React.lazy(() => import("@/views/single/login")),
         meta: {
-          fullpath: '/yes/login/:id',
+          fullpath: '/design/login/:id',
           title: '测试登录',
           is_verify: true,
           is_login: true,
@@ -96,11 +133,11 @@ const blogRoutes: ROUTER[] = [
           is_show: false,
           name_c: '测试登录',
           name_e: 'testlogin',
-          route: '/yes/login'
+          route: '/design/login'
         }
       }
     ]
   },
 ]
 
-export default blogRoutes
+export default workRoutes

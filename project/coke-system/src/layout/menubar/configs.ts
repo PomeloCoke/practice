@@ -1,5 +1,5 @@
 import { defaultRoutes } from "@/routes";
-import blogRoutes from "@/routes/configs/blog";
+import workRoutes from "@/routes/configs/blog";
 
 import { PRODUCT } from "@/settings/enums/basic";
 import { menuListType } from "../types";
@@ -14,13 +14,13 @@ const getMenuList = (product_id: number): menuListType[] => {
   let routes = defaultRoutes;
   switch (product_id) {
     case PRODUCT.Blog:
-      routes = [...routes, ...blogRoutes];
+      routes = [...routes, ...workRoutes];
       break;
     case PRODUCT.TimeManagement:
-      routes = [...blogRoutes];
+      routes = [...workRoutes];
       break;
     default:
-      routes = [...routes, ...blogRoutes];
+      routes = [...routes, ...workRoutes];
       break;
   }
 

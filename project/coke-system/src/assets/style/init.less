@@ -110,8 +110,16 @@ footer {
 
 html,body {
   font-size: 14px;
+  line-height: 14px;
   font-family:  PingFang SC,Microsoft Yahei,Microsoft Yahei UI,Segoe UI,Tahoma,SimSun,sans-serif,Hiragino Sans GB;
   color: @basic-on-background;
+}
+
+@media screen and (min-width: 1680px) {
+  html,body {
+    font-size: 16px;
+    line-height: 16px;
+  }
 }
 
 address,
@@ -198,4 +206,15 @@ input::-webkit-inner-spin-button {
 /* 火狐浏览器 */
 input[type="number"]{ 
     -moz-appearance: textfield; 
+}
+
+.line-1 {
+  text-overflow: ellipsis;
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  word-break: break-all;
 }
