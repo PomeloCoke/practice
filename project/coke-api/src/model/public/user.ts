@@ -196,6 +196,62 @@ export async function validPassword(params: paramsType.validPassword): Promise<v
 }
 
 // TODO 用户列表
+/**
+ * 用户列表
+ * @param params 
+ * @returns
+ */
+export async function getUserList(params: paramsType.list) {
+  let resArr = [] as any[];
+  const { limitStr, limitCount } = getPageLimit(params.page, params.page_count);
+  /** sql语句 start */
+  const countSql: querySql = {
+    select: [
+      "SQL_CALC_FOUND_ROWS id",
+      "create_time",
+      "edit_time",
+      "status",
+      "nickname",
+      "avatar",
+      "description",
+      "birthday",
+      "mobile",
+      "area_code",
+      "email",
+      "name",
+      "id_number",
+      "sex",
+      "is_staff",
+    ],
+    from: userBaseTable,
+    where: [
+      { name: "is_del", opt: "=", val: 0 },
+    ],
+    limit: limitStr,
+  };
+  const totalSql: querySql = {
+    select: [
+      {
+        name: "FOUND_ROWS()",
+        alias: "total",
+      },
+    ],
+  };
+  /** sql语句 end */
+
+  const res = await querySql(countSql);
+  const total = await querySql(totalSql);
+
+  return {
+    data: res,
+    total: total[0].total,
+    page: params.page,
+    page_count: params.page_count,
+    page_total: Math.ceil(total[0].total / limitCount),
+  }
+
+}
+
 // TODO 用户详情
 
 /**
@@ -264,9 +320,11 @@ export async function login(params: paramsType.login) {
     
     /** redis存入session start */
     const sessionParams = {
-      uid: baseInfo.id,
-      permission_ids: countInfo.permission_ids ? countInfo.permission_ids.split(',') : []
+      uid: baseInfo[0].id,
+      permission_ids: countInfo.permission_ids ? countInfo.permission_ids.split(',') : [],
+      authorization: logInfo.data
     }
+    console.log('getRedisSet', sessionParams)
     const cache = await redis.set(logInfo.data || '',JSON.stringify(sessionParams))
     /** redis存入session end */
 
@@ -421,6 +479,7 @@ export async function addLoginLog(params: paramsType.addLog) {
   })
   /** 创建token end */
 
+  // TODO 前端接入ip获取接口
   /** sql语句 start */
   let addSql: insertSql = {
     table: userLogTable,

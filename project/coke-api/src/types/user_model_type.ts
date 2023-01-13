@@ -47,3 +47,9 @@ export type addLog = {
   product_id: number,
   device: string
 }
+
+export type list = {
+  id?: number;
+  page?: number;
+  page_count?: number;
+};

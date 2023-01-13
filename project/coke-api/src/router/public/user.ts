@@ -18,6 +18,14 @@ const routes: route[] = [
       method: 'post',
       verifyToken: true,
     }
+  },
+  {
+    path: controllerName + '/list',
+    controller: user.getList,
+    option: {
+      method: 'post',
+      verifyToken: true,
+    }
   }
 ]
 

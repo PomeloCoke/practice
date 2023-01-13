@@ -127,8 +127,20 @@ const addUser = async (ctx: ctx, next: next) => {
 
 }
 
+// 获取筛选项列表
+const getList = async (ctx: ctx, next: next) => {
+  const { id, page, page_count } = ctx.request.body
+
+  const params = { id, page, page_count }
+  const res = await userModel.getUserList(params)
+  ctx.success({
+    data: res
+  })
+}
+
 
 export default {
   login,
-  addUser
+  addUser,
+  getList
 }
