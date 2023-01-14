@@ -8,18 +8,17 @@ import Styles from "./index.module.less";
 import { isEqual as _isEqual } from "lodash";
 import IconFont from "@/components/iconfont";
 
-
 type propType = {
   Store?: STORE;
   menuList: menuListType[];
 };
 
-type hasChildFunction = (item: menuListType) => boolean;
-type createMenuItemFunction = (menuIdx: number[], item: menuListType) => void;
+type createMenuItemFunction = () => void;
+type closeMenuItemFunction = (id: number) => void;
 /**
  * 创建菜单项
  * @description 递归创建菜单子项dom
- * @param StoreData 状态管理数据
+ * @param initActiveMenuChain 初始化活跃菜单链表
  * @param menuItem 菜单列表
  * @param clickMenuItem 点击菜单项的方法
  * @returns 返回菜单列表dom
@@ -27,70 +26,112 @@ type createMenuItemFunction = (menuIdx: number[], item: menuListType) => void;
 const createMenuItem = (
   initActiveMenuChain: activeMenuItemType[],
   menuItem: menuListType,
-  // clickMenuItem: createMenuItemFunction,
+  clickCount: number,
+  clickCallback: createMenuItemFunction,
   level: number = 1,
-  prevKeyName: string = "menu-item"
+  prevKeyName: string = "menu-item",
+  closeMenuItem?: closeMenuItemFunction
 ) => {
   const state = useLocalObservable(() => ({
     open: false,
+    clickCount: 0,
   }));
   const initChainItem = initActiveMenuChain[level - 1];
   const keyName = `${prevKeyName}-${menuItem.id}`;
   let childEl = [] as React.ReactNode[];
 
-  // 判断是否为初始化活跃菜单
-  if (initChainItem && menuItem.id === initChainItem.id) {
+  if (
+    initChainItem &&
+    !state.clickCount &&
+    clickCount &&
+    menuItem.id === initChainItem.id
+  ) {
     runInAction(() => {
-      state.open = true
+      state.open = true;
     })
   }
 
   // 判断是否有子菜单列表
-  // React.useEffect(() => {
+  if (menuItem.children.length > 0) {
+    menuItem.children.map((childItem: menuListType) => {
+      childEl.push(
+        createMenuItem(
+          initActiveMenuChain,
+          childItem,
+          clickCount,
+          clickCallback,
+          level + 1,
+          keyName,
+          closeMenuItem
+        )
+      );
+    });
+  }
+
+  const getClickItem = (id: number) => {
     if (menuItem.children.length > 0) {
-      menuItem.children.map((childItem: menuListType) => {
-        childEl.push(
-          createMenuItem(initActiveMenuChain, childItem, level + 1, keyName)
-        );
+      runInAction(() => {
+        clickCallback();
+        if (menuItem.id === initChainItem.id && !state.clickCount && !clickCount) {
+          state.open = false;
+        } else {
+          state.open = !state.open;
+          closeMenuItem
+        }
+
+        state.clickCount++;
+        console.log("getState--", state.open, clickCount);
       });
     }
-  // })
-  
-  const getClickItem = (id: number) => {
-    runInAction(() => {
-      state.open = !state.open
-    })
-    
+  };
+
+  const closeOthers = (id: number) => {
+    console.log('getActiveId', id)
+    return false
   }
-  return (
+
+  return (<div
+    className={window.className([
+      Styles.menu_item,
+      level === 1 ? Styles.menu_item_root : Styles.menu_item_child,
+      initChainItem && menuItem.id === initChainItem.id
+        ? Styles.active_init
+        : "",
+      // state.open ? Styles.active : (!state.open &&state.clickCount ? Styles.fallow : ''),
+      initChainItem && clickCount === 0 && menuItem.id === initChainItem.id
+        ? "active_init"
+        : initChainItem && clickCount && menuItem.id === initChainItem.id
+        ? ""
+        : "",
+      state.open ? "active" : state.clickCount ? "fallow" : "",
+      // clickCount ? (state.open ? 'active' : 'fallow') : ''
+    ])}
+    key={keyName}
+  >
     <div
-      className={window.className([
-        Styles.menu_item,
-        level === 1 ? Styles.menu_item_root : Styles.menu_item_child,
-        state.open ? Styles.active : "",
-      ])}
-      key={keyName}
-      onClick={()=>{getClickItem(menuItem.id)}}
+      className={Styles.menu_info}
+      onClick={(e) => {
+        e.stopPropagation();
+        getClickItem(menuItem.id);
+      }}
     >
-      <div className={Styles.menu_info}>
-        {menuItem.icon && (
-          <IconFont name={menuItem.icon} className={Styles.icon} />
-        )}
-        {
-          <div className={window.className([Styles.name, "line-1"])}>
-            {menuItem.name_c}
-          </div>
-        }
-        {childEl.length > 0 && (
-          <IconFont name="icon-arrow-down" className={Styles.arrow} />
-        )}
-      </div>
-      {childEl.length > 0 &&
-        childEl.map((childItemEl) => {
-          return childItemEl;
-        })}
+      {menuItem.icon && (
+        <IconFont name={menuItem.icon} className={Styles.icon} />
+      )}
+      {
+        <div className={window.className([Styles.name, "line-1"])}>
+          {menuItem.name_c}
+        </div>
+      }
+      {childEl.length > 0 && (
+        <IconFont name="icon-arrow-down" className={Styles.arrow} />
+      )}
     </div>
-  );
+    {childEl.length > 0 &&
+      childEl.map((childItemEl) => {
+        return childItemEl;
+      })}
+  </div>);
 };
 
 /**
@@ -130,22 +171,24 @@ const MenuBar = (prop: propType) => {
   const StoreData = Store.data;
   const { layoutMenuBar } = StoreData;
   const state = useLocalObservable(() => ({
-    currentMenu: [] as activeMenuItemType[],
+    clickCount: 0,
   }));
+  let currentMenu = [] as activeMenuItemType[];
 
-  React.useEffect(() => {
   // 进入页面初始化活跃菜单
   if (layoutMenuBar.activeItem.length > 0) {
-    state.currentMenu = layoutMenuBar.activeItem;
+    currentMenu = layoutMenuBar.activeItem;
   } else {
     const activeMenuList = prop.menuList[0];
-    runInAction(() => {
-      state.currentMenu = getActiveMenuChain(activeMenuList);
-    })
-    
+    currentMenu = getActiveMenuChain(activeMenuList);
   }
-  console.log("getMenuChain", state.currentMenu);
-  })
+  console.log("getMenuChain", currentMenu);
+
+  const clickCallback = () => {
+    runInAction(() => {
+      state.clickCount++;
+    });
+  };
 
   return (
     <>
@@ -163,9 +206,14 @@ const MenuBar = (prop: propType) => {
         <div className={Styles.slot__mid}>
           <div className={Styles.active_item_bg}></div>
           <div className={Styles.menu_list}>
-            {/* {prop.menuList.map((menuItem: menuListType) => {
-              return createMenuItem(state.currentMenu, menuItem);
-            })} */}
+            {prop.menuList.map((menuItem: menuListType) => {
+              return createMenuItem(
+                currentMenu,
+                menuItem,
+                state.clickCount,
+                clickCallback,
+              );
+            })}
           </div>
         </div>
         <div className={Styles.slot__bottom}>
