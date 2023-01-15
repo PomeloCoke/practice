@@ -15,6 +15,7 @@ type propType = {
 
 type createMenuItemFunction = () => void;
 type closeMenuItemFunction = (id: number) => void;
+
 /**
  * 创建菜单项
  * @description 递归创建菜单子项dom
