@@ -27,18 +27,48 @@ const createMenuItem = (
   initActiveMenuChain: activeMenuItemType[],
   menuItem: menuListType,
   clickCount: number,
+  activeId: number,
   clickCallback: createMenuItemFunction,
+  closeMenuItem: closeMenuItemFunction,
   level: number = 1,
-  prevKeyName: string = "menu-item",
-  closeMenuItem?: closeMenuItemFunction
+  prevKeyName: string = "menu-item"
 ) => {
-  const state = useLocalObservable(() => ({
+  const state = useLocalObservable(() =>({
     open: false,
     clickCount: 0,
+    activeId: activeId,
+    activeChild: 0,
   }));
   const initChainItem = initActiveMenuChain[level - 1];
   const keyName = `${prevKeyName}-${menuItem.id}`;
   let childEl = [] as React.ReactNode[];
+
+  const closeOthers = (id: number) => {
+    runInAction(() => {
+      state.activeChild = id;
+      console.log("getActiveId", state.activeChild, state.activeId, id);
+    });
+    // return false
+  };
+
+  const createChildList = () => {
+    // console.log('getActiveId====',activeId)
+    childEl = []
+    menuItem.children.map((childItem: menuListType) => {
+      childEl.push(
+        createMenuItem(
+          initActiveMenuChain,
+          childItem,
+          clickCount,
+          state.activeChild,
+          clickCallback,
+          closeOthers,
+          level + 1,
+          keyName
+        )
+      );
+    });
+  }
 
   if (
     initChainItem &&
@@ -48,90 +78,92 @@ const createMenuItem = (
   ) {
     runInAction(() => {
       state.open = true;
-    })
+    });
   }
 
   // 判断是否有子菜单列表
   if (menuItem.children.length > 0) {
-    menuItem.children.map((childItem: menuListType) => {
-      childEl.push(
-        createMenuItem(
-          initActiveMenuChain,
-          childItem,
-          clickCount,
-          clickCallback,
-          level + 1,
-          keyName,
-          closeMenuItem
-        )
-      );
+    runInAction(() => {
+      state.activeChild = initChainItem.nextId;
     });
+    createChildList()
   }
 
-  const getClickItem = (id: number) => {
+
+
+  const getClickItem = () => {
+    clickCallback();
     if (menuItem.children.length > 0) {
+      
       runInAction(() => {
-        clickCallback();
-        if (menuItem.id === initChainItem.id && !state.clickCount && !clickCount) {
+        if (
+          menuItem.id === initChainItem.id &&
+          !state.clickCount &&
+          !clickCount
+        ) {
           state.open = false;
         } else {
           state.open = !state.open;
-          closeMenuItem
+          closeMenuItem(menuItem.id);
         }
 
         state.clickCount++;
-        console.log("getState--", state.open, clickCount);
+        
       });
+      setTimeout(() => {
+        console.log("getState--", state.open, clickCount, state.clickCount, activeId);
+      }, 1000);
     }
   };
 
-  const closeOthers = (id: number) => {
-    console.log('getActiveId', id)
-    return false
-  }
-
-  return (<div
-    className={window.className([
-      Styles.menu_item,
-      level === 1 ? Styles.menu_item_root : Styles.menu_item_child,
-      initChainItem && menuItem.id === initChainItem.id
-        ? Styles.active_init
-        : "",
-      // state.open ? Styles.active : (!state.open &&state.clickCount ? Styles.fallow : ''),
-      initChainItem && clickCount === 0 && menuItem.id === initChainItem.id
-        ? "active_init"
-        : initChainItem && clickCount && menuItem.id === initChainItem.id
-        ? ""
-        : "",
-      state.open ? "active" : state.clickCount ? "fallow" : "",
-      // clickCount ? (state.open ? 'active' : 'fallow') : ''
-    ])}
-    key={keyName}
-  >
+  return (
     <div
-      className={Styles.menu_info}
-      onClick={(e) => {
-        e.stopPropagation();
-        getClickItem(menuItem.id);
-      }}
+      className={window.className([
+        Styles.menu_item,
+        level === 1 ? Styles.menu_item_root : Styles.menu_item_child,
+        initChainItem && menuItem.id === initChainItem.id
+          ? Styles.active_init
+          : "",
+        // state.open ? Styles.active : (!state.open &&state.clickCount ? Styles.fallow : ''),
+        initChainItem && clickCount === 0 && menuItem.id === initChainItem.id
+          ? "active_init"
+          : initChainItem && clickCount && menuItem.id === initChainItem.id
+          ? ""
+          : "",
+        state.open
+          ? "active"
+          : state.clickCount
+          ? "fallow"
+          : "",
+        // clickCount ? (state.open ? 'active' : 'fallow') : ''
+      ])}
+      key={keyName}
     >
-      {menuItem.icon && (
-        <IconFont name={menuItem.icon} className={Styles.icon} />
-      )}
-      {
-        <div className={window.className([Styles.name, "line-1"])}>
-          {menuItem.name_c}
-        </div>
-      }
-      {childEl.length > 0 && (
-        <IconFont name="icon-arrow-down" className={Styles.arrow} />
-      )}
+      <div
+        className={Styles.menu_info}
+        onClick={(e) => {
+          e.stopPropagation();
+          getClickItem();
+        }}
+      >
+        {menuItem.icon && (
+          <IconFont name={menuItem.icon} className={Styles.icon} />
+        )}
+        {
+          <div className={window.className([Styles.name, "line-1"])}>
+            {menuItem.name_c}
+          </div>
+        }
+        {childEl.length > 0 && (
+          <IconFont name="icon-arrow-down" className={Styles.arrow} />
+        )}
+      </div>
+      {childEl.length > 0 &&
+        childEl.map((childItemEl) => {
+          return childItemEl;
+        })}
     </div>
-    {childEl.length > 0 &&
-      childEl.map((childItemEl) => {
-        return childItemEl;
-      })}
-  </div>);
+  );
 };
 
 /**
@@ -172,8 +204,29 @@ const MenuBar = (prop: propType) => {
   const { layoutMenuBar } = StoreData;
   const state = useLocalObservable(() => ({
     clickCount: 0,
+    activeId: 0,
   }));
   let currentMenu = [] as activeMenuItemType[];
+  const [activeId, setActive] = React.useState(0)
+
+  const closeOthers = (id: number) => {
+    runInAction(() => {
+      state.activeId = id;
+      console.log("getRootActiveId", state.activeId);
+    });
+    // activeId = id
+    setActive(id)
+    // console.log("getRootActiveId", activeId);
+
+    // return false
+  };
+
+  const clickCallback = () => {
+    runInAction(() => {
+      state.clickCount++;
+    });
+  };
+
 
   // 进入页面初始化活跃菜单
   if (layoutMenuBar.activeItem.length > 0) {
@@ -182,13 +235,16 @@ const MenuBar = (prop: propType) => {
     const activeMenuList = prop.menuList[0];
     currentMenu = getActiveMenuChain(activeMenuList);
   }
+  runInAction(() => {
+    state.activeId = currentMenu[0].id;
+  });
+  // activeId = currentMenu[0].id
+  
   console.log("getMenuChain", currentMenu);
 
-  const clickCallback = () => {
-    runInAction(() => {
-      state.clickCount++;
-    });
-  };
+  React.useEffect(() => {
+    setActive(currentMenu[0].id)
+  },[activeId])
 
   return (
     <>
@@ -205,16 +261,17 @@ const MenuBar = (prop: propType) => {
         </div>
         <div className={Styles.slot__mid}>
           <div className={Styles.active_item_bg}></div>
-          <div className={Styles.menu_list}>
-            {prop.menuList.map((menuItem: menuListType) => {
-              return createMenuItem(
-                currentMenu,
-                menuItem,
-                state.clickCount,
-                clickCallback,
-              );
-            })}
-          </div>
+          <div className={Styles.menu_list}>{
+            prop.menuList.map((menuItem: menuListType) => 
+            createMenuItem(
+              currentMenu,
+              menuItem,
+              state.clickCount,
+              state.activeId,
+              clickCallback,
+              closeOthers
+            ))
+          }</div>
         </div>
         <div className={Styles.slot__bottom}>
           <div className={Styles.log_out_btn}>
