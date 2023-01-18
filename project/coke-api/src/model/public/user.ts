@@ -1,11 +1,14 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { omit as _omit } from 'lodash'
 import redis from '../../cache'
+import { values } from '../../types/sql';
 import { querySql, insertSql, updateSql, deleteSql } from "../../db";
 import { getPageLimit } from "./select";
 import * as paramsType from '../../types/user_model_type'
 import { ErrorCode } from "../../enum/errorCode";
 import { DefaultOption } from '../../enum/defaultOption';
+
 
 const userBaseTable = 'temp_public_user_baseinfo';
 const userCountTable = 'temp_public_user_countinfo';
@@ -239,34 +242,86 @@ export async function getUserList(params: paramsType.list) {
   };
   /** sql语句 end */
 
-  const res = await querySql(countSql);
-  const total = await querySql(totalSql);
+  try {
+    const data = await querySql(countSql);
+    const total = await querySql(totalSql);
+  
+    const res = {
+      data: data,
+      total: total[0].total,
+      page: params.page,
+      page_count: params.page_count,
+      page_total: Math.ceil(total[0].total / limitCount),
+    }
+    return {
+      data: res,
+      res: true,
+      msg: ''
+    };
 
-  return {
-    data: res,
-    total: total[0].total,
-    page: params.page,
-    page_count: params.page_count,
-    page_total: Math.ceil(total[0].total / limitCount),
+  } catch (error) {
+    return {
+      code: ErrorCode.QUERY_FAIL,
+      res: false,
+      data: '',
+      msg: error
+    }
   }
-
 }
 
-// TODO 用户详情
+/**
+ * 获取用户详情
+ * @param params 
+ * @returns 
+ */
+export async function getUserDetail(params: paramsType.detail) {
+  try {
+    const baseRes = await getBaseDetail({id: params.id})
+    const countRes = await getCountDetail({id: params.id, product_id: params.product_id})
+
+    if (baseRes.res && countRes.res) {
+      const res = {
+        ...baseRes.data,
+        count_info: countRes.data
+      }
+      return {
+        res: true,
+        data: res,
+        msg: ''
+      }
+    } else {
+      const errorMsg = baseRes.msg || countRes.msg
+      return {
+        code: ErrorCode.QUERY_FAIL,
+        res: false,
+        data: '',
+        msg: errorMsg
+      }
+    }
+    
+  } catch (error) {
+    return {
+      code: ErrorCode.QUERY_FAIL,
+      res: false,
+      data: '',
+      msg: error
+    }
+  }
+}
 
 /**
- * 用户登录
+ * 获取用户基本详情
  * @param params 
- * @returns
+ * @returns 
  */
-export async function login(params: paramsType.login) {
-  let res = {}
-
+export async function getBaseDetail(params: paramsType.baseDetail) {
   /** sql语句 start */
   const baseSql: querySql = {
     select: [
       'id',
       'create_time',
+      'edit_time',
+      'edit_id',
       'status',
       'nickname',
       'avatar',
@@ -275,6 +330,7 @@ export async function login(params: paramsType.login) {
       'mobile',
       'area_code',
       'email',
+      'name',
       'id_number',
       'sex',
       'is_staff'
@@ -282,6 +338,31 @@ export async function login(params: paramsType.login) {
     from: userBaseTable,
     where: [{ name: 'id', opt: '=', val: params.id }]
   }
+
+  try {
+    const res = await querySql(baseSql)
+    return {
+      data: res[0],
+      res: true,
+      msg: ''
+    }
+  } catch (error) {
+    return {
+      code: ErrorCode.QUERY_FAIL,
+      res: false,
+      data: '',
+      msg: error
+    }
+  }
+}
+
+/**
+ * 获取用户基本详情
+ * @param params 
+ * @returns 
+ */
+export async function getCountDetail(params: paramsType.countDetail) {
+  /** sql语句 start */
   const countSql: querySql = {
     select: [
       'id',
@@ -295,43 +376,87 @@ export async function login(params: paramsType.login) {
     from: userCountTable,
     where: [
       { name: 'user_id', opt: '=', val: params.id },
-      { name: 'product_id', opt: '=', val: params.product_id }
+      
     ]
   }
+  if (params.product_id) {
+    countSql.where?.push(
+      { name: 'product_id', opt: '=', val: params.product_id }
+    )
+  }
+  /** sql语句 end */
+
+  try {
+    const res = await querySql(countSql)
+    return {
+      data: res.length === 1 ? res[0] : res,
+      res: true,
+      msg: ''
+    }
+  } catch (error) {
+    return {
+      code: ErrorCode.QUERY_FAIL,
+      res: false,
+      data: '',
+      msg: error
+    }
+  }
+}
+
+ 
+
+/**
+ * 用户登录
+ * @param params 
+ * @returns
+ */
+export async function login(params: paramsType.login) {
+  let res = {}
   const logParams = {
     uid: params.id,
     product_id: params.product_id,
     device: params.device
   }
-  /** sql语句 end */
 
   try {
-    const baseInfo = await querySql(baseSql)
-    const countInfo = await querySql(countSql)
+    const baseRes = await getBaseDetail({id: params.id})
+    const countRes = await getCountDetail({id: params.id, product_id: params.product_id})
     const logInfo = await addLoginLog(logParams)
 
-    // TODO 获取对应产品账户信息
-    // TODO 记录token，登录日志，session
-    res = {
-      ...baseInfo[0],
-      token: logInfo.data,
-      count_info: countInfo[0],
-    }
-    
-    /** redis存入session start */
-    const sessionParams = {
-      uid: baseInfo[0].id,
-      permission_ids: countInfo.permission_ids ? countInfo.permission_ids.split(',') : [],
-      authorization: logInfo.data
-    }
-    console.log('getRedisSet', sessionParams)
-    const cache = await redis.set(logInfo.data || '',JSON.stringify(sessionParams))
-    /** redis存入session end */
+    if (baseRes.res && countRes.res) {
+      const baseInfo = baseRes.data
+      const countInfo = countRes.data
 
-    return {
-      data: res,
-      res: true,
-      msg: ''
+      console.log('getRes', baseInfo, countInfo)
+
+      res = {
+        ...baseInfo,
+        token: logInfo.data,
+        count_info: countInfo,
+      }
+      
+      /** redis存入session start */
+      const sessionParams = {
+        uid: baseInfo.id,
+        permission_ids: countInfo.permission_ids ? countInfo.permission_ids.split(',') : [],
+        authorization: logInfo.data
+      }
+      const cache = await redis.set(logInfo.data || '',JSON.stringify(sessionParams))
+      /** redis存入session end */
+  
+      return {
+        data: res,
+        res: true,
+        msg: ''
+      }
+    } else {
+      const errorMsg = baseRes.msg || countRes.msg
+      return {
+        code: ErrorCode.QUERY_FAIL,
+        data: '',
+        res: false,
+        msg: errorMsg
+      }
     }
   } catch (error) {
     return {
@@ -350,7 +475,7 @@ export async function login(params: paramsType.login) {
  */
 export async function addUser({ is_staff = 0, ...params }: paramsType.addUser) {
   let uid
-  /** sql语句 end */
+  /** sql语句 start */
   let addSql: insertSql = {
     table: userBaseTable,
     values: []
@@ -511,6 +636,45 @@ export async function addLoginLog(params: paramsType.addLog) {
 }
 // TODO 编辑基本信息
 // TODO 编辑重要信息
+export async function editUser(params: paramsType.editUser) {
+  /** sql语句 start */
+  let editSql: updateSql = {
+    table: userBaseTable,
+    values: [],
+    where: [
+      { name: 'id', opt: '=', val: params.id }
+    ]
+  }
+
+  const infoVals = _omit(params, ['id'])
+  let hasParams = false
+  console.log('getInfoVals', infoVals)
+  type keyType = keyof typeof params
+    Object.keys(infoVals).map((key) => {
+      if (params[key as keyType]) {
+        hasParams = true
+        editSql.values.push({
+          key: key, value: params[key as keyType]
+        })
+      }
+    })
+  if (hasParams) {
+    
+  } else {
+    return {
+      res: false,
+      msg: '请提交需要编辑的信息',
+      code: ErrorCode.UPDATE_FAIL
+    }
+  }
+  /** sql语句 end */
+
+  return {
+    res: true,
+    msg: '编辑成功'
+  }
+}
+
 // TODO 编辑员工相关信息
 // TODO 更改密码
 // TODO 账户更改更新状态

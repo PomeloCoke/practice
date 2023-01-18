@@ -37,6 +37,20 @@ export type addUser = {
   }
 }
 
+export type editUser = {
+  id: number,
+  nickname?: string,
+  avatar?: string,
+  description?: string,
+  birthday?: string,
+  mobile?: string,
+  area_code?: number,
+  email?: string,
+  id_number?: string,
+  password?: string,
+  sex?: number
+}
+
 export type addCount = {
   product_id: string,
   uid: number
@@ -53,3 +67,18 @@ export type list = {
   page?: number;
   page_count?: number;
 };
+
+export type detail = {
+  id: number,
+  product_id?: number
+}
+
+export type baseDetail = {
+  id: number
+}
+
+
+export type countDetail = {
+  id: number,
+  product_id?: number
+}

@@ -1,3 +1,4 @@
+import { ErrorCode } from "../../enum/errorCode";
 import { querySql, insertSql, updateSql, deleteSql } from "../../db";
 import * as paramsType from '../../types/option_model_type'
 import { getPageLimit } from "./select";
@@ -99,22 +100,37 @@ export async function getOptionList(params: paramsType.list) {
   }
   /** sql语句 end */
 
-  const res = await querySql(countSql);
-  const total = await querySql(totalSql);
-  for (let parent of res) {
-    const children = await getOptionChildren(parent.id);
-    resArr.push({
-      ...parent,
-      children,
-    });
+  try {
+    const data = await querySql(countSql);
+    const total = await querySql(totalSql);
+    for (let parent of data) {
+      const children = await getOptionChildren(parent.id);
+      resArr.push({
+        ...parent,
+        children,
+      });
+    }
+
+    const res = {
+      data: resArr,
+      total: total[0].total,
+      page: params.page,
+      page_count: params.page_count,
+      page_total: Math.ceil(total[0].total / limitCount),
+    }
+    return {
+      data: res,
+      res: true,
+      msg: ''
+    };
+  } catch (error) {
+    return {
+      code: ErrorCode.OPERATE_FAIL,
+      res: false,
+      data: '',
+      msg: error
+    }
   }
-  return {
-    data: resArr,
-    total: total[0].total,
-    page: params.page,
-    page_count: params.page_count,
-    page_total: Math.ceil(total[0].total / limitCount),
-  };
 }
 
 /**

@@ -127,20 +127,66 @@ const addUser = async (ctx: ctx, next: next) => {
 
 }
 
-// 获取筛选项列表
+const editUser = async (ctx: ctx, next: next) => {
+  const {id, nickname, avatar, description, birthday, mobile, area_code, email, id_number, password, sex } = ctx.request.body
+
+  const params = {
+    id, nickname, avatar, description, birthday, mobile, area_code, email, id_number, password, sex
+  }
+  const res = await userModel.editUser(params)
+  if (res.res) {
+    ctx.success({
+      msg: res.msg
+    })
+  } else {
+    ctx.error({
+      code: res.code,
+      msg: res.msg,
+    })
+  }
+  
+}
+
+// 后台获取用户列表
 const getList = async (ctx: ctx, next: next) => {
   const { id, page, page_count } = ctx.request.body
 
   const params = { id, page, page_count }
   const res = await userModel.getUserList(params)
-  ctx.success({
-    data: res
-  })
+  if (res.res) {
+    ctx.success({
+      data: res.data
+    })
+  } else {
+    ctx.error({
+      code: ctx.state.ErrorCode.QUERY_FAIL,
+      msg: res.msg
+    })
+  }
 }
 
+const getDetail = async (ctx: ctx, next: next) => {
+  const {id, product_id} = ctx.request.body
+
+  const params = {id, product_id}
+  const res = await userModel.getUserDetail(params)
+
+  if (res.res) {
+    ctx.success({
+      data: res.data
+    })
+  } else {
+    ctx.error({
+      code: ctx.state.ErrorCode.QUERY_FAIL,
+      msg: res.msg
+    })
+  }
+}
 
 export default {
   login,
   addUser,
-  getList
+  editUser,
+  getList,
+  getDetail
 }

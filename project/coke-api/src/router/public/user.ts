@@ -20,8 +20,24 @@ const routes: route[] = [
     }
   },
   {
+    path: controllerName + '/edit',
+    controller: user.editUser,
+    option: {
+      method: 'post',
+      verifyToken: true,
+    }
+  },
+  {
     path: controllerName + '/list',
     controller: user.getList,
+    option: {
+      method: 'post',
+      verifyToken: true,
+    }
+  },
+  {
+    path: controllerName + '/detail',
+    controller: user.getDetail,
     option: {
       method: 'post',
       verifyToken: true,

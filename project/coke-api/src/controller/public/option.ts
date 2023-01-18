@@ -6,9 +6,16 @@ const getList = async (ctx: ctx, next: next) => {
 
   const params = { id, parent_id, name_c, side, page, page_count }
   const res = await optionModel.getOptionList(params)
-  ctx.success({
-    data: res
-  })
+  if (res.res) {
+    ctx.success({
+      data: res
+    })
+  } else {
+    ctx.error({
+      code: ctx.state.ErrorCode.QUERY_FAIL,
+      msg: res.msg
+    })
+  }
 }
 
 // 获取筛选项详情

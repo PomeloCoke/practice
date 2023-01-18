@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "nickname": {
+      "type": "string"
+    },
+    "avatar": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "birthday": {
+      "type": "string"
+    },
+    "mobile": {
+      "type": "string"
+    },
+    "area_code": {
+      "type": "number"
+    },
+    "email": {
+      "type": "string"
+    },
+    "id_number": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "sex": {
+      "type": "integer",
+      "enum": [0,1,2],
+      "minimum": 0
+    }
+  },
+  "required": ["id"]
+}
