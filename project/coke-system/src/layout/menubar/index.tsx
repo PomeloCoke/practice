@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { runInAction } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { observer, useLocalObservable } from "mobx-react-lite";
 
 import { menuListType, activeMenuItemType } from "../types";
@@ -13,60 +13,52 @@ type propType = {
   menuList: menuListType[];
 };
 
-type createMenuItemFunction = () => void;
-type closeMenuItemFunction = (id: number) => void;
+type itemPropType = {
+  menuItem: menuListType,
+  level?: number,
+  prevKeyName?: string
+}
+
+const MenuStore = makeAutoObservable({
+  clickCount: 0,
+  initActiveMenuChain: [] as activeMenuItemType[],
+  setInitActiveMenuChain(menuChain: activeMenuItemType[]) {
+    this.initActiveMenuChain = menuChain
+  },
+  setClickCount() {
+    this.clickCount++
+  }
+})
+
+const useMenuContext = () => React.useContext(React.createContext(MenuStore))
 
 /**
  * 创建菜单项
  * @description 递归创建菜单子项dom
- * @param initActiveMenuChain 初始化活跃菜单链表
  * @param menuItem 菜单列表
  * @param clickMenuItem 点击菜单项的方法
  * @returns 返回菜单列表dom
  */
-const createMenuItem = (
-  initActiveMenuChain: activeMenuItemType[],
-  menuItem: menuListType,
-  clickCount: number,
-  activeId: number,
-  clickCallback: createMenuItemFunction,
-  closeMenuItem: closeMenuItemFunction,
-  level: number = 1,
-  prevKeyName: string = "menu-item"
+const CreateMenuItem = (
+  props: itemPropType
 ) => {
+  const MenuContext = useMenuContext()
+  const { menuItem, level, prevKeyName } = props
   const state = useLocalObservable(() =>({
     open: false,
     clickCount: 0,
-    activeId: activeId,
     activeChild: 0,
   }));
-  const initChainItem = initActiveMenuChain[level - 1];
+  const initChainItem = MenuContext.initActiveMenuChain[level - 1];
   const keyName = `${prevKeyName}-${menuItem.id}`;
   let childEl = [] as React.ReactNode[];
-
-  const closeOthers = (id: number) => {
-    runInAction(() => {
-      state.activeChild = id;
-      console.log("getActiveId", state.activeChild, state.activeId, id);
-    });
-    // return false
-  };
+  console.log('获取活跃菜单链表',MenuContext.clickCount)
 
   const createChildList = () => {
-    // console.log('getActiveId====',activeId)
     childEl = []
-    menuItem.children.map((childItem: menuListType) => {
+    menuItem.children.map((childItem: menuListType,idx: number) => {
       childEl.push(
-        createMenuItem(
-          initActiveMenuChain,
-          childItem,
-          clickCount,
-          state.activeChild,
-          clickCallback,
-          closeOthers,
-          level + 1,
-          keyName
-        )
+        <CreateMenuItem menuItem={childItem} level={level + 1} prevKeyName={keyName} key={`${keyName}-${idx}`}></CreateMenuItem>
       );
     });
   }
@@ -74,7 +66,7 @@ const createMenuItem = (
   if (
     initChainItem &&
     !state.clickCount &&
-    clickCount &&
+    MenuContext.clickCount &&
     menuItem.id === initChainItem.id
   ) {
     runInAction(() => {
@@ -91,29 +83,24 @@ const createMenuItem = (
   }
 
 
-
   const getClickItem = () => {
-    clickCallback();
     if (menuItem.children.length > 0) {
-      
-      runInAction(() => {
-        if (
-          menuItem.id === initChainItem.id &&
-          !state.clickCount &&
-          !clickCount
-        ) {
-          state.open = false;
-        } else {
-          state.open = !state.open;
-          closeMenuItem(menuItem.id);
-        }
-
-        state.clickCount++;
+      MenuContext.setClickCount()
+      console.log('获取活跃菜单链表',MenuContext.clickCount)
+      // runInAction(() => {
+      //   if (
+      //     menuItem.id === initChainItem.id &&
+      //     !state.clickCount &&
+      //     !MenuContext.clickCount
+      //   ) {
+      //     state.open = false;
+      //   } else {
+      //     state.open = !state.open;
+      //     // closeMenuItem(menuItem.id);
+      //   }
+      //   state.clickCount++;
         
-      });
-      setTimeout(() => {
-        console.log("getState--", state.open, clickCount, state.clickCount, activeId);
-      }, 1000);
+      // });
     }
   };
 
@@ -126,9 +113,9 @@ const createMenuItem = (
           ? Styles.active_init
           : "",
         // state.open ? Styles.active : (!state.open &&state.clickCount ? Styles.fallow : ''),
-        initChainItem && clickCount === 0 && menuItem.id === initChainItem.id
+        initChainItem && MenuContext.clickCount === 0 && menuItem.id === initChainItem.id
           ? "active_init"
-          : initChainItem && clickCount && menuItem.id === initChainItem.id
+          : initChainItem && MenuContext.clickCount && menuItem.id === initChainItem.id
           ? ""
           : "",
         state.open
@@ -138,7 +125,6 @@ const createMenuItem = (
           : "",
         // clickCount ? (state.open ? 'active' : 'fallow') : ''
       ])}
-      key={keyName}
     >
       <div
         className={Styles.menu_info}
@@ -203,50 +189,20 @@ const MenuBar = (prop: propType) => {
   const { Store } = prop;
   const StoreData = Store.data;
   const { layoutMenuBar } = StoreData;
-  const state = useLocalObservable(() => ({
-    clickCount: 0,
-    activeId: 0,
-  }));
+  const MenuContext = useMenuContext()
   let currentMenu = [] as activeMenuItemType[];
-  const [activeId, setActive] = React.useState(0)
-
-  const closeOthers = (id: number) => {
-    runInAction(() => {
-      state.activeId = id;
-      console.log("getRootActiveId", state.activeId);
-    });
-    // activeId = id
-    setActive(id)
-    // console.log("getRootActiveId", activeId);
-
-    // return false
-  };
-
-  const clickCallback = () => {
-    runInAction(() => {
-      state.clickCount++;
-    });
-  };
-
 
   // 进入页面初始化活跃菜单
   if (layoutMenuBar.activeItem.length > 0) {
     currentMenu = layoutMenuBar.activeItem;
+    MenuContext.setInitActiveMenuChain(layoutMenuBar.activeItem)
   } else {
     const activeMenuList = prop.menuList[0];
     currentMenu = getActiveMenuChain(activeMenuList);
+    MenuContext.setInitActiveMenuChain(getActiveMenuChain(activeMenuList))
   }
-  runInAction(() => {
-    state.activeId = currentMenu[0].id;
-  });
-  // activeId = currentMenu[0].id
+
   
-  console.log("getMenuChain", currentMenu);
-
-  React.useEffect(() => {
-    setActive(currentMenu[0].id)
-  },[activeId])
-
   return (
     <>
       <div
@@ -263,15 +219,9 @@ const MenuBar = (prop: propType) => {
         <div className={Styles.slot__mid}>
           <div className={Styles.active_item_bg}></div>
           <div className={Styles.menu_list}>{
-            prop.menuList.map((menuItem: menuListType) => 
-            createMenuItem(
-              currentMenu,
-              menuItem,
-              state.clickCount,
-              state.activeId,
-              clickCallback,
-              closeOthers
-            ))
+            prop.menuList.map((menuItem: menuListType, idx: number) => 
+              {return <CreateMenuItem menuItem={menuItem} level={1} prevKeyName={'menu-item'} key={`menu-item-${idx}`}></CreateMenuItem>}
+            )
           }</div>
         </div>
         <div className={Styles.slot__bottom}>
