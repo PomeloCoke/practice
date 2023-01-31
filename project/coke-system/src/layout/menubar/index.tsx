@@ -15,11 +15,19 @@ type propType = {
 
 type itemPropType = {
   menuItem: menuListType,
+  menuContext: menuContextType,
   level?: number,
   prevKeyName?: string
 }
 
-const MenuStore = makeAutoObservable({
+type menuContextType = {
+  clickCount: number,
+  initActiveMenuChain: activeMenuItemType[],
+  setInitActiveMenuChain(menuChain: activeMenuItemType[]): void,
+  setClickCount(): void
+}
+
+const MenuStore = {
   clickCount: 0,
   initActiveMenuChain: [] as activeMenuItemType[],
   setInitActiveMenuChain(menuChain: activeMenuItemType[]) {
@@ -28,9 +36,9 @@ const MenuStore = makeAutoObservable({
   setClickCount() {
     this.clickCount++
   }
-})
+}
 
-const useMenuContext = () => React.useContext(React.createContext(MenuStore))
+const MenuValue = React.createContext(MenuStore)
 
 /**
  * 创建菜单项
@@ -42,7 +50,7 @@ const useMenuContext = () => React.useContext(React.createContext(MenuStore))
 const CreateMenuItem = (
   props: itemPropType
 ) => {
-  const MenuContext = useMenuContext()
+  const MenuContext = React.useContext(MenuValue)
   const { menuItem, level, prevKeyName } = props
   const state = useLocalObservable(() =>({
     open: false,
@@ -58,11 +66,14 @@ const CreateMenuItem = (
     childEl = []
     menuItem.children.map((childItem: menuListType,idx: number) => {
       childEl.push(
-        <CreateMenuItem menuItem={childItem} level={level + 1} prevKeyName={keyName} key={`${keyName}-${idx}`}></CreateMenuItem>
+        <CreateMenuItem menuItem={childItem} level={level + 1} prevKeyName={keyName} menuContext={MenuContext} key={`${keyName}-${idx}`}></CreateMenuItem>
       );
     });
   }
 
+  React.useEffect(() => {
+    console.log('获取活跃菜单链表',MenuContext.clickCount)
+  },[MenuContext.clickCount])
   if (
     initChainItem &&
     !state.clickCount &&
@@ -87,24 +98,25 @@ const CreateMenuItem = (
     if (menuItem.children.length > 0) {
       MenuContext.setClickCount()
       console.log('获取活跃菜单链表',MenuContext.clickCount)
-      // runInAction(() => {
-      //   if (
-      //     menuItem.id === initChainItem.id &&
-      //     !state.clickCount &&
-      //     !MenuContext.clickCount
-      //   ) {
-      //     state.open = false;
-      //   } else {
-      //     state.open = !state.open;
-      //     // closeMenuItem(menuItem.id);
-      //   }
-      //   state.clickCount++;
+      runInAction(() => {
+        if (
+          menuItem.id === initChainItem.id &&
+          !state.clickCount &&
+          !MenuContext.clickCount
+        ) {
+          state.open = false;
+        } else {
+          state.open = !state.open;
+          // closeMenuItem(menuItem.id);
+        }
+        state.clickCount++;
         
-      // });
+      });
     }
   };
 
   return (
+    <MenuValue.Provider value={MenuStore}>
     <div
       className={window.className([
         Styles.menu_item,
@@ -150,6 +162,7 @@ const CreateMenuItem = (
           return childItemEl;
         })}
     </div>
+    </MenuValue.Provider>
   );
 };
 
@@ -189,17 +202,17 @@ const MenuBar = (prop: propType) => {
   const { Store } = prop;
   const StoreData = Store.data;
   const { layoutMenuBar } = StoreData;
-  const MenuContext = useMenuContext()
+  const menuContext = React.useContext(MenuValue)
   let currentMenu = [] as activeMenuItemType[];
 
   // 进入页面初始化活跃菜单
   if (layoutMenuBar.activeItem.length > 0) {
     currentMenu = layoutMenuBar.activeItem;
-    MenuContext.setInitActiveMenuChain(layoutMenuBar.activeItem)
+    menuContext.setInitActiveMenuChain(layoutMenuBar.activeItem)
   } else {
     const activeMenuList = prop.menuList[0];
     currentMenu = getActiveMenuChain(activeMenuList);
-    MenuContext.setInitActiveMenuChain(getActiveMenuChain(activeMenuList))
+    menuContext.setInitActiveMenuChain(getActiveMenuChain(activeMenuList))
   }
 
   
@@ -220,7 +233,9 @@ const MenuBar = (prop: propType) => {
           <div className={Styles.active_item_bg}></div>
           <div className={Styles.menu_list}>{
             prop.menuList.map((menuItem: menuListType, idx: number) => 
-              {return <CreateMenuItem menuItem={menuItem} level={1} prevKeyName={'menu-item'} key={`menu-item-${idx}`}></CreateMenuItem>}
+              {return (
+              <CreateMenuItem menuItem={menuItem} level={1} prevKeyName={'menu-item'} menuContext={menuContext} key={`menu-item-${idx}`}></CreateMenuItem>
+              )}
             )
           }</div>
         </div>
