@@ -133,6 +133,14 @@ const editUser = async (ctx: ctx, next: next) => {
   const params = {
     id, nickname, avatar, description, birthday, mobile, area_code, email, id_number, password, sex
   }
+  const hasUserRes = await userModel.validHasUser({uid:id})
+  if (!hasUserRes.res) {
+    ctx.error({
+      code: ctx.state.ErrorCode.DATA_INEXISTENCE,
+      msg: '用户不存在',
+    })
+    return
+  }
   const res = await userModel.editUser(params)
   if (res.res) {
     ctx.success({
