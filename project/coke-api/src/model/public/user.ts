@@ -676,6 +676,8 @@ export async function editUser(params: paramsType.editUser) {
       });
     }
   });
+  /** sql语句 end */
+
   if (hasParams) {
     console.log("getInfoVals", editSql);
     try {
@@ -697,10 +699,10 @@ export async function editUser(params: paramsType.editUser) {
       code: ErrorCode.UPDATE_FAIL,
     };
   }
-  /** sql语句 end */
 }
 // TODO 编辑重要信息
 // TODO 编辑员工相关信息
+
 // TODO 更改密码
 // TODO 账户更改更新状态
 // TODO 更改用户状态
