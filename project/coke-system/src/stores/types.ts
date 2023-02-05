@@ -89,7 +89,7 @@ export type STATE = {
   layoutMenuBar: {
     open: boolean,
     visible: boolean,
-    activeItem: menuItemType[] 
+    activeId: string
   }
   user: STATE_USER
 }

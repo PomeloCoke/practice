@@ -289,15 +289,15 @@
   .slot__top .logo, .slot__top .text, .log_out_btn {
     transition: all 0.2s ease-in;
   }
-  .active_init {
+  .active {
     transition: height 0.1s ease-in;
-    height: auto;
-    .menu_item_child {
+    height: auto !important;
+    &>.menu_item_child {
       position: relative;
       top: 0;
     }
   }
-  .active_init.fallow {
+  .fallow {
     transition: height 0.1s ease-in;
   }
 }

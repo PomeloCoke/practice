@@ -30,7 +30,7 @@ const state:STORE_STATE = {
   layoutMenuBar: {
     open: true,
     visible: true,
-    activeItem: []
+    activeId: ''
   },
   user: {
     login: false,

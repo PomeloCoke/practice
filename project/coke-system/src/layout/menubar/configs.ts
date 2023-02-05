@@ -35,13 +35,14 @@ const getMenuList = (product_id: number): menuListType[] => {
  * @param isChild 是否为子路由，默认为否
  * @returns 菜单列表
  */
-const createMenuList = (routes: ROUTER[], isChild = false) => {
+const createMenuList = (routes: ROUTER[],level = '1') => {
   let list: menuListType[] = [];
   routes
     .map((item, idx) => {
       if (item.menu.is_show) {
+        const id = level + '-' + (idx + 1)
         let listItem = {
-          id: idx + 1,
+          id: id,
           name_c: item.menu.name_c || "",
           name_e: item.menu.name_e || "",
           icon: item.menu.icon || "",
@@ -50,7 +51,7 @@ const createMenuList = (routes: ROUTER[], isChild = false) => {
           children: [] as menuListType[],
         };
         if (item.children && item.children.length > 0) {
-          const children: menuListType[] = createMenuList(item.children, true);
+          const children: menuListType[] = createMenuList(item.children, id);
           listItem = { ...listItem, children };
         }
         list.push(listItem);

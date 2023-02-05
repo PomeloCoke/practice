@@ -6,7 +6,7 @@ export type navListType = {
 }
 
 export type menuListType = {
-  id: number,
+  id: string,
   name_c: string,
   name_e: string,
   is_show: boolean,
@@ -16,7 +16,7 @@ export type menuListType = {
 }
 
 export type activeMenuItemType = {
-  id: number,
+  id: string,
   nextId: number | null,
   open: boolean,
   info: {
