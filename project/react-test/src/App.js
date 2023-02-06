@@ -34,25 +34,24 @@ function MenuItem({ item, onItemSelected, selectedId }) {
   );
 }
 
-const maxSubArray = function(nums) {
-  const n = nums.length
-  let max = nums[0]
-  for (let i = 0; i < n; i++) {
-      const newArr = nums.slice(i,i+i+1)
-      let sum = 0
-      for(let j = 0; j < newArr.length; j++) {
-          sum += newArr[j]
+const twoSum = function(nums, target) {
+  let newNums = nums
+  let arr = []
+  for (let i = 0; i < nums.length; i++) {
+      const start = nums[i]
+      const end = target - start
+      const idx = newNums.findIndex(item=>item === end)
+      if (idx > -1 && idx != i) {
+          arr = [i,idx]
+          break
       }
-      console.log('getSliceSum',newArr, sum)
-      if (sum > max) {
-          max = sum
-      }
+
   }
-  return max
+  return arr
 };
 
 function App() {
-  maxSubArray([-2,1,-3,4,-1,2,1,-5,4])
+  twoSum([3,3],6)
   const [selectedId, setSelectedId] = useState(null);
 
   const menuItems = [

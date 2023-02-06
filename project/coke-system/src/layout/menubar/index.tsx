@@ -166,19 +166,22 @@ const MenuBar = (prop: propType) => {
         </div>
         <div className={Styles.slot__mid}>
           <div className={Styles.active_item_bg}></div>
-          <div className={Styles.menu_list}>{
-            prop.menuList.map((menuItem: menuListType, idx: number) => 
-              {return (
-              <CreateMenuItem 
-              menuItem={menuItem} 
-              level={menuLevel} 
-              prevKeyName={'menu-item'} 
-              activeChildId={activeChild}
-              onActiveChildClick={setActiveChild}
-              key={`menu-item-${idx}`}></CreateMenuItem>
-              )}
-            )
-          }</div>
+          <div className={Styles.menu_list}>
+            {
+              prop.menuList.map((menuItem: menuListType, idx: number) => 
+                {return (
+                <CreateMenuItem 
+                menuItem={menuItem} 
+                level={menuLevel} 
+                prevKeyName={'menu-item'} 
+                activeChildId={activeChild}
+                onActiveChildClick={setActiveChild}
+                key={`menu-item-${idx}`}></CreateMenuItem>
+                )}
+              )
+            }
+            <div className={Styles.menu_bg_root}></div>
+          </div>
         </div>
         <div className={Styles.slot__bottom}>
           <div className={Styles.log_out_btn}>

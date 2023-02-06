@@ -251,6 +251,7 @@
       .menu_item {
         flex-shrink: 0;
         position: relative;
+        z-index: 2;
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -274,13 +275,16 @@
           position: absolute;
           left: 0;
           top: -100%;
+          overflow: hidden;
+        }
+      }
+      .active {
+        color: @text-primary;
+        .icon {
+          color: @theme-primary;
         }
       }
     }
-  }
-
-  &.invisible {
-
   }
 }
 
@@ -300,6 +304,7 @@
   .fallow {
     transition: height 0.1s ease-in;
   }
+  
 }
 
 .layout__menubar_1.close {
@@ -342,6 +347,16 @@
     .slot__mid {
       padding-top: min(30px, 3.8cqh);
       padding-bottom: min(35px, 4.55cqh);
+      .menu_bg_root {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        background-color: @basic-surface;
+        border-radius: 22px;
+      }
       .menu_item {
         &_root {
           padding-top: 18px;
@@ -382,7 +397,12 @@
     width: 200px;
     .slot__top .logo {
       font-size: 44px;
-      
+    }
+    .menu_item {
+      &_root {
+        padding-left: 13px;
+        padding-right: 3px;
+      }
     }
   }
   .layout__menubar_1.close {
