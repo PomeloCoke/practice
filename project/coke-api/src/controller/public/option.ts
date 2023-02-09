@@ -5,8 +5,8 @@ import * as optionModel from "../../model/public/option"
 // 获取筛选项列表
 const getList = async (ctx: ctx, next: next) => {
   const { SUPER_ADMIN } = PermissionGroup
-  
-  const perRes = global.validPermission([SUPER_ADMIN],ctx.session.user.permission_ids)
+  const perRes = global.validPermission([SUPER_ADMIN],ctx)
+  if (!perRes) return
   console.log('getPremission',SUPER_ADMIN,ctx.session.user,perRes)
   const { id, parent_id, name_c, side, page, page_count } = ctx.request.body
 

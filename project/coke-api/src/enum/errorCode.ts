@@ -10,5 +10,6 @@ export enum ErrorCode {
   DELETE_FAIL,
   VALID_FAIL,
   OPERATE_FAIL,
-  PARAM_LACK
+  PARAM_LACK,
+  NO_PERMISSION
 }

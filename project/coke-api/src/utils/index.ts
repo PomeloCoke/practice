@@ -15,13 +15,18 @@ export function formatDate(val: string, join?: string):string {
   return `DATE_FORMAT(${val}, '${format}') AS ${val}`
 }
 
-global.validPermission =  function (permission: number[], user: number[]):boolean {
+global.validPermission =  function (permission: number[], ctx: ctx):boolean {
   const set = new Set(permission)
-  for (let i = 0; i < user.length; i++) {
-    if (set.has(user[i])) {
+  const permission_ids = ctx.session.user.permission_ids
+  for (let i = 0; i < permission_ids.length; i++) {
+    if (set.has(permission_ids[i])) {
       return true
     }
   }
+  ctx.error({
+    code: ctx.state.ErrorCode.NO_PERMISSION,
+    msg: '没有操作权限'
+  })
   return false
 }
 
