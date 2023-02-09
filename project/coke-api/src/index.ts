@@ -9,8 +9,6 @@ import authority from './middleware/authority'  // 校验路由权限
 import session from './middleware/session' // 设置用户session
 import routerFrame from './router'  // 挂载路由
 
-// global.validPermission =
-
 const app = new Koa()
 
 app.use(serverInit())

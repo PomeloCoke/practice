@@ -39,16 +39,16 @@ const CreateMenuItem = (
   const { menuItem, level, prevKeyName } = props
   const {activeId, setActiveId} = React.useContext(menuContext)
   const [activeChild, setActiveChild] = React.useState('')
+  const ref = React.useRef<HTMLDivElement>(null)
   const menuLevel = level + 1 // 菜单层级
-  React.useEffect(() => {
-    const childId = activeId.split('-').slice(0,menuLevel + 1).join('-')
-    console.log('getChildId',childId)
-    setActiveChild(childId)
-  },[activeId])
-
   const keyName = `${prevKeyName}-${menuItem.id}`;
   let childEl = [] as React.ReactNode[];
 
+  React.useEffect(() => {
+    const childId = activeId.split('-').slice(0,menuLevel + 1).join('-')
+    setActiveChild(childId)
+  },[activeId])
+  
   const createChildList = () => {
     childEl = []
     menuItem.children.map((childItem: menuListType,idx: number) => {
@@ -73,11 +73,14 @@ const CreateMenuItem = (
     props.onActiveChildClick(menuItem.id)
     if (menuItem.children.length === 0) {
       setActiveId(menuItem.id)
+    } else {
+
     }
   };
 
   return (
     <div
+      ref={ref}
       className={window.className([
         Styles.menu_item,
         level === 1 ? Styles.menu_item_root : Styles.menu_item_child,
