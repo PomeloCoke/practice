@@ -5,6 +5,7 @@ declare global {
   interface Array<T> {
     remove(val: T): Array<T>
   }
+  function validPermission(permission: number[], user: number[]):boolean
 
 
   // 框架相关
@@ -36,7 +37,7 @@ declare global {
   }
 
   const typeData:(data: any, type: string)=>any
-
+  // const validPermission:(permission: number[], user: number[])=>boolean
 }
 
 export { }

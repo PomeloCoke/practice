@@ -15,4 +15,14 @@ export function formatDate(val: string, join?: string):string {
   return `DATE_FORMAT(${val}, '${format}') AS ${val}`
 }
 
+global.validPermission =  function (permission: number[], user: number[]):boolean {
+  const set = new Set(permission)
+  for (let i = 0; i < user.length; i++) {
+    if (set.has(user[i])) {
+      return true
+    }
+  }
+  return false
+}
+
 export { }
