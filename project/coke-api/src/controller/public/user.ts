@@ -128,10 +128,10 @@ const addUser = async (ctx: ctx, next: next) => {
 }
 
 const editUser = async (ctx: ctx, next: next) => {
-  const {id, nickname, avatar, description, birthday, mobile, area_code, email, id_number, password, sex } = ctx.request.body
+  const {id, nickname, avatar, description, birthday, mobile, area_code, email, id_number, password, sex, is_staff } = ctx.request.body
 
   const params = {
-    id, nickname, avatar, description, birthday, mobile, area_code, email, id_number, password, sex
+    id, nickname, avatar, description, birthday, mobile, area_code, email, id_number, password, sex, is_staff
   }
   const hasUserRes = await userModel.validHasUser({uid:id})
   if (!hasUserRes.res) {

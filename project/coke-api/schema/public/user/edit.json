@@ -36,6 +36,11 @@
       "type": "integer",
       "enum": [0,1,2],
       "minimum": 0
+    },
+    "is_staff": {
+      "type": "integer",
+      "enum": [0,1],
+      "minimum": 0
     }
   },
   "required": ["id"]

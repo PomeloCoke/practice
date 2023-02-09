@@ -180,7 +180,7 @@ const MenuBar = (prop: propType) => {
                 )}
               )
             }
-            <div className={Styles.menu_bg_root}></div>
+            {/* <div className={Styles.menu_bg_root}></div> */}
           </div>
         </div>
         <div className={Styles.slot__bottom}>

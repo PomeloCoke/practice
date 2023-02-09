@@ -298,7 +298,9 @@
     height: auto !important;
     &>.menu_item_child {
       position: relative;
+      z-index: 1;
       top: 0;
+      transition: top 1s ease-in;
     }
   }
   .fallow {
@@ -399,9 +401,16 @@
       font-size: 44px;
     }
     .menu_item {
-      &_root {
+      &_root.active {
         padding-left: 13px;
         padding-right: 3px;
+        background-color: @basic-surface;
+        border-radius: 22px;
+        .menu_info {
+          position: relative;
+          z-index: 2;
+          background-color: @basic-surface;
+        }
       }
     }
   }

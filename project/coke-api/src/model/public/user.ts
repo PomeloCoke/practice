@@ -653,8 +653,6 @@ export async function addLoginLog(params: paramsType.addLog) {
     };
   }
 }
-// TODO 编辑基本信息
-
 export async function editUser(params: paramsType.editUser) {
   /** sql语句 start */
   let editSql: updateSql = {
@@ -665,14 +663,17 @@ export async function editUser(params: paramsType.editUser) {
 
   const infoVals = _omit(params, ["id"]);
   let hasParams = false;
+  let password = ''
 
   type keyType = keyof typeof params;
   Object.keys(infoVals).map((key) => {
     if (params[key as keyType]) {
       hasParams = true;
+      
+      if (key == 'password') password = bcrypt.hashSync(String(params[key as keyType]), 10)
       editSql.values.push({
         key: key,
-        value: params[key as keyType],
+        value: key == 'password' ? password : params[key as keyType],
       });
     }
   });
@@ -702,7 +703,7 @@ export async function editUser(params: paramsType.editUser) {
 }
 // TODO 编辑重要信息
 // TODO 编辑员工相关信息
-
 // TODO 更改密码
+
 // TODO 账户更改更新状态
 // TODO 更改用户状态
