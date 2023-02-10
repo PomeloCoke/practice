@@ -16,10 +16,17 @@ export function formatDate(val: string, join?: string):string {
   return `DATE_FORMAT(${val}, '${format}') AS ${val}`
 }
 
+/**
+ * 校验操作权限
+ * @param {Array}permission 允许操作的权限组ids
+ * @param {ctx}ctx 接口实例
+ * @returns 
+ */
 global.validPermission =  function (permission: number[] = [], ctx: ctx):boolean {
   permission.push(PermissionGroup.SUPER_ADMIN)
   const set = new Set(permission)
   const permission_ids = ctx.session.user.permission_ids
+  
   for (let i = 0; i < permission_ids.length; i++) {
     if (set.has(permission_ids[i])) {
       return true
