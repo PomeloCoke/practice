@@ -1,3 +1,4 @@
+import { PermissionGroup } from "../enum/permissionGroup"
 export function typeData(data: any, type: string): boolean {
   const dType = Object.prototype.toString.call(data)
   return dType === `[object ${type}]`
@@ -15,7 +16,8 @@ export function formatDate(val: string, join?: string):string {
   return `DATE_FORMAT(${val}, '${format}') AS ${val}`
 }
 
-global.validPermission =  function (permission: number[], ctx: ctx):boolean {
+global.validPermission =  function (permission: number[] = [], ctx: ctx):boolean {
+  permission.push(PermissionGroup.SUPER_ADMIN)
   const set = new Set(permission)
   const permission_ids = ctx.session.user.permission_ids
   for (let i = 0; i < permission_ids.length; i++) {
