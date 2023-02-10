@@ -35,12 +35,12 @@ const getMenuList = (product_id: number): menuListType[] => {
  * @param isChild 是否为子路由，默认为否
  * @returns 菜单列表
  */
-const createMenuList = (routes: ROUTER[],level = '1') => {
+const createMenuList = (routes: ROUTER[],level = '') => {
   let list: menuListType[] = [];
   routes
     .map((item, idx) => {
       if (item.menu.is_show) {
-        const id = level + '-' + (idx + 1)
+        const id = level ? level + '-' + (idx + 1) : String(idx + 1)
         let listItem = {
           id: id,
           name_c: item.menu.name_c || "",
