@@ -111,11 +111,11 @@ const MenuBar = (prop: propType) => {
   
   const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1)
-    // if (rootMenuKeys.indexOf(latestOpenKey!) === -1) {
-    //   setOpenKeys(keys)
-    // } else {
-    //   setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
-    // }
+    if (rootMenuKeys.indexOf(latestOpenKey!) === -1) {
+      setOpenKeys(keys)
+    } else {
+      setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
+    }
   }
 
   React.useEffect(() => {
@@ -127,7 +127,7 @@ const MenuBar = (prop: propType) => {
       setActiveId(getActiveId(activeMenuList))
     }
     setOpenKeys(getActiveIds(activeId))
-  },)
+  },[activeId])
   console.log('getMenuList',prop.menuList[0],activeId)
 
   return (
