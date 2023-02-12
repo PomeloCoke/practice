@@ -296,6 +296,55 @@
           color: @theme-primary;
         }
       }
+      .icon {
+        font-size: 24px;
+      }
+      :global(.ant-menu) {
+        background-color: transparent !important;
+        border-inline-end:none;
+      }
+      :global(.ant-menu-submenu-title) {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100%;
+      }
+      :global(.ant-menu-title-content) {
+        margin-inline-start: 6px;
+      }
+      :global(.ant-menu-submenu:not(.ant-menu-submenu-open)) {
+        color: @basic-surface;
+      }
+      :global(.ant-menu-submenu.ant-menu-submenu-open) {
+        color: @text-primary;
+        background-color: @basic-surface;
+      }
+      :global(:not(.ant-menu-submenu-open).ant-menu-submenu-selected >.ant-menu-submenu-title) {
+        color: @basic-surface;
+      }
+      :global(.ant-menu-submenu:not(.ant-menu-submenu-open).ant-menu-submenu-title) {
+        color: @basic-surface;
+      }
+      :global(.ant-menu-submenu.ant-menu-submenu-open .ant-menu-submenu) {
+        color: @text-primary;
+      }
+      :global(.ant-menu-submenu-open >.ant-menu-submenu-title>.ant-menu-item-icon) {
+        color: @for-secondary;
+      }
+      :global(.ant-menu-submenu-open.ant-menu-submenu .ant-menu-submenu-title:hover) {
+        background-color: transparent;
+      }
+      :global(.ant-menu-submenu-open.ant-menu-submenu .ant-menu-submenu:not(.ant-menu-submenu-open)>.ant-menu-submenu-title:hover) {
+        color: @text-primary;
+        background-color: transparent;
+      }
+      :global(:not(.ant-menu-submenu-open).ant-menu-submenu>.ant-menu-submenu-title:hover) {
+        color: @basic-surface;
+        background-color: transparent;
+      }
+      :global(.ant-menu-item-selected) {
+        background-color: @basic-surface-variant;
+        color: @basic-on-surface-variant;
+      }
     }
   }
 }
