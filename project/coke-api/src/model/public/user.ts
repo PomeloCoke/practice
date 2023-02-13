@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { omit as _omit } from "lodash";
 import redis from "../../cache";
-import { values } from "../../types/sql";
 import { querySql, insertSql, updateSql, deleteSql } from "../../db";
 import { getPageLimit } from "./select";
 import * as paramsType from "../../types/user_model_type";
@@ -112,6 +111,11 @@ export async function validHasUser(
   }
 }
 
+/**
+ * 判断账户是否存在
+ * @param params 
+ * @returns 
+ */
 export async function validCount(
   params: paramsType.validCount
 ): Promise<validResType> {
