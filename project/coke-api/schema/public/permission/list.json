@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "product_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "name_c": {
+      "type": "string"
+    },
+    "name_e": {
+      "type": "string"
+    },
+    "page": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "page_count": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

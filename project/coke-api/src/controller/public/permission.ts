@@ -22,7 +22,7 @@ export const addPermission = async (ctx: ctx, next: next) => {
 // 编辑权限组
 export const editPermission = async (ctx: ctx, next: next) => {
 
-  const { name_c, name_e, description } = ctx.request.body
+  const { id, name_c, name_e, description } = ctx.request.body
 }
 
 // 删除权限组
