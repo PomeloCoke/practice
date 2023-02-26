@@ -1,112 +1,28 @@
 .layout__navbar {
-  width: 100%;
-  height: 56px;
-  padding-left: 5px;
-  padding-right: 20px;
+  flex-shrink: 0;
   background-color: @for-tertiary;
   display: flex;
   justify-content: space-between;
   align-items: center;
   user-select: none;
+  border-bottom: 1px solid @basic-border;
 }
-// logo
-.logo_box {
-  width: 61px;
-  height: 56px;
-  padding: 10px 15px 10px 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  &.active {
-    width: 195px;
-    padding-left: 15px;
-    .logo_text {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  .logo_img {
-    position: relative;
-    z-index: 2;
-    width: 36px;
-    height: 36px;
-    background-color: @for-secondary;
-    flex-shrink: 0;
-    &:not(.prod)::after {
-      position: absolute;
-      top: calc(-9px);
-      right: calc(-13px);
-      height: 18px;
-      width: 34px;
-      padding: 2px 5px;
-      background-color: @theme-module-background;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 2px;
-      font-size: 12px;
-      transform: scale(0.8);
-    }
-    &.dev::after {
-      content: "开发";
-    }
-    &.test::after {
-      content: "测试";
-    }
-    &.sandbox::after {
-      content: "沙箱";
-    }
-  }
-  .logo_text {
-    font-size: 24px;
-    font-weight: bold;
-    font-family: "Courier New", Courier, monospace;
-    color: @on-tertiary;
-    transform: translateX(-36px);
-    opacity: 0;
-    transition: all 0.3s ease;
-  }
-}
+
 // 面包屑
 .breadcrumb_box {
+  height: 100%;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  .icon {
-    margin-left: 5px;
-    font-size: 24px;
-    color: @on-tertiary;
-    cursor: pointer;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  :global(.ant-breadcrumb) {
+    color: @text-quaterrary;
   }
-  .page_list {
-    position: relative;
-    margin-left: 15px;
-    padding-left: 15px;
-    &::before {
-      position: absolute;
-      content: ' ';
-      left: 0;
-      top: calc(50% - 8px);
-      width: 6px;
-      height: 16px;
-      border-radius: 2px;
-      background-color: @primary-container;
-    }
-    .page_item {
-      color: @on-tertiary;
-    }
-    li>span:nth-child(2) {
-      color: @on-tertiary;
-      opacity: 0.5;
-    }
-    li:not(:last-child) {
-      opacity: 0.85;
-    }
-    
+  :global(.ant-breadcrumb-separator) {
+    color: @text-quaterrary;
   }
 }
+
 // 产品导航
 .nav_list_box {
   height: 56px;
@@ -114,12 +30,14 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+
   .nav_item_box {
     padding: 0 15px;
     height: 56px;
     display: flex;
     justify-content: center;
     align-items: center;
+
     .nav_item {
       position: relative;
       height: 56px;
@@ -129,11 +47,13 @@
       justify-content: center;
       align-items: center;
       transition: all 0.2s ease;
+
       &:active,
       &:visited,
       &:hover {
         color: @on-tertiary;
       }
+
       &::after {
         position: absolute;
         content: " ";
@@ -144,15 +64,18 @@
         background-color: @primary-container;
         transition: all 0.2s ease;
       }
+
       &:not(.active) {
         cursor: pointer;
       }
+
       .icon {
         margin-right: 5px;
         font-size: 16px;
         opacity: 0.7;
         transition: all 0.2s ease;
       }
+
       .text {
         height: 56px;
         display: flex;
@@ -161,12 +84,15 @@
         opacity: 0.7;
         transition: all 0.2s ease;
       }
+
       &:not(.active):hover,
       &.active {
+
         .icon,
         .text {
           opacity: 1;
         }
+
         &::after {
           left: 0;
           width: 100%;
@@ -175,28 +101,18 @@
     }
   }
 }
+
 // 用户头像
 .user_avatar_box {
   position: relative;
-  width: 40px;
-  height: 40px;
-  margin-left: 10px;
-  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: all 0.2s ease;
-  border: 2px solid transparent;
   cursor: pointer;
-  .avatar {
-    width: 36px;
-    height: 36px;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-  &:hover {
-    border: 2px solid @primary-container;
-  }
+  border: 2px solid @on-primary !important;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
   &.notice::after {
     position: absolute;
     content: " ";
@@ -208,9 +124,78 @@
     border-radius: 50%;
     background-color: @theme-error;
   }
-  
+
   .menu_item {
-    padding: 0 10px;
     white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: 1680px) {
+  .layout__navbar {
+    width: calc(100% - 15px);
+    height: 50px;
+    margin-left: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+  }
+  .breadcrumb_box {
+    .active_page {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    :global(.ant-breadcrumb) {
+      font-size: 12px;
+      line-height: 12px;
+    }
+  }
+  .user_avatar_box {
+    width: 40px;
+    height: 40px;
+    margin-left: 15px;
+    border-radius: 14px;
+    .avatar {
+      width: 36px;
+      height: 36px;
+      object-fit: cover;
+      border-radius: 14px;
+      
+    }
+  }
+}
+
+@media screen and (min-width: 1680px) {
+  .layout__navbar {
+    width: calc(100% - 20px);
+    height: 75px;
+    margin-left: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+  }
+  .breadcrumb_box {
+    .active_page {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    :global(.ant-breadcrumb) {
+      font-size: 14px;
+      line-height: 14px;
+    }
+  }
+  .user_avatar_box {
+    width: 48px;
+    height: 48px;
+    margin-left: 20px;
+    border-radius: 16px;
+    .avatar {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 16px;
+      
+    }
   }
 }

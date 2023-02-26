@@ -37,7 +37,7 @@ export const defaultRoutes: ROUTER[] = [
       is_login: true,
     },
     menu: {
-      is_show: false,
+      is_show: true,
       name_c: '仪表盘',
       name_e: 'dashboard',
       route: '/dashboard',

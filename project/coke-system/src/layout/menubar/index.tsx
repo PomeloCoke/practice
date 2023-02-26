@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 
 import { menuListType } from "../types";
@@ -15,6 +15,7 @@ type propType = {
 };
 
 type menuItemType = Required<MenuProps>['items'][number]
+type clickItemFunction = (item: menuListType) => void
 
 const getMenuItem = (
   label: React.ReactNode,
@@ -32,19 +33,20 @@ const getMenuItem = (
   } as menuItemType
 }
 
-const createMenuList = (menuList: menuListType[]) => {
+const createMenuList = (menuList: menuListType[], clickItem:clickItemFunction ) => {
   let listArr = [] as menuItemType[]
   menuList.map((menu: menuListType) => {
     let childArr = [] as menuItemType[]
     let iconNode: React.ReactNode
-    const itemNode = (
-      <div>{menu.name_c}</div>
-    )
+    
     if (menu.icon) {
       iconNode = <IconFont name={menu.icon} className={Styles.icon} />
     }
     if (menu.children.length > 0) {
-      childArr = createMenuList(menu.children)
+      const itemNode = (
+        <div>{menu.name_c}</div>
+      )
+      childArr = createMenuList(menu.children, clickItem)
       listArr.push(
         getMenuItem(
           itemNode,
@@ -54,6 +56,9 @@ const createMenuList = (menuList: menuListType[]) => {
         )
       )
     } else {
+      const itemNode = (
+        <div onClick={()=>clickItem(menu)}>{menu.name_c}</div>
+      )
       listArr.push(
         getMenuItem(
           itemNode,
@@ -78,7 +83,6 @@ const getActiveId = (activeMenuList: menuListType):string => {
   } else {
     return activeMenuList.id
   }
-  // return activeMenuList.id
 };
 
 const getActiveIds = (id: string):string[]=> {
@@ -107,6 +111,8 @@ const MenuBar = (prop: propType) => {
   const { layoutMenuBar } = StoreData;
   const [activeId, setActiveId] = React.useState('')
   const [openKeys, setOpenKeys] = React.useState([''])
+  const [noOpenKeys, setNoOpenKeys] = React.useState(false)
+  const [openHistory, setOpenHistory] = React.useState([''])
   const rootMenuKeys = getRootIds(prop.menuList)
   
   const onOpenChange: MenuProps['onOpenChange'] = (keys) => {
@@ -116,6 +122,26 @@ const MenuBar = (prop: propType) => {
     } else {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
     }
+    console.log('getOpenChange',latestOpenKey)
+    setNoOpenKeys(latestOpenKey ? false : true)
+  }
+
+  const toggleCollapsed = () => {
+    if (layoutMenuBar.open) setOpenHistory(openKeys)
+    Store.toggleMenuBar( layoutMenuBar.open ? false : true)
+    if (layoutMenuBar.open) {
+      setNoOpenKeys(openHistory ? false : true)
+      setTimeout(() => {
+        setOpenKeys(openHistory)
+      }, 10);
+    }
+  }
+
+  const clickItem = (item: menuListType) => {
+    navigate(item.route, {replace: true})
+    setActiveId(item.id)
+    Store.changeMenuBar(item)
+
   }
 
   React.useEffect(() => {
@@ -134,7 +160,7 @@ const MenuBar = (prop: propType) => {
     <>
       <div
         className={window.className([
-          Styles.layout__menubar_1,
+          Styles.layout__menubar,
           layoutMenuBar.open ? Styles.open : Styles.close,
           layoutMenuBar.visible ? Styles.visible : Styles.invisible,
         ])}
@@ -145,15 +171,19 @@ const MenuBar = (prop: propType) => {
         </div>
         <div className={Styles.slot__mid}>
           <div className={Styles.active_item_bg}></div>
-          <div className={Styles.menu_list}>
+          <div className={window.className([
+            Styles.menu_list,
+            noOpenKeys ? Styles.no_open_keys : ''
+          ])}>
             <Menu
-            // defaultSelectedKeys={[activeId]}
-            selectedKeys={[activeId]}
-            openKeys={openKeys}
-            onOpenChange={onOpenChange}
-            mode="inline"
-            inlineCollapsed={!layoutMenuBar.open}
-              items={createMenuList(prop.menuList)}
+              defaultOpenKeys={openKeys}
+              defaultSelectedKeys={[activeId]}
+              selectedKeys={[activeId]}
+              openKeys={openKeys}
+              onOpenChange={onOpenChange}
+              mode="inline"
+              inlineCollapsed={!layoutMenuBar.open}
+              items={createMenuList(prop.menuList,clickItem)}
             />
           </div>
         </div>
@@ -166,7 +196,7 @@ const MenuBar = (prop: propType) => {
 
         <div
           className={Styles.toggle_open_btn}
-          onClick={() => Store.toggleMenuBar(layoutMenuBar.open ? false : true)}
+          onClick={toggleCollapsed}
         >
           <IconFont
             name={"icon-menu-" + (layoutMenuBar.open ? "close" : "open")}

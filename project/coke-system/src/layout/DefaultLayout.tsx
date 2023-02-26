@@ -38,7 +38,7 @@ const DefaultLayout = () => {
       
       <MenuBar Store={Store} menuList={state.menuList} />
       <div className="layout__main">
-        {/* <NavBar Store={Store} navList={state.navList} menuList={state.menuList} /> */}
+        <NavBar Store={Store} navList={state.navList} menuList={state.menuList} />
         <div className="layout__slot__mid">
           {/* <PageBar Store={Store} /> */}
           <RouterView routes={routes} />

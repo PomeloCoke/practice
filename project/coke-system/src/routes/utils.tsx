@@ -22,6 +22,7 @@ const beforeEach = (
 ) => {
   const { pathname } = location
   const routeInfo = routeSearch(pathname, routes)
+  // console.log('getRouteSearch',routeInfo)
   // TODO 404页面
   if (!routeInfo) return false
   const token = StoreData.user.token
@@ -39,11 +40,12 @@ const beforeEach = (
   }
   
   const pageItem = {
+    id: routeInfo.id,
     name_c: routeInfo.menu.name_c,
     name_e: routeInfo.menu.name_e,
-    route: pathname
+    route: pathname,
   }
-  Store.changeMenuBar(routeInfo.idxs, pageItem)
+  Store.changeMenuBar(pageItem)
   document.title = routeInfo.meta.title
 
   return true
@@ -56,16 +58,16 @@ const beforeEach = (
  * @param routes 路由列表
  * @returns if 存在=>返回该路由的信息 else=>返回null
  */
-function routeSearch(path: string, routes: ROUTER[], id: number[] = []): ROUTER | null {
-  let res:ROUTER | null = null
+function routeSearch(path: string, routes: ROUTER[], id: number[] = []) {
+  let res:any = null
   for (let i = 0; i < routes.length; i++) {
-    let idxs = [...id, i]
+    let idxs = [...id, i+1]
     const routeItem = { ...routes[i], idxs }
     if (routes[i].children) res = routeSearch(path, routes[i].children, idxs)
     if(res) return res
     if (matchPath(routes[i].meta.fullpath, path)) {
-      res = routeItem
-      return routeItem
+      res = {...routeItem, id: idxs.join('-')}
+      return {...routeItem, id: idxs.join('-')}
     }
   }
   return res

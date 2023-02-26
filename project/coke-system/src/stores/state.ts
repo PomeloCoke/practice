@@ -37,7 +37,7 @@ const state:STORE_STATE = {
     token: '',
     uid: 0,
     nickname: 'PomeloCoke',
-    avatar: 'https://www.ygexing.com/upload/150/new/20210303/16137992359659254.jpg',
+    avatar: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F202007%2F21%2F20200721225542_2R83m.thumb.1000_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1680008080&t=cb5ececaaba394418b167f515490387a',
     birthday: '',
     sex: null,
     description: null,

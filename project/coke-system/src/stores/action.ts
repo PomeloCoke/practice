@@ -1,5 +1,6 @@
 import { curMenuType, curPageType, STATE_USER } from "./types";
 import { remove as _remove, isEqual as _isEqual, indexOf as _indexOf } from "lodash";
+
 const common = {
   /**
    * 存储系统信息
@@ -70,23 +71,17 @@ const layout = {
    * @param menuIdx 活跃菜单项的ids
    * @param item 活跃菜单项数据
    */
-  changeMenuBar(menuIdx: number[], item: curMenuType): void {
-    this.data.layout.menuBar.active_item = [0, 0, 0, 0, 0];
-    menuIdx.map((item, idx) => {
-      this.data.layout.menuBar.active_item[idx] = item;
-    });
-    if (item.children && item.children.length === 0 || !item.children) {
-      const { name_c, name_e, route } = item;
-      const curPage = {
-        name_c,
-        name_e,
-        route,
-      };
-      if (route !== '/' && route !== '/login') {
-        this.addPageItem(curPage);
-      }
-      
-    }
+  changeMenuBar(item: curMenuType): void {
+    this.data.layoutMenuBar.activeId = item.id
+    // const { name_c, name_e, route } = item;
+    // const curPage = {
+    //   name_c,
+    //   name_e,
+    //   route,
+    // };
+    // if (route !== '/' && route !== '/login') {
+    //   this.addPageItem(curPage);
+    // }
     this.setSystemInfo();
   },
 
