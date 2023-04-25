@@ -1,3 +1,4 @@
+require('dotenv').config()
 type sqlConfig = {
   host: string,
   port: number,
@@ -7,11 +8,11 @@ type sqlConfig = {
 }
 
 const testSql: sqlConfig = {
-  host: '119.45.60.225',
-  port: 2119,
-  user: 'coke',
-  password: 'lytz+01@19!lovey',
-  database: 'test'
+  host: String(process.env.DATABASE_HOST),
+  port: Number(process.env.DATABASE_PORT),
+  user: String(process.env.DATABASE_USER),
+  password: String(process.env.DATABASE_PASSWORD),
+  database: String(process.env.DATABASE_NAME)
 }
 
 const env = process.env.NODE_ENV

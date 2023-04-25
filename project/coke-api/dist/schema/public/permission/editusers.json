@@ -5,19 +5,12 @@
       "type": "integer",
       "minimum": 1
     },
-    "product_id": {
-      "type": "integer",
-      "minimum": 1
-    },
     "name_c": {
       "type": "string"
     },
-    "name_e": {
-      "type": "string"
-    },
-    "description": {
+    "cids": {
       "type": "string"
     }
   },
-  "required": ["id", "name_c"]
+  "required": ["id","name_c", "cids"]
 }

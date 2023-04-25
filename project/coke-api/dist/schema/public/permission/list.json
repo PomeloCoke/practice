@@ -15,9 +15,13 @@
     "name_e": {
       "type": "string"
     },
-    "description": {
-      "type": "string"
+    "page": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "page_count": {
+      "type": "integer",
+      "minimum": 1
     }
-  },
-  "required": ["id", "name_c"]
+  }
 }

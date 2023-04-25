@@ -18,14 +18,21 @@ const pool = mysql.createPool({
 // 数据库会话操作
 export function querySql(sql: querySql) {
   const sqlStr = querySqlStr(sql)
-  // console.log('getSqlStr', sqlStr)
-
+  console.log('getDBConfig', config,sqlStr)
   return new Promise<any>((resolve, reject) => {
     pool.getConnection((err, connection) => {
-      if (err) reject(err)
+      if (err) reject({
+        err: err,
+        config,
+        sqlStr
+      })
       else {
         connection.query(sqlStr, (error, res) => {
-          if (error) reject(error)
+          if (error) reject({
+        err: err,
+        config,
+        sqlStr
+      })
           else {
             const newRes = JSON.parse(JSON.stringify(res))
             resolve(newRes)

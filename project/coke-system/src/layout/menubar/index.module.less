@@ -153,6 +153,18 @@
           &:global(:not(.ant-menu-submenu-open).ant-menu-submenu-active .ant-menu-submenu-title:hover) {
             color: @basic-surface !important;
           }
+          &:global(:not(.ant-menu-submenu-open)+.ant-menu-item-selected),
+          &:global(:not(.ant-menu-submenu-open)~.ant-menu-item-selected) {
+            display: flex;
+              justify-content: center;
+              align-items: center;
+              background-color: @basic-surface;
+              color: @theme-secondary;
+              .icon {
+                color: @theme-primary;
+              }
+          }
+          
         }
         &>:global(.ant-menu-item) {
           margin: 0 !important;
@@ -160,15 +172,17 @@
           margin-inline: 0;
           margin-block: 0;
           width: 100% !important;
-          &:global(.ant-menu-item-selected) {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: @basic-surface !important;
-            .icon {
-              color: @theme-primary;
-            }
-          }
+          color: @basic-surface;
+          // &:global(.ant-menu-item-selected) {
+          //   display: flex;
+          //   justify-content: center;
+          //   align-items: center;
+          //   background-color: @basic-surface;
+          //   color: @theme-secondary;
+          //   .icon {
+          //     color: @theme-primary;
+          //   }
+          // }
         }
       }
       // 列表展开状态
@@ -375,6 +389,12 @@
         &>:global(.ant-menu-submenu) {
           padding-bottom: 8px;
         }
+        &>:global(.ant-menu-item .ant-menu-item-icon) {
+          margin-left: 16px;
+        }
+        &>:global(.ant-menu-item .ant-menu-title-content) {
+          margin-inline-start: 6px;
+        }
         :global(.ant-menu-submenu) {
           &:global(.ant-menu-submenu-open) {
             &>:global(.ant-menu) {
@@ -490,6 +510,12 @@
         &>:global(.ant-menu-submenu) {
           padding-bottom: 8px;
         }
+        &>:global(.ant-menu-item .ant-menu-item-icon) {
+          margin-left: 18px;
+        }
+        // &>:global(.ant-menu-item .ant-menu-title-content) {
+        //   margin-inline-start: 6px;
+        // }
         :global(.ant-menu-submenu) {
           &:global(.ant-menu-submenu-open) {
             &>:global(.ant-menu) {

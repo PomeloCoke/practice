@@ -1,23 +1,19 @@
 {
   "type": "object",
   "properties": {
-    "id": {
-      "type": "integer",
-      "minimum": 1
-    },
-    "product_id": {
-      "type": "integer",
-      "minimum": 1
-    },
     "name_c": {
       "type": "string"
     },
     "name_e": {
       "type": "string"
     },
+    "product_id": {
+      "type": "integer",
+      "minimum": 1
+    },
     "description": {
       "type": "string"
     }
   },
-  "required": ["id", "name_c"]
+  "required": ["name_c", "name_e", "product_id"]
 }

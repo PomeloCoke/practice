@@ -36,6 +36,14 @@ const routes: route[] = [
     }
   },
   {
+    path: controllerName + '/editusers',
+    controller: Permission.editPermissionUsers,
+    option: {
+      method: 'post',
+      verifyToken: false,
+    }
+  },
+  {
     path: controllerName + '/del',
     controller: Permission.delPermission,
     option: {

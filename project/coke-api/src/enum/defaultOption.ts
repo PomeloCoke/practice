@@ -12,5 +12,6 @@ export enum UserStatus {
 }
 
 export enum ProductName {
-  BLOG = 12
+  BLOG = 12,
+  ADMIN = 14
 }

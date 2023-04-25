@@ -1,6 +1,7 @@
 export enum PRODUCT {
-  Blog = 1,
-  TimeManagement = 2
+  Work = 1,
+  Blog = 2,
+  TimeManagement = 3
 }
 
 export default {

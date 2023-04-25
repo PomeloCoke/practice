@@ -1,11 +1,7 @@
 {
   "type": "object",
   "properties": {
-    "id": {
-      "type": "integer",
-      "minimum": 1
-    },
-    "product_id": {
+    "parent_id": {
       "type": "integer",
       "minimum": 1
     },
@@ -15,9 +11,11 @@
     "name_e": {
       "type": "string"
     },
-    "description": {
-      "type": "string"
+    "side": {
+      "type": "integer",
+      "enum": [1,2,3],
+      "minimum": 1
     }
   },
-  "required": ["id", "name_c"]
+  "required": ["name_c", "side"]
 }

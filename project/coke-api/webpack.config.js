@@ -5,7 +5,7 @@ module.exports = {
   target: 'node',
   entry: './src/index.ts',
   output: {
-    filename: "bundle.js",
+    filename: "server.js",
     path: path.resolve(__dirname, "dist"),
     clean: true
   },
@@ -40,5 +40,8 @@ module.exports = {
     compress: true,
     port: 3000,
     hot: true
+  },
+  optimization: {
+      minimize: false
   }
 }

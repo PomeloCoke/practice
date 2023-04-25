@@ -21,7 +21,7 @@ const getList = async (ctx: ctx, next: next) => {
       msg: res.msg
     })
   }
-}
+} 
 
 // 获取筛选项详情
 const getDetail = async (ctx: ctx, next: next) => {

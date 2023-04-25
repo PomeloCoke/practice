@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Navigate, Routes, Route, useLocation, useNavigate, NavigateFunction, matchPath } from 'react-router-dom';
+import { withPageCache } from './routeCache';
 import useStore from '@/stores';
 
 /**
@@ -79,8 +80,9 @@ function routeSearch(path: string, routes: ROUTER[], id: number[] = []) {
  * @returns 生成的路由元素
  */
 function createRoute(route: ROUTER) {
+  const CacheRoute = withPageCache(route.component)
   if (route.children && route.children.length > 0) {
-    // 有子路由
+    // 有子路由    
     return (
       <Route key={route.path}
         path={route.path}
@@ -89,7 +91,8 @@ function createRoute(route: ROUTER) {
         {!route.redirect &&
           <Route index
             key={route.path}
-            element={<route.component />}
+            // element={<route.component />}
+            element={<CacheRoute/>}
           ></Route>
         }
         {route.redirect &&
@@ -123,7 +126,7 @@ function createRoute(route: ROUTER) {
   return (
     <Route key={route.path}
       path={route.path}
-      element={<route.component />}
+      element={<CacheRoute/>}
     >
     </Route>
   )

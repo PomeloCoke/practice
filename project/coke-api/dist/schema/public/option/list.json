@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "parent_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "name_c": {
+      "type": "string"
+    },
+    "side": {
+      "type": "integer",
+      "enum": [1,2,3],
+      "minimum": 1
+    },
+    "page": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "page_count": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

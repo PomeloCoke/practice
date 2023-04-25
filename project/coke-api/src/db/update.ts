@@ -21,7 +21,7 @@ export default function createSqlStr(sql: updateSql, user: boolean): string {
   ]
 
   valArr.map((item: ValValuesType) => {
-    const valStr = typeof item.value === 'number' ? item.value : `'${item.value}'`
+    const valStr = (typeof item.value === 'number' || item.value.indexOf('IF(') > -1 )? item.value : `'${item.value}'`
     values.push(`${item.key}=${valStr}`)
   })
   str = str + values.join(',')

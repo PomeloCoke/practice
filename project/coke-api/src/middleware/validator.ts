@@ -9,7 +9,11 @@ formatAjv(ajv)
 function readSchema(url: string) {
   return new Promise<string>((resolve, reject) => {
     // TODO 打包时需注意读取路径
-    const filePath = `./schema${url}.json`
+    let rootPath = './schema'
+    if (process.env.NODE_ENV !== 'development') {
+      rootPath = path.resolve(__dirname, "schema")
+    } 
+    const filePath = `${rootPath}${url}.json`
     fs.readFile(filePath, 'utf8', function(err, data) {
       if (err) {
         resolve('error')

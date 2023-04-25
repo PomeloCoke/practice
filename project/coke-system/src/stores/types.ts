@@ -88,7 +88,20 @@ export type STATE = {
     open: boolean,
     visible: boolean,
     activeId: string
-  }
+  },
+  layoutTopBar: {
+    visible: boolean,
+  },
+  layoutNavBar: {
+    open: boolean,
+    visible: boolean,
+    activeId: number,
+    activeIdx: number
+  },
+  layoutPageBar: {
+    open: boolean,
+    visible: boolean,
+  },
   user: STATE_USER
 }
 
@@ -99,6 +112,9 @@ export type ACTION = {
   toggleMenuBar(status: boolean): void,
   toggleMenuList(menuIdx: number[]): void,
   changeMenuBar(item: curMenuType): void,
+  toggleNavBar(status: boolean): void,
+  changeNavBar(id: number, idx: number): void,
+  
   toggleRightPanel(status: boolean): void,
   changeRightPanelTab(active: number): void,
   addPageItem(page: curPageType): void,

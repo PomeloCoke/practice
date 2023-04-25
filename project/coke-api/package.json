@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "dev": "nodemon ./src/index.ts",
-    "build:test": "webpack --mode test",
+    "build:test": "webpack --env env.test && cp -r ./schema ./dist/",
+    "server:test": "node ./dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "PomeloCoke",
@@ -13,6 +14,7 @@
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.3",
     "ioredis": "^5.2.4",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.4",

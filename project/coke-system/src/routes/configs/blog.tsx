@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const workRoutes: ROUTER[] = [
+const blogRoutes: ROUTER[] = [
   {
     path: '/development',
     redirect: 'dashboard',
@@ -140,4 +140,4 @@ const workRoutes: ROUTER[] = [
   },
 ]
 
-export default workRoutes
+export default blogRoutes

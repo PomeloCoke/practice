@@ -32,6 +32,19 @@ const state:STORE_STATE = {
     visible: true,
     activeId: ''
   },
+  layoutTopBar: {
+    visible: true,
+  },
+  layoutNavBar: {
+    open: true,
+    visible: true,
+    activeId: 1,
+    activeIdx: 0,
+  },
+  layoutPageBar: {
+    open: false,
+    visible: true
+  },
   user: {
     login: false,
     token: '',

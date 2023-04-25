@@ -1,11 +1,13 @@
 import * as React from "react";
 import { observer } from "mobx-react-lite";
 import envConfig from "@/settings";
+import useStore from "@/stores";
 
 import { menuListType, navListType } from "../types";
 import Styles from "./index.module.less";
 import { Breadcrumb as AntBreadcrumb, Dropdown as AntDropdown, Menu as AntMenu } from "antd";
 import IconFont from "@/components/iconfont";
+
 
 type propType = {
   Store?: STORE;
@@ -47,7 +49,7 @@ const BreadcrumbModule = (prop: modulePropType) => {
 
   return (
     <div className={window.className([Styles.breadcrumb_box])}>
-      <div className={Styles.active_page}>{activePage.name_c}</div>
+      <div className={Styles.active_page}>{activePage?.name_c}</div>
       <AntBreadcrumb>
         {pageList.map((item, idx) => {
           return (
@@ -66,29 +68,56 @@ const BreadcrumbModule = (prop: modulePropType) => {
 /*面包屑 end*************************************/
 
 /*产品导航 start***********************************/
-const NavigationModule = (prop: modulePropType) => {
-  const { StoreData } = prop;
-  const { navBar } = StoreData.layout;
+const NavigationModule = observer((prop: modulePropType) => {
+  const Store = useStore();
+  const { open, visible, activeIdx } = Store.data.layoutNavBar
+  
+  const toggleOpen = () => {
+    Store.toggleNavBar(!open)
+  }
+
+  const changeActiveNav = (id: number, idx: number) => {
+    if (idx === activeIdx) return
+    Store.changeNavBar(id, idx)
+  }
+
   return (
-    <div className={Styles.nav_list_box}>
-      {prop.navList.map((item, idx) => {
-        return (
-          <div className={Styles.nav_item_box} key={`navitem-${idx}`}>
-            <nav
-              className={window.className([
+    <div className={window.className([
+      Styles.nav_list_box,
+      open ? Styles.open : '',
+      visible ? Styles.visible : ''
+    ])}>
+      <div className={Styles.nav_list}>
+        <IconFont name="icon-arrow-left" className={Styles.icon} />
+        <div className={Styles.nav_item_box}>
+          {prop.navList.map((nav, idx) => {
+            return (
+              <div className={window.className([
                 Styles.nav_item,
-                navBar.active === idx ? Styles.active : "",
-              ])}
-            >
-              <IconFont className={Styles.icon} name={item.icon} />
-              <div className={Styles.text}>{item.name_c}</div>
-            </nav>
-          </div>
-        );
-      })}
+                activeIdx === idx ? Styles.active : ''
+              ])} key={`nav-item-${idx}`}
+                onClick={()=>changeActiveNav(nav.id, idx)}
+              >
+                <IconFont name={nav.icon} className={Styles.icon} />
+                <span className={Styles.text}>{nav.name_c}</span>
+              </div>
+            )
+          })}
+        </div> 
+        <IconFont name="icon-arrow-right" className={Styles.icon} />       
+      </div>
+      <div className={Styles.toggle_btn} onClick={(e)=>{toggleOpen()}}>
+        <div className={Styles.icon_box}>
+          <IconFont name={prop.navList[activeIdx].icon} className={window.className([
+            Styles.icon,
+            open ? Styles.hidden : '',
+          ])}/>
+          <IconFont name="icon-interface-list" className={Styles.icon}/>
+        </div>
+      </div>
     </div>
   );
-};
+});
 /*产品导航 end*************************************/
 
 /*用户头像 start***********************************/
@@ -165,18 +194,23 @@ const AvatarModule = (prop: modulePropType) => {
 };
 /*用户头像 end*************************************/
 
-const NavBar = (prop: propType) => {
+const TopBar = (prop: propType) => {
   const { Store, menuList, navList } = prop;
   const StoreData = Store.data;
   return (
     <>
       <header className={Styles.layout__navbar}>
         {BreadcrumbModule({ Store, StoreData, menuList })}
+        {/* 页面栏+导航栏 */}
+        <div className={window.className([Styles.list_box])}>
+        <NavigationModule navList={navList}/>
+        </div>
         {/* {NavigationModule({Store,StoreData,navList})} */}
+        
         {AvatarModule({Store,StoreData})}
       </header>
     </>
   );
 };
 
-export default observer(NavBar);
+export default observer(TopBar);

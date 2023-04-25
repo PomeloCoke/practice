@@ -1,5 +1,5 @@
 import { curMenuType, curPageType, STATE_USER } from "./types";
-import { remove as _remove, isEqual as _isEqual, indexOf as _indexOf } from "lodash";
+import { remove as _remove, isEqual as _isEqual, indexOf as _indexOf, cloneDeep as _cloneDeep } from "lodash";
 
 const common = {
   /**
@@ -82,6 +82,28 @@ const layout = {
     // if (route !== '/' && route !== '/login') {
     //   this.addPageItem(curPage);
     // }
+    this.setSystemInfo();
+  },
+
+  /**
+   * 切换导航栏状态
+   * @description 打开/收起导航栏
+   * @param status 导航状态
+   */
+  toggleNavBar(status: boolean):void {
+    this.data.layoutNavBar.open = status;
+    this.setSystemInfo();
+  },
+
+  /**
+   * 改变活跃的导航项
+   * @description 将活跃导航项的相关信息存储到系统信息中
+   * @param id 活跃菜单项的ids
+   * @param idx 活跃导航项索引
+   */
+  changeNavBar(id: number, idx: number): void {
+    this.data.layoutNavBar.activeId = id
+    this.data.layoutNavBar.activeIdx = idx
     this.setSystemInfo();
   },
 

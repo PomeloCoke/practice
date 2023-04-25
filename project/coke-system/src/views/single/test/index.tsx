@@ -4,7 +4,7 @@ function Test() {
   // console.log('getRemoveArr',oldArr.remove(1))
   return (
     <div className='page__single__test'>
-      <h2>测试页面</h2>
+      {/* <h2>测试页面</h2> */}
     </div>
   )
 }

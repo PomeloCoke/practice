@@ -41,7 +41,7 @@ export const defaultRoutes: ROUTER[] = [
       name_c: '仪表盘',
       name_e: 'dashboard',
       route: '/dashboard',
-      icon: 'icon-dashboard-fill'
+      icon: 'icon-interface-home'
     }
   },
 ]
